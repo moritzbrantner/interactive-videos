@@ -1,0 +1,31 @@
+{
+  "name": "interactive-videos",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.4.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "verify": "bun run check-types && bun run test && bun run build"
+  },
+  "dependencies": {
+    "@moritzbrantner/charts": "0.2.1",
+    "@moritzbrantner/tables": "file:../tables",
+    "@remotion/captions": "^4.0.529",
+    "@remotion/player": "4.0.520",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "recharts": "^3",
+    "remotion": "4.0.520"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "@vitejs/plugin-react": "6.1.1",
+    "typescript": "^6.0.2",
+    "vite": "8.2.2",
+    "vitest": "^4.1.8"
+  }
+}
