@@ -1,0 +1,12 @@
+{
+  "//": "Runtime resolution for Playwright only. Node cannot strip types under node_modules, so the pinned react-render-budget helpers are bundled from the pinned source into .cache/pins by `bun run build:pins`. The root tsconfig type-checks against that same pinned source.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "paths": {
+      "react-render-budget/playwright": ["../.cache/pins/react-render-budget/playwright.js"]
+    }
+  }
+}

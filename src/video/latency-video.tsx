@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, useCurrentFrame } from 'remotion';
 
 import { Fade } from '@/components/remotion/fade';
 import { HotspotProvider, SvgHotspot, type HotspotActivation } from '@/components/remotion/hotspot';
@@ -13,6 +13,8 @@ import {
   REQUEST_COUNT,
   type LatencyBin,
 } from '@/data/latency';
+import { counted } from '@/render-budget';
+import { barRevealEnd, barRevealProgress } from '@/video/reveal';
 
 export const VIDEO_FPS = 30;
 export const VIDEO_DURATION = 360;
@@ -30,9 +32,6 @@ export type TermPayload = { kind: 'term' };
 const plot = { left: 96, top: 150, width: 1088, height: 320 } as const;
 const slot = plot.width / BIN_COUNT;
 const barWidth = slot * 0.72;
-const revealStart = 30;
-const revealStagger = 2;
-const revealDuration = 18;
 
 const colors = {
   background: '#0b0d12',
@@ -52,7 +51,7 @@ const bars = latencyBins.map((bin, index) => {
     left: plot.left + index * slot + (slot - barWidth) / 2,
     height,
     incident: bin.x1 > INCIDENT_WINDOW[0] && bin.x0 < INCIDENT_WINDOW[1],
-    revealAt: revealStart + index * revealStagger,
+    index,
   };
 });
 
@@ -81,7 +80,8 @@ const subtitleHotspots = [
 ];
 
 // Static chart chrome does not read the frame, so it renders once and is skipped afterwards.
-const ChartChrome = memo(function ChartChrome() {
+const ChartChrome = memo(
+  counted(function ChartChrome() {
   return (
     <>
       {gridValues.map((value) => {
@@ -132,21 +132,30 @@ const ChartChrome = memo(function ChartChrome() {
       ))}
     </>
   );
-});
+  }, 'ChartChrome'),
+);
 
+// Reads the frame and nothing else. BarMark is memoized on `progress`, so once a bar is fully
+// revealed, later frames and selection changes no longer re-render its mark.
 function Bar({ bar }: { bar: (typeof bars)[number] }) {
-  const frame = useCurrentFrame();
-  const progress = interpolate(frame, [bar.revealAt, bar.revealAt + revealDuration], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const progress = barRevealProgress(bar.index, useCurrentFrame());
+  return <BarMark bar={bar} progress={progress} />;
+}
 
+const BarMark = memo(
+  counted(function BarMark({
+  bar,
+  progress,
+}: {
+  bar: (typeof bars)[number];
+  progress: number;
+}) {
   return (
     <SvgHotspot<BinPayload>
       id={bar.id}
       payload={{ kind: 'bin', bin: bar.bin }}
       label={`${formatClock(bar.bin.x0)} to ${formatClock(bar.bin.x1)}, p95 ${Math.round(bar.bin.p95 ?? 0)} ms`}
-      from={bar.revealAt + revealDuration}
+      from={barRevealEnd(bar.index)}
       selectedStyle={{ stroke: colors.text, strokeWidth: 3 }}
     >
       {/* Geometry is fixed; the reveal only animates transform and opacity. */}
@@ -166,9 +175,12 @@ function Bar({ bar }: { bar: (typeof bars)[number] }) {
       />
     </SvgHotspot>
   );
-}
+  }, 'BarMark'),
+);
 
-const Bars = memo(function Bars() {
+// The bar container has no props and does not read the frame; only each Bar animates.
+const Bars = memo(
+  counted(function Bars() {
   return (
     <svg
       width={VIDEO_WIDTH}
@@ -181,9 +193,10 @@ const Bars = memo(function Bars() {
       ))}
     </svg>
   );
-});
+  }, 'Bars'),
+);
 
-export function LatencyVideo({ onActivate, selectedId }: LatencyVideoProps) {
+function LatencyVideoRoot({ onActivate, selectedId }: LatencyVideoProps) {
   return (
     <HotspotProvider onActivate={onActivate} selectedId={selectedId}>
       <AbsoluteFill
@@ -221,3 +234,5 @@ export function LatencyVideo({ onActivate, selectedId }: LatencyVideoProps) {
     </HotspotProvider>
   );
 }
+
+export const LatencyVideo = counted(LatencyVideoRoot, 'LatencyVideo');

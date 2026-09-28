@@ -8,7 +8,10 @@
     "build": "vite build",
     "check-types": "tsc --noEmit",
     "test": "vitest run",
-    "verify": "bun run check-types && bun run test && bun run build"
+    "verify": "bun run check-types && bun run test && bun run build && bun run test:budget",
+    "build:budget": "vite build --mode render-budget --outDir .cache/budget-dist",
+    "test:budget": "bun run build:pins && playwright test",
+    "build:pins": "bun build ./node_modules/react-render-budget/src/playwright.ts --outfile .cache/pins/react-render-budget/playwright.js --target node --external @playwright/test"
   },
   "dependencies": {
     "@moritzbrantner/charts": "github:moritzbrantner/charts#053da9ddd133d62e65f9f1e9e95ecc8b7624623f",
@@ -20,9 +23,11 @@
     "remotion": "4.0.520"
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
     "@vitejs/plugin-react": "6.1.1",
+    "react-render-budget": "github:moritzbrantner/react-render-budget#d27dd7ca600952a7bf2c4d57c8ab6444de2166e6",
     "typescript": "^6.0.2",
     "vite": "8.2.2",
     "vitest": "^4.1.8"

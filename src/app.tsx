@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { HotspotActivation } from '@/components/remotion/hotspot';
 import { formatClock, slowestRequests, type LatencyBin } from '@/data/latency';
+import { exposePlayerForBudgetTests } from '@/render-budget';
 import {
   LatencyVideo,
   VIDEO_DURATION,
@@ -99,6 +100,7 @@ export function App() {
 
   useEffect(() => {
     const current = player.current;
+    exposePlayerForBudgetTests(current);
     if (!current) return;
     const dismiss = () => setActivation(undefined);
     current.addEventListener('play', dismiss);

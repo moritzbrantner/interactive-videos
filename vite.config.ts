@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
-import { appAlias, sourcePinAliases } from './source-pins';
+import { appAlias, sourcePinAliases } from './source-pins.ts';
 
 export default defineConfig({
   base: './',

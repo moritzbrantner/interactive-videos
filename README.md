@@ -19,7 +19,28 @@ bun install
 bun run dev
 ```
 
-`bun run verify` type-checks, runs the data tests, and builds.
+`bun run verify` type-checks, runs the data tests, builds, and runs the render budget tests.
+
+## Render budget
+
+`bun run test:budget` (part of `bun run verify`) builds the app with `--mode render-budget`, which
+wraps the video's components in `react-render-budget` counters, then steps the Player frame by frame
+in Playwright and asserts exact render counts:
+
+- during the bar reveal, only marks whose reveal progress changes re-render;
+- after the reveal, frames re-render no chart marks at all;
+- selecting a bar re-renders the composition root once and no chart parts.
+
+The Player re-renders the composition root on every frame, so frame-independent parts must be
+memoized to stay out of the per-frame work. Normal builds contain no counters.
+
+`react-render-budget` is pinned like the other packages. Node cannot strip TypeScript under
+`node_modules`, so `bun run build:pins` bundles the pinned Playwright helpers into `.cache/pins`,
+and `e2e/tsconfig.json` points Playwright at that bundle.
+
+`withRenderCounter` counts renders of its wrapper, which only happen when the parent re-renders. A
+component that reads the frame itself re-renders without its wrapper, so counted components
+receive time-dependent values as props (`Bar` reads the frame, the counted `BarMark` draws).
 
 ## Source pins
 

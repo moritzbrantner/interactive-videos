@@ -21,14 +21,23 @@
       ],
       "@moritzbrantner/tables/table": [
         "./node_modules/@moritzbrantner/tables/src/table.tsx"
+      ],
+      "react-render-budget/react": [
+        "./node_modules/react-render-budget/src/react.ts"
+      ],
+      "react-render-budget/playwright": [
+        "./node_modules/react-render-budget/src/playwright.ts"
       ]
-    }
+    },
+    "allowImportingTsExtensions": true
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "vite.config.ts",
     "vitest.config.ts",
-    "source-pins.ts"
+    "source-pins.ts",
+    "e2e/**/*.ts",
+    "playwright.config.ts"
   ]
 }
