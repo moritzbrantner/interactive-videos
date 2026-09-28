@@ -11,7 +11,7 @@
     "verify": "bun run check-types && bun run test && bun run build && bun run test:budget",
     "build:budget": "vite build --mode render-budget --outDir .cache/budget-dist",
     "test:budget": "bun run build:pins && playwright test",
-    "build:pins": "bun build ./node_modules/react-render-budget/src/playwright.ts --outfile .cache/pins/react-render-budget/playwright.js --target node --external @playwright/test"
+    "build:pins": "rm -rf .cache/pins/react-render-budget && mkdir -p .cache/pins/react-render-budget && cp -R node_modules/react-render-budget/src .cache/pins/react-render-budget/src"
   },
   "dependencies": {
     "@moritzbrantner/charts": "github:moritzbrantner/charts#053da9ddd133d62e65f9f1e9e95ecc8b7624623f",

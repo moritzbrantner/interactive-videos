@@ -39,8 +39,8 @@ memoized to stay out of the per-frame work. `Bar` only reads the frame; `BarMark
 the resulting progress, so fully revealed bars stop redrawing. Normal builds contain no counters.
 
 `react-render-budget` is pinned like the other packages. Node cannot strip TypeScript under
-`node_modules`, so `bun run build:pins` bundles the pinned Playwright helpers into `.cache/pins`,
-and `e2e/tsconfig.json` points Playwright at that bundle.
+`node_modules`, so `bun run build:pins` copies the pinned source into `.cache/pins`, and
+`e2e/tsconfig.json` points Playwright at that copy.
 
 ## Source pins
 
