@@ -13,7 +13,7 @@ import {
   REQUEST_COUNT,
   type LatencyBin,
 } from '@/data/latency';
-import { counted } from '@/render-budget';
+import { useBudgetCounter } from '@/render-budget';
 import { barRevealEnd, barRevealProgress } from '@/video/reveal';
 
 export const VIDEO_FPS = 30;
@@ -80,8 +80,8 @@ const subtitleHotspots = [
 ];
 
 // Static chart chrome does not read the frame, so it renders once and is skipped afterwards.
-const ChartChrome = memo(
-  counted(function ChartChrome() {
+const ChartChrome = memo(function ChartChrome() {
+  useBudgetCounter('ChartChrome');
   return (
     <>
       {gridValues.map((value) => {
@@ -132,24 +132,24 @@ const ChartChrome = memo(
       ))}
     </>
   );
-  }, 'ChartChrome'),
-);
+});
 
 // Reads the frame and nothing else. BarMark is memoized on `progress`, so once a bar is fully
 // revealed, later frames and selection changes no longer re-render its mark.
 function Bar({ bar }: { bar: (typeof bars)[number] }) {
+  useBudgetCounter('Bar');
   const progress = barRevealProgress(bar.index, useCurrentFrame());
   return <BarMark bar={bar} progress={progress} />;
 }
 
-const BarMark = memo(
-  counted(function BarMark({
+const BarMark = memo(function BarMark({
   bar,
   progress,
 }: {
   bar: (typeof bars)[number];
   progress: number;
 }) {
+  useBudgetCounter('BarMark');
   return (
     <SvgHotspot<BinPayload>
       id={bar.id}
@@ -175,12 +175,11 @@ const BarMark = memo(
       />
     </SvgHotspot>
   );
-  }, 'BarMark'),
-);
+});
 
 // The bar container has no props and does not read the frame; only each Bar animates.
-const Bars = memo(
-  counted(function Bars() {
+const Bars = memo(function Bars() {
+  useBudgetCounter('Bars');
   return (
     <svg
       width={VIDEO_WIDTH}
@@ -193,10 +192,10 @@ const Bars = memo(
       ))}
     </svg>
   );
-  }, 'Bars'),
-);
+});
 
-function LatencyVideoRoot({ onActivate, selectedId }: LatencyVideoProps) {
+export function LatencyVideo({ onActivate, selectedId }: LatencyVideoProps) {
+  useBudgetCounter('LatencyVideo');
   return (
     <HotspotProvider onActivate={onActivate} selectedId={selectedId}>
       <AbsoluteFill
@@ -234,5 +233,3 @@ function LatencyVideoRoot({ onActivate, selectedId }: LatencyVideoProps) {
     </HotspotProvider>
   );
 }
-
-export const LatencyVideo = counted(LatencyVideoRoot, 'LatencyVideo');

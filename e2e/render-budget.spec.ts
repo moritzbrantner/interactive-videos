@@ -44,17 +44,11 @@ async function seekFrames(page: Page, from: number, to: number) {
   );
 }
 
-// Budgets are upper bounds, so a count of zero would pass them vacuously. Exact counts are
-// asserted as well; a target that never rendered in the window reports undefined, meaning 0.
-async function renderCounts(page: Page) {
+// Budgets are upper bounds, so a scenario in which nothing rendered would pass them vacuously.
+// Each frame scenario therefore also proves that every frame-reading Bar rendered on every frame.
+async function expectFramesRendered(page: Page, frames: number) {
   const { components } = await getRenderStats(page);
-  const count = (name: string) => components[name] ?? 0;
-  return {
-    LatencyVideo: count('LatencyVideo'),
-    ChartChrome: count('ChartChrome'),
-    Bars: count('Bars'),
-    BarMark: count('BarMark'),
-  };
+  expect(components.Bar ?? 0).toBeGreaterThanOrEqual(BAR_COUNT * frames);
 }
 
 test('during the reveal, only marks whose progress changes re-render', async ({ page }) => {
@@ -65,21 +59,24 @@ test('during the reveal, only marks whose progress changes re-render', async ({ 
   await seekFrames(page, REVEAL_WINDOW_START + 1, last);
 
   const markRenders = expectedMarkRenders(REVEAL_WINDOW_START + 1, last);
-  // Guard against a vacuous window: the reveal must actually be animating here.
+  // The window must be mid-reveal for the mark budget to mean anything.
   expect(markRenders).toBeGreaterThan(BAR_COUNT * 5);
   expect(markRenders).toBeLessThan(BAR_COUNT * STEPPED_FRAMES);
 
-  expect(await renderCounts(page)).toEqual({
-    // The Player re-renders the composition root on every frame; that is what makes
-    // memoizing the frame-independent parts below it necessary.
-    LatencyVideo: STEPPED_FRAMES,
-    // Frame-independent parts must not re-render while the video plays.
-    ChartChrome: 0,
-    Bars: 0,
-    BarMark: markRenders,
-  });
+  await expectFramesRendered(page, STEPPED_FRAMES);
   await expectRenderBudget(page, {
-    components: { LatencyVideo: STEPPED_FRAMES, ChartChrome: 0, Bars: 0, BarMark: markRenders },
+    components: {
+      // The Player re-renders the composition root on every frame; that is what makes
+      // memoizing the frame-independent parts below it necessary.
+      LatencyVideo: STEPPED_FRAMES,
+      // Frame-independent parts must not re-render while the video plays.
+      ChartChrome: 0,
+      Bars: 0,
+      // Each bar reads the frame once per frame...
+      Bar: BAR_COUNT * STEPPED_FRAMES,
+      // ...but only redraws its mark when its reveal progress changed.
+      BarMark: markRenders,
+    },
   });
 });
 
@@ -89,11 +86,15 @@ test('after the reveal, frames re-render no chart marks', async ({ page }) => {
 
   await seekFrames(page, STEADY_START + 1, STEADY_START + STEPPED_FRAMES);
 
-  expect(await renderCounts(page)).toEqual({
-    LatencyVideo: STEPPED_FRAMES,
-    ChartChrome: 0,
-    Bars: 0,
-    BarMark: 0,
+  await expectFramesRendered(page, STEPPED_FRAMES);
+  await expectRenderBudget(page, {
+    components: {
+      LatencyVideo: STEPPED_FRAMES,
+      ChartChrome: 0,
+      Bars: 0,
+      Bar: BAR_COUNT * STEPPED_FRAMES,
+      BarMark: 0,
+    },
   });
 });
 
@@ -105,12 +106,15 @@ test('selecting a bar leaves the chart untouched', async ({ page }) => {
   await expect(page.locator('.insight h2')).toHaveText('14:30–15:00');
   await expect(page.locator('g[data-hotspot="bin-29"]')).toHaveAttribute('aria-pressed', 'true');
 
-  expect(await renderCounts(page)).toEqual({
-    // The new selectedId arrives through inputProps once.
-    LatencyVideo: 1,
-    ChartChrome: 0,
-    Bars: 0,
-    // Selection reaches the hotspots through context; the marks themselves do not re-render.
-    BarMark: 0,
+  await expectRenderBudget(page, {
+    components: {
+      // The new selectedId arrives through inputProps once.
+      LatencyVideo: 1,
+      ChartChrome: 0,
+      Bars: 0,
+      // The frame readers see the Player's context update once; their marks do not redraw.
+      Bar: BAR_COUNT,
+      BarMark: 0,
+    },
   });
 });

@@ -23,24 +23,24 @@ bun run dev
 
 ## Render budget
 
-`bun run test:budget` (part of `bun run verify`) builds the app with `--mode render-budget`, which
-wraps the video's components in `react-render-budget` counters, then steps the Player frame by frame
-in Playwright and asserts exact render counts:
+`bun run test:budget` (part of `bun run verify`) builds the app with `--mode render-budget`, in
+which the video's components call `useRenderCounter` from `react-render-budget`, then steps the
+Player frame by frame in Playwright and checks render budgets:
 
-- during the bar reveal, only marks whose reveal progress changes re-render;
-- after the reveal, frames re-render no chart marks at all;
-- selecting a bar re-renders the composition root once and no chart parts.
+- during the bar reveal, only marks whose reveal progress changes redraw;
+- after the reveal, frames redraw no chart marks at all;
+- selecting a bar re-renders the composition root once and redraws no chart parts.
+
+Budgets are upper bounds, so each frame scenario also asserts a lower bound: every frame-reading
+`Bar` rendered on every stepped frame. Without it, a scenario in which nothing rendered would pass.
 
 The Player re-renders the composition root on every frame, so frame-independent parts must be
-memoized to stay out of the per-frame work. Normal builds contain no counters.
+memoized to stay out of the per-frame work. `Bar` only reads the frame; `BarMark` is memoized on
+the resulting progress, so fully revealed bars stop redrawing. Normal builds contain no counters.
 
 `react-render-budget` is pinned like the other packages. Node cannot strip TypeScript under
 `node_modules`, so `bun run build:pins` bundles the pinned Playwright helpers into `.cache/pins`,
 and `e2e/tsconfig.json` points Playwright at that bundle.
-
-`withRenderCounter` counts renders of its wrapper, which only happen when the parent re-renders. A
-component that reads the frame itself re-renders without its wrapper, so counted components
-receive time-dependent values as props (`Bar` reads the frame, the counted `BarMark` draws).
 
 ## Source pins
 

@@ -27,7 +27,7 @@
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
     "@vitejs/plugin-react": "6.1.1",
-    "react-render-budget": "github:moritzbrantner/react-render-budget#d27dd7ca600952a7bf2c4d57c8ab6444de2166e6",
+    "react-render-budget": "github:moritzbrantner/react-render-budget#89465b8ca979e54dcd60db215ce176c8c4cc3ea7",
     "typescript": "^6.0.2",
     "vite": "8.2.2",
     "vitest": "^4.1.8"
