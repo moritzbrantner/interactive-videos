@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 
 import { Fade } from '@/components/remotion/fade';
-import { Hotspot, HotspotProvider, type HotspotActivation } from '@/components/remotion/hotspot';
+import { HotspotProvider, SvgHotspot, type HotspotActivation } from '@/components/remotion/hotspot';
 import { Subtitles } from '@/components/remotion/subtitles';
 import {
   BIN_COUNT,
@@ -142,46 +142,44 @@ function Bar({ bar }: { bar: (typeof bars)[number] }) {
   });
 
   return (
-    <Hotspot<BinPayload>
+    <SvgHotspot<BinPayload>
       id={bar.id}
       payload={{ kind: 'bin', bin: bar.bin }}
       label={`${formatClock(bar.bin.x0)} to ${formatClock(bar.bin.x1)}, p95 ${Math.round(bar.bin.p95 ?? 0)} ms`}
       from={bar.revealAt + revealDuration}
-      style={{
-        position: 'absolute',
-        left: bar.left,
-        top: plot.top + plot.height - bar.height,
-        width: barWidth,
-        height: bar.height,
-        display: 'block',
-      }}
-      interactiveStyle={{ borderRadius: 4 }}
-      selectedStyle={{ outline: `3px solid ${colors.text}`, outlineOffset: 3 }}
+      selectedStyle={{ stroke: colors.text, strokeWidth: 3 }}
     >
-      {/* Layout is fixed; the reveal only animates transform and opacity. */}
-      <span
+      {/* Geometry is fixed; the reveal only animates transform and opacity. */}
+      <rect
+        x={bar.left}
+        y={plot.top + plot.height - bar.height}
+        width={barWidth}
+        height={bar.height}
+        rx={4}
+        fill={bar.incident ? colors.incident : colors.bar}
         style={{
-          display: 'block',
-          width: '100%',
-          height: '100%',
-          borderRadius: 4,
-          background: bar.incident ? colors.incident : colors.bar,
           transform: `scaleY(${progress})`,
+          transformBox: 'fill-box',
           transformOrigin: 'bottom',
           opacity: 0.35 + 0.65 * progress,
         }}
       />
-    </Hotspot>
+    </SvgHotspot>
   );
 }
 
 const Bars = memo(function Bars() {
   return (
-    <>
+    <svg
+      width={VIDEO_WIDTH}
+      height={VIDEO_HEIGHT}
+      viewBox={`0 0 ${VIDEO_WIDTH} ${VIDEO_HEIGHT}`}
+      style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+    >
       {bars.map((bar) => (
         <Bar key={bar.id} bar={bar} />
       ))}
-    </>
+    </svg>
   );
 });
 

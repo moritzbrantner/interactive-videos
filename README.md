@@ -9,7 +9,7 @@ This repository is the consuming app that owns domain content. It combines:
   source through its shadcn registry (`src/components/remotion`, `src/lib/remotion`): `Hotspot`,
   `Subtitles` with clickable terms, `Fade`;
 - [`@moritzbrantner/charts`](https://github.com/moritzbrantner/charts) for binning and percentiles
-  (`/density` entry point only);
+  (`density` entry point only);
 - [`@moritzbrantner/tables`](https://github.com/moritzbrantner/tables) for the insight panel table.
 
 ## Run
@@ -21,8 +21,19 @@ bun run dev
 
 `bun run verify` type-checks, runs the data tests, and builds.
 
-`@moritzbrantner/tables` is not published to npm yet, so it is linked from a sibling checkout
-(`file:../tables`). Build it first with `bun run build` in `../tables`.
+## Source pins
+
+`charts` and `tables` are not consumed from npm. `package.json` pins each one to an exact GitHub
+commit (`github:moritzbrantner/<repo>#<full sha>`); never replace a pin with a branch. Git installs
+contain source but no built `dist/`, so `source-pins.ts` (Vite and Vitest) and `tsconfig.json`
+`paths` resolve the entry points to the pinned `src/` files. Keep those two lists in sync.
+
+To move a pin, review the upstream change, then `bun add
+"@moritzbrantner/<repo>@github:moritzbrantner/<repo>#<new sha>"` and run `bun run verify`.
+
+The remotion-primitives source in `src/components/remotion` and `src/lib/remotion` is installed
+the same way, from an exact commit through the shadcn registry:
+`bunx shadcn@4.20.1 add --overwrite "moritzbrantner/remotion-primitives/<item>#<sha>"`.
 
 ## Latency explainer
 
@@ -47,4 +58,4 @@ Integration notes learned while building this:
   wall-clock time or measure asynchronously.
 - Keep hotspots out of the bottom of the frame. The Player's controls overlay intercepts clicks
   there, even while the controls are hidden.
-- `Hotspot` renders HTML, so chart marks are HTML elements rather than SVG.
+- Chart marks are SVG inside `SvgHotspot`; HTML content such as subtitle words uses `Hotspot`.

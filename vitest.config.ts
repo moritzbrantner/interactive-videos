@@ -1,9 +1,9 @@
-import { fileURLToPath } from 'node:url';
-
 import { defineConfig } from 'vitest/config';
+
+import { appAlias, sourcePinAliases } from './source-pins';
 
 export default defineConfig({
   resolve: {
-    alias: [{ find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) }],
+    alias: [...sourcePinAliases, appAlias],
   },
 });
