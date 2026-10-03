@@ -19,7 +19,7 @@
         "@types/react": "19.2.18",
         "@types/react-dom": "19.2.7",
         "@vitejs/plugin-react": "6.1.1",
-        "react-render-budget": "github:moritzbrantner/react-render-budget#89465b8ca979e54dcd60db215ce176c8c4cc3ea7",
+        "react-render-budget": "github:moritzbrantner/react-render-budget#db67f7c16201d67a247e491565ce01b51ad778d4",
         "typescript": "^6.0.2",
         "vite": "8.2.2",
         "vitest": "^4.1.8",
@@ -233,7 +233,7 @@
 
     "react-redux": ["react-redux@9.3.0", "", { "dependencies": { "@types/use-sync-external-store": "^0.0.6", "use-sync-external-store": "^1.4.0" }, "peerDependencies": { "@types/react": "^18.2.25 || ^19", "react": "^18.0 || ^19", "redux": "^5.0.0" }, "optionalPeers": ["@types/react", "redux"] }, "sha512-KQopgqFo/p/fgmAs5qz6p5RWaNAzq40WAu7fJIXnQpYxFPbJYtsJPWvGeF2rOBaY/kEuV77AVsX8TsQzKm+A/g=="],
 
-    "react-render-budget": ["react-render-budget@github:moritzbrantner/react-render-budget#89465b8", { "peerDependencies": { "@playwright/test": ">=1.40.0", "react": ">=18.0.0 || >=19.0.0" }, "optionalPeers": ["@playwright/test"] }, "moritzbrantner-react-render-budget-89465b8", "sha512-GNM1d87iAuQW+Te80agvXqau164ooQb0YfoEiRcAZ6AnJ137Cx/IIlmcru4xKZM290WNgbGhHPCciBG7ouGtRg=="],
+    "react-render-budget": ["react-render-budget@github:moritzbrantner/react-render-budget#db67f7c", { "peerDependencies": { "@playwright/test": ">=1.40.0", "react": ">=18.0.0 || >=19.0.0" }, "optionalPeers": ["@playwright/test"] }, "moritzbrantner-react-render-budget-db67f7c", "sha512-q41U0jSVp7X4MJ0ifGM8aUszlfLphMssNtSl5QjaWliOIMKeSLZar6me98P4e30Q3CNY1gogiHRsiBMoPHvibQ=="],
 
     "recharts": ["recharts@3.10.1", "", { "dependencies": { "@reduxjs/toolkit": "^1.9.0 || 2.x.x", "clsx": "^2.1.1", "decimal.js-light": "^2.5.1", "es-toolkit": "^1.39.3", "eventemitter3": "^5.0.1", "immer": "^11.1.8", "react-redux": "8.x.x || 9.x.x", "reselect": "5.2.0", "tiny-invariant": "^1.3.3", "use-sync-external-store": "^1.2.2", "victory-vendor": "^37.0.2" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-is": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-QXFrvt6IVcw7eeZCoyXTwkIJAX3Dv1nyVhMicXJ47GsGDDpcN8z6o644DibE9XjpBTThtsomLKnTV6lc+cVFUA=="],
 
