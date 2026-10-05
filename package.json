@@ -18,14 +18,14 @@
     "@moritzbrantner/tables": "github:moritzbrantner/tables#7ede19a0e8db00b924641c241ae8b424574e874a",
     "@remotion/captions": "^4.0.529",
     "@remotion/player": "4.0.520",
-    "react": "19.2.8",
+    "react": "19.3.0",
     "react-dom": "19.2.8",
     "remotion": "4.0.520"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
     "@types/node": "^24",
-    "@types/react": "19.2.18",
+    "@types/react": "19.3.0",
     "@types/react-dom": "19.2.7",
     "@vitejs/plugin-react": "6.1.1",
     "react-render-budget": "github:moritzbrantner/react-render-budget#db67f7c16201d67a247e491565ce01b51ad778d4",
