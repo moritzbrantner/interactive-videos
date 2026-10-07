@@ -17,7 +17,7 @@
     "@moritzbrantner/charts": "github:moritzbrantner/charts#053da9ddd133d62e65f9f1e9e95ecc8b7624623f",
     "@moritzbrantner/tables": "github:moritzbrantner/tables#7ede19a0e8db00b924641c241ae8b424574e874a",
     "@remotion/captions": "^4.0.529",
-    "@remotion/player": "4.0.520",
+    "@remotion/player": "4.0.534",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "remotion": "4.0.520"
