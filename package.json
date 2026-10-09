@@ -14,7 +14,7 @@
     "build:pins": "rm -rf .cache/pins/react-render-budget && mkdir -p .cache/pins/react-render-budget && cp -R node_modules/react-render-budget/src .cache/pins/react-render-budget/src"
   },
   "dependencies": {
-    "@moritzbrantner/charts": "github:moritzbrantner/charts#053da9ddd133d62e65f9f1e9e95ecc8b7624623f",
+    "@moritzbrantner/charts": "github:moritzbrantner/charts#29c978898e9aaead1995a6499707d4570c01bdef",
     "@moritzbrantner/tables": "github:moritzbrantner/tables#7ede19a0e8db00b924641c241ae8b424574e874a",
     "@remotion/captions": "4.0.534",
     "@remotion/player": "4.0.534",
