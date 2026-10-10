@@ -29,7 +29,8 @@
         "./node_modules/react-render-budget/src/playwright.ts"
       ]
     },
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*.ts",

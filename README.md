@@ -62,6 +62,25 @@ the same way, from an exact commit through the shadcn registry:
 seeded generator) as 48 half-hour p95 bars. Clicking a bar shows that bucket's request count,
 percentiles, and slowest requests; clicking a subtitle term shows a glossary entry.
 
+## VideoSpec
+
+`src/spec/video-spec.ts` defines `VideoSpec` v1, the versioned data contract for a video's semantic
+intent: project identity, format pack id/version, output profile, ordered scenes with a duration,
+narration cues, asset references, interaction terms and a per-kind semantic payload (v1 kinds:
+`title`, `binnedChart`). Layout pixels, easing, typography and renderer details belong to the
+format pack and are not representable in a spec.
+
+- `parseVideoSpec` / `parseVideoSpecJson` validate untrusted input and fail closed: unknown fields,
+  unknown scene kinds and other spec versions are diagnostics with a JSON path, not ignored.
+- `normalizeVideoSpec` and `serializeVideoSpec` give a canonical form (fixed key order, assets by
+  id), so identical specs produce identical data and bytes. `resolveTimeline` derives scene starts
+  and the total length.
+- The module has no React or Remotion dependency and is tested as plain TypeScript.
+
+The latency explainer's spec is `src/spec/fixtures/latency-explainer.videospec.json`. The video
+reads its output profile, length, title, narration and glossary terms from it, and tests check
+that the fixture round-trips byte for byte and agrees with the generated dataset.
+
 ## Rules
 
 This app follows the performance rules from `remotion-primitives`:

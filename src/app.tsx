@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { HotspotActivation } from '@/components/remotion/hotspot';
 import { formatClock, slowestRequests, type LatencyBin } from '@/data/latency';
 import { exposePlayerForBudgetTests } from '@/render-budget';
+import { latencyScene } from '@/video/latency-spec';
 import {
   LatencyVideo,
   VIDEO_DURATION,
@@ -14,20 +15,10 @@ import {
   type BinPayload,
 } from '@/video/latency-video';
 
-const glossary: Record<string, { title: string; body: string }> = {
-  'term:binned': {
-    title: 'Binning',
-    body: 'Two hundred thousand requests are too many marks to draw per frame. @moritzbrantner/charts aggregates them once into 48 buckets with counts and percentiles; the video only animates those 48 bars.',
-  },
-  'term:p95': {
-    title: 'p95 latency',
-    body: '95% of requests in the bucket finished faster than this. Unlike the average, it shows the slow tail that users actually notice.',
-  },
-  'term:incident': {
-    title: 'The incident',
-    body: 'Between 14:00 and 15:30 the dataset injects a heavier latency tail and 503 errors. Click one of the orange bars to see the slowest requests in that window.',
-  },
-};
+// Glossary entries are the spec's narration terms.
+const glossary: Record<string, { title: string; body: string }> = Object.fromEntries(
+  (latencyScene.interaction?.terms ?? []).map((term) => [term.id, { title: term.title, body: term.body }]),
+);
 
 // Percentiles are interpolated, so they are not whole milliseconds.
 function formatMs(value: number | null) {
