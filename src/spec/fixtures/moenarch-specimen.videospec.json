@@ -1,0 +1,137 @@
+{
+  "specVersion": 1,
+  "project": {
+    "id": "moenarch-specimen",
+    "title": "Moenarch short specimen"
+  },
+  "format": {
+    "id": "moenarch-short",
+    "version": 1
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "assets": [],
+  "scenes": [
+    {
+      "kind": "title",
+      "id": "open",
+      "durationInFrames": 90,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2600,
+            "text": "Every short starts from the same house style."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Moenarch short",
+        "heading": "One format, many videos"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "type",
+      "durationInFrames": 105,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 200,
+            "endMs": 1600,
+            "text": "Short lines."
+          },
+          {
+            "startMs": 1800,
+            "endMs": 3300,
+            "text": "A fixed type scale."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Typography",
+        "heading": "Big words, few of them"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "colour",
+      "durationInFrames": 90,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2700,
+            "text": "Surfaces and accents come from one module."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Palette",
+        "heading": "Colour lives in tokens"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "pace",
+      "durationInFrames": 120,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 1900,
+            "text": "Durations stay inside a range."
+          },
+          {
+            "startMs": 2100,
+            "endMs": 3700,
+            "text": "Transitions come from a fixed list."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Pacing",
+        "heading": "Every scene keeps time"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "frame",
+      "durationInFrames": 90,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2700,
+            "text": "Text and subtitles keep to the safe area."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Framing",
+        "heading": "Safe areas stay clear"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "close",
+      "durationInFrames": 105,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 3200,
+            "text": "The outro closes every video the same way."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Signature",
+        "heading": "Same ending every time"
+      }
+    }
+  ]
+}
