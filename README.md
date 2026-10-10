@@ -56,6 +56,24 @@ The remotion-primitives source in `src/components/remotion` and `src/lib/remotio
 the same way, from an exact commit through the shadcn registry:
 `bunx shadcn@4.20.1 add --overwrite "moritzbrantner/remotion-primitives/<item>#<sha>"`.
 
+## Project catalog
+
+The app hosts several videos. `src/projects.ts` lists each project as its VideoSpec (project
+content) plus the format pack that renders it; `src/catalog/catalog.ts` validates the specs, keys
+them by `project.id` and resolves an id into a composition whose width, height, fps and
+`durationInFrames` come from the spec. Unknown ids, a spec registered with a format pack it does
+not target, and specs a format cannot render are resolve errors, never a fallback to another video.
+
+- `?project=<id>` selects the project; the catalog nav pushes history entries and back/forward
+  restore them. `/` opens the default project, the latency explainer.
+- The Player wrapper exposes `data-composition-id`, `data-width`, `data-height`, `data-fps` and
+  `data-duration-in-frames`; an unknown id renders a `role="alert"` and no composition.
+- Format packs (`src/formats/`, and the latency format in `src/video/latency-format.tsx`) hold the
+  reusable rendering code. `title-card` v1 renders `title` scenes and draws the
+  `catalog-title-card` fixture (portrait 1080x1920 at 24 fps).
+- A format with hotspots supplies `renderInsight`, and only then does the app show the insight
+  panel.
+
 ## Latency explainer
 
 `src/video/latency-video.tsx` renders one day of synthetic API traffic (200,000 requests from a

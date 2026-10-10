@@ -1,7 +1,7 @@
 import { BIN_COUNT, INCIDENT_WINDOW, REQUEST_COUNT } from '@/data/latency';
 import fixture from '@/spec/fixtures/latency-explainer.videospec.json';
 import { barRevealEnd } from '@/video/reveal';
-import { assertVideoSpec, resolveTimeline, type BinnedChartScene, type VideoSpec } from '@/spec/video-spec';
+import { assertVideoSpec, type BinnedChartScene, type VideoSpec } from '@/spec/video-spec';
 
 // The latency explainer's content (output profile, narration, glossary, chart intent) comes from
 // its VideoSpec; layout, colors and the reveal stay in the video's own format code.
@@ -62,4 +62,3 @@ export function latencyFormatScene(spec: VideoSpec): BinnedChartScene {
 
 export const latencySpec = assertVideoSpec(fixture);
 export const latencyScene = latencyFormatScene(latencySpec);
-export const latencyTimeline = resolveTimeline(latencySpec);

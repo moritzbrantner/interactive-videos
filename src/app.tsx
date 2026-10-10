@@ -1,83 +1,75 @@
 import { Player, type PlayerRef } from '@remotion/player';
-import { Table, type TableColumnDef } from '@moritzbrantner/tables/table';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 
+import type { Catalog, ResolvedComposition } from '@/catalog/catalog';
 import type { HotspotActivation } from '@/components/remotion/hotspot';
-import { formatClock, slowestRequests, type LatencyBin } from '@/data/latency';
+import { catalog as defaultCatalog } from '@/projects';
 import { exposePlayerForBudgetTests } from '@/render-budget';
-import { latencyScene } from '@/video/latency-spec';
-import {
-  LatencyVideo,
-  VIDEO_DURATION,
-  VIDEO_FPS,
-  VIDEO_HEIGHT,
-  VIDEO_WIDTH,
-  type BinPayload,
-} from '@/video/latency-video';
 
-// Glossary entries are the spec's narration terms.
-const glossary: Record<string, { title: string; body: string }> = Object.fromEntries(
-  (latencyScene.interaction?.terms ?? []).map((term) => [term.id, { title: term.title, body: term.body }]),
-);
+const PROJECT_PARAM = 'project';
 
-// Percentiles are interpolated, so they are not whole milliseconds.
-function formatMs(value: number | null) {
-  return value === null ? '–' : `${Math.round(value).toLocaleString('en-US')} ms`;
+function projectIdFromLocation(fallback: string) {
+  return new URLSearchParams(window.location.search).get(PROJECT_PARAM) ?? fallback;
 }
 
-type RequestRow = ReturnType<typeof slowestRequests>[number];
+function projectHref(id: string) {
+  const url = new URL(window.location.href);
+  url.searchParams.set(PROJECT_PARAM, id);
+  return `${url.pathname}${url.search}${url.hash}`;
+}
 
-const requestColumns: TableColumnDef<RequestRow>[] = [
-  { id: 'time', header: 'Time', accessor: (row) => formatClock(row.x) },
-  { id: 'route', header: 'Route', accessor: (row) => row.properties.route },
-  { id: 'status', header: 'Status', accessor: (row) => row.properties.status, align: 'end' },
-  {
-    id: 'latency',
-    header: 'Latency',
-    accessor: (row) => row.y,
-    align: 'end',
-    cell: (value) => formatMs(Number(value)),
-  },
-];
+/** The selected project id is URL state: links push it, and back/forward restore it. */
+function useProjectId(fallback: string) {
+  const [id, setId] = useState(() => projectIdFromLocation(fallback));
+  useEffect(() => {
+    const restore = () => setId(projectIdFromLocation(fallback));
+    window.addEventListener('popstate', restore);
+    return () => window.removeEventListener('popstate', restore);
+  }, [fallback]);
+  const open = useCallback((next: string) => {
+    window.history.pushState(null, '', projectHref(next));
+    setId(next);
+  }, []);
+  return [id, open] as const;
+}
 
-function BinInsight({ bin }: { bin: LatencyBin }) {
-  const rows = useMemo(() => slowestRequests(bin), [bin]);
-  const stats = [
-    ['Requests', bin.pointCount.toLocaleString('en-US')],
-    ['p50', formatMs(bin.p50)],
-    ['p95', formatMs(bin.p95)],
-    ['p99', formatMs(bin.p99)],
-  ];
+function ProjectNav({
+  catalog,
+  currentId,
+  onOpen,
+}: {
+  catalog: Catalog;
+  currentId: string;
+  onOpen: (id: string) => void;
+}) {
   return (
-    <>
-      <h2>
-        {formatClock(bin.x0)}–{formatClock(bin.x1)}
-      </h2>
-      <dl className="stats">
-        {stats.map(([label, value]) => (
-          <div key={label}>
-            <dt>{label}</dt>
-            <dd>{value}</dd>
-          </div>
+    <nav aria-label="Projects" className="projects">
+      <ul>
+        {catalog.projects.map((project) => (
+          <li key={project.id}>
+            <a
+              href={projectHref(project.id)}
+              aria-current={project.id === currentId ? 'page' : undefined}
+              onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                // Let modified clicks open a new tab or window as usual.
+                if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                event.preventDefault();
+                if (project.id !== currentId) onOpen(project.id);
+              }}
+            >
+              {project.title}
+            </a>
+          </li>
         ))}
-      </dl>
-      <h3>Slowest requests</h3>
-      <Table
-        ariaLabel="Slowest requests in this bucket"
-        className="requests"
-        density="compact"
-        minWidth="100%"
-        columns={requestColumns}
-        rows={rows}
-        rowKey={(row) => row.id}
-      />
-    </>
+      </ul>
+    </nav>
   );
 }
 
-export function App() {
+function ProjectView({ composition }: { composition: ResolvedComposition }) {
   const player = useRef<PlayerRef>(null);
   const [activation, setActivation] = useState<HotspotActivation>();
+  const { renderInsight } = composition;
 
   const onActivate = useCallback((next: HotspotActivation) => {
     player.current?.pause();
@@ -99,48 +91,46 @@ export function App() {
   }, []);
 
   const inputProps = useMemo(
-    () => ({ onActivate, selectedId: activation?.id }),
-    [onActivate, activation?.id],
+    () => (renderInsight ? { onActivate, selectedId: activation?.id } : {}),
+    [renderInsight, onActivate, activation?.id],
   );
 
-  const payload = activation?.payload as BinPayload | undefined;
-  const term = activation ? glossary[activation.id] : undefined;
+  const { width, height, fps, durationInFrames } = composition;
 
   return (
-    <main className="shell">
-      <header>
-        <p className="eyebrow">interactive video · charts + remotion-primitives + tables</p>
-        <h1>Latency explainer</h1>
-        <p className="lede">
-          Play the video, then click a bar or an underlined word. The video pauses and the panel shows
-          the data behind it.
-        </p>
-      </header>
-      <section className="stage">
+    <section className={renderInsight ? 'stage' : 'stage stage-solo'}>
+      <div
+        className="player-frame"
+        data-composition-id={composition.id}
+        data-width={width}
+        data-height={height}
+        data-fps={fps}
+        data-duration-in-frames={durationInFrames}
+        style={{
+          aspectRatio: `${width} / ${height}`,
+          // Fit the frame inside the column and a share of the viewport height.
+          width: `min(100%, calc(80vh * ${width} / ${height}))`,
+        }}
+      >
         <Player
           ref={player}
-          component={LatencyVideo}
+          component={composition.component}
           inputProps={inputProps}
-          durationInFrames={VIDEO_DURATION}
-          compositionWidth={VIDEO_WIDTH}
-          compositionHeight={VIDEO_HEIGHT}
-          fps={VIDEO_FPS}
+          durationInFrames={durationInFrames}
+          compositionWidth={width}
+          compositionHeight={height}
+          fps={fps}
           controls
           clickToPlay={false}
-          style={{ width: '100%', aspectRatio: `${VIDEO_WIDTH} / ${VIDEO_HEIGHT}` }}
+          style={{ width: '100%', height: '100%' }}
         />
+      </div>
+      {renderInsight ? (
         <aside className="insight" aria-live="polite">
           {activation ? (
             <>
-              <p className="eyebrow">paused at {(activation.frame / VIDEO_FPS).toFixed(1)} s</p>
-              {payload?.kind === 'bin' ? (
-                <BinInsight bin={payload.bin} />
-              ) : term ? (
-                <>
-                  <h2>{term.title}</h2>
-                  <p>{term.body}</p>
-                </>
-              ) : null}
+              <p className="eyebrow">paused at {(activation.frame / fps).toFixed(1)} s</p>
+              {renderInsight(activation)}
               <button type="button" onClick={resume}>
                 Resume
               </button>
@@ -149,7 +139,41 @@ export function App() {
             <p className="empty">Nothing selected yet.</p>
           )}
         </aside>
-      </section>
+      ) : null}
+    </section>
+  );
+}
+
+export function App({ catalog = defaultCatalog }: { catalog?: Catalog }) {
+  const [projectId, openProject] = useProjectId(catalog.defaultId);
+  const result = catalog.resolve(projectId);
+  const title = result.ok ? result.composition.title : 'Project not available';
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  return (
+    <main className="shell">
+      <ProjectNav catalog={catalog} currentId={projectId} onOpen={openProject} />
+      <header>
+        <p className="eyebrow">interactive video · charts + remotion-primitives + tables</p>
+        <h1>{title}</h1>
+        {result.ok && result.composition.renderInsight ? (
+          <p className="lede">
+            Play the video, then click a bar or an underlined word. The video pauses and the panel shows
+            the data behind it.
+          </p>
+        ) : null}
+      </header>
+      {result.ok ? (
+        // A new project gets a fresh Player and selection state.
+        <ProjectView key={result.composition.id} composition={result.composition} />
+      ) : (
+        <p role="alert" className="error">
+          {result.message}
+        </p>
+      )}
     </main>
   );
 }
