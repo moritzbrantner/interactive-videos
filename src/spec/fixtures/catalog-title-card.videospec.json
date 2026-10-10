@@ -1,0 +1,28 @@
+{
+  "specVersion": 1,
+  "project": {
+    "id": "catalog-title-card",
+    "title": "Catalog title card"
+  },
+  "format": {
+    "id": "title-card",
+    "version": 1
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 24
+  },
+  "assets": [],
+  "scenes": [
+    {
+      "kind": "title",
+      "id": "opening",
+      "durationInFrames": 96,
+      "payload": {
+        "eyebrow": "Fixture project",
+        "heading": "A second video in the catalog"
+      }
+    }
+  ]
+}

@@ -7,13 +7,11 @@ import { Subtitles } from '@/components/remotion/subtitles';
 import { BIN_COUNT, formatClock, INCIDENT_WINDOW, latencyBins, maxP95, type LatencyBin } from '@/data/latency';
 import { useBudgetCounter } from '@/render-budget';
 import { narrationToSrt } from '@/spec/video-spec';
-import { latencyScene, latencySpec, latencyTimeline, SUBTITLE_LINGER_MS } from '@/video/latency-spec';
+import { latencyScene, latencySpec, SUBTITLE_LINGER_MS } from '@/video/latency-spec';
 import { barRevealEnd, barRevealProgress } from '@/video/reveal';
 
-export const VIDEO_FPS = latencySpec.output.fps;
-export const VIDEO_DURATION = latencyTimeline.durationInFrames;
-export const VIDEO_WIDTH = latencySpec.output.width;
-export const VIDEO_HEIGHT = latencySpec.output.height;
+// The format code is laid out for the spec's output profile (latencyFormatScene enforces it).
+const { width: frameWidth, height: frameHeight } = latencySpec.output;
 
 export type LatencyVideoProps = {
   onActivate?: (activation: HotspotActivation) => void;
@@ -167,9 +165,9 @@ const Bars = memo(function Bars() {
   useBudgetCounter('Bars');
   return (
     <svg
-      width={VIDEO_WIDTH}
-      height={VIDEO_HEIGHT}
-      viewBox={`0 0 ${VIDEO_WIDTH} ${VIDEO_HEIGHT}`}
+      width={frameWidth}
+      height={frameHeight}
+      viewBox={`0 0 ${frameWidth} ${frameHeight}`}
       style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
     >
       {bars.map((bar) => (
