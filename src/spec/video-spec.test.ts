@@ -210,6 +210,25 @@ describe('VideoSpec v1', () => {
       diagnosticsOf({ ...fixture(), project: { id: undefined, title: 'x' } }),
     ).toEqual([{ path: '$.project.id', message: 'missing required field' }]);
 
+    const nested = fixture();
+    nested.scenes[0].narration.cues[3].text = 'Run <a<b> mode';
+    expect(diagnosticsOf(nested)).toEqual([
+      { path: '$.scenes[0].narration.cues[3].text', message: expect.stringContaining('subtitle markup') },
+    ]);
+    const between = fixture();
+    between.scenes[0].narration.cues[3] = { startMs: 11_980, endMs: 12_000, text: 'Click any bar.' };
+    between.scenes[0].narration.cues.splice(3, 0, { startMs: 9_910, endMs: 9_920, text: 'Gap.' });
+    expect(diagnosticsOf(between).map((d) => `${d.path}: ${d.message}`)).toEqual([
+      '$.scenes[0].narration.cues[3]: is not on screen on any rendered frame',
+      '$.scenes[0].narration.cues[4]: is not on screen on any rendered frame',
+    ]);
+    const sparse = fixture();
+    sparse.assets = new Array(1);
+    expect(diagnosticsOf(sparse)).toContainEqual({
+      path: '$.assets[0]',
+      message: 'expected an object, got undefined',
+    });
+
     const ampersand = fixture();
     ampersand.scenes[0].narration.cues[3].text = 'Search & inspect any bar.';
     expect(parseVideoSpec(ampersand).ok).toBe(true);

@@ -250,7 +250,8 @@ class Reader {
       return null;
     }
     if (nonEmpty && value.length === 0) this.error(path, 'must not be empty');
-    return value;
+    // Holes of a sparse array become undefined elements, which then fail their own checks.
+    return Array.from(value);
   }
 
   string(value: unknown, path: string): string {
@@ -427,9 +428,10 @@ function readScene(
     return null;
   }
   const durationInFrames = r.integer(scene.durationInFrames, `${path}.durationInFrames`, { min: 1 });
-  const durationMs = fps > 0 ? (durationInFrames / fps) * 1000 : Number.POSITIVE_INFINITY;
   const narration =
-    scene.narration === undefined ? undefined : readNarration(r, scene.narration, `${path}.narration`, durationMs);
+    scene.narration === undefined
+      ? undefined
+      : readNarration(r, scene.narration, `${path}.narration`, fps, durationInFrames);
   const interaction =
     scene.interaction === undefined
       ? undefined
@@ -497,7 +499,14 @@ function readScene(
   };
 }
 
-function readNarration(r: Reader, value: unknown, path: string, durationMs: number): Narration {
+function readNarration(
+  r: Reader,
+  value: unknown,
+  path: string,
+  fps: number,
+  durationInFrames: number,
+): Narration {
+  const durationMs = fps > 0 ? (durationInFrames / fps) * 1000 : Number.POSITIVE_INFINITY;
   const narration = r.object(value, path, ['cues']);
   const cues = (r.array(narration?.cues, `${path}.cues`, { nonEmpty: true }) ?? []).map((cueValue, index) => {
     const cuePath = `${path}.cues[${index}]`;
@@ -518,7 +527,8 @@ function readNarration(r: Reader, value: unknown, path: string, durationMs: numb
       r.error(`${path}.cues[${index}].text`, 'must use "\\n" line breaks, not "\\r"');
     }
     // Subtitle parsers read tags and ASS overrides as formatting; narration is literal text.
-    if (/<[^<>]*>|\{\\/.test(cue.text)) {
+    // Same tag shape the subtitle markup parser strips (`<([^>]+)>`).
+    if (/<[^>]+>|\{\\/.test(cue.text)) {
       r.error(`${path}.cues[${index}].text`, 'must not contain subtitle markup (<tag> or {\\…})');
     }
     // Subtitle parsers decode entity references, so "&amp;" would render as "&".
@@ -531,6 +541,12 @@ function readNarration(r: Reader, value: unknown, path: string, durationMs: numb
     if (cue.endMs <= cue.startMs) r.error(cuePath, 'endMs must be greater than startMs');
     if (cue.endMs > durationMs) {
       r.error(`${cuePath}.endMs`, `ends after the scene (${Math.round(durationMs)} ms)`);
+    } else if (fps > 0 && cue.endMs > cue.startMs) {
+      // Frames sample time at frame / fps; a cue between two samples is never shown.
+      const firstFrame = Math.ceil((cue.startMs * fps) / 1000);
+      if ((firstFrame * 1000) / fps >= cue.endMs || firstFrame >= durationInFrames) {
+        r.error(cuePath, 'is not on screen on any rendered frame');
+      }
     }
     const previous = cues[index - 1];
     if (previous && cue.startMs < previous.endMs) {
