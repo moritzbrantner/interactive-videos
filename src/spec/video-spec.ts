@@ -231,6 +231,11 @@ class Reader {
       this.error(path, `expected an object, got ${describe(value)}`);
       return null;
     }
+    const prototype = Object.getPrototypeOf(value);
+    if (prototype !== Object.prototype && prototype !== null) {
+      this.error(path, 'expected a plain object');
+      return null;
+    }
     const record = value as Json;
     for (const key of Object.keys(record)) {
       if (!required.includes(key) && !optional.includes(key)) {
@@ -239,7 +244,9 @@ class Reader {
     }
     for (const key of required) {
       // An explicit undefined (programmatic input) is as missing as an absent key.
-      if (record[key] === undefined) this.error(`${path}.${key}`, 'missing required field');
+      if (!Object.hasOwn(record, key) || record[key] === undefined) {
+        this.error(`${path}.${key}`, 'missing required field');
+      }
     }
     return record;
   }
@@ -542,9 +549,10 @@ function readNarration(
     if (cue.endMs > durationMs) {
       r.error(`${cuePath}.endMs`, `ends after the scene (${Math.round(durationMs)} ms)`);
     } else if (fps > 0 && cue.endMs > cue.startMs) {
-      // Frames sample time at frame / fps; a cue between two samples is never shown.
+      // Frames sample time at frame / fps, and a cue is shown through its end time inclusive;
+      // a cue strictly between two samples is never shown.
       const firstFrame = Math.ceil((cue.startMs * fps) / 1000);
-      if ((firstFrame * 1000) / fps >= cue.endMs || firstFrame >= durationInFrames) {
+      if ((firstFrame * 1000) / fps > cue.endMs || firstFrame >= durationInFrames) {
         r.error(cuePath, 'is not on screen on any rendered frame');
       }
     }

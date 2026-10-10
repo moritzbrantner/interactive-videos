@@ -222,6 +222,13 @@ describe('VideoSpec v1', () => {
       '$.scenes[0].narration.cues[3]: is not on screen on any rendered frame',
       '$.scenes[0].narration.cues[4]: is not on screen on any rendered frame',
     ]);
+    const onEndFrame = fixture();
+    onEndFrame.scenes[0].narration.cues[0] = { startMs: 999, endMs: 1000, text: 'All binned.' };
+    // The only sampled frame (30, at 1000 ms) is the cue's end time, which is still shown.
+    expect(parseVideoSpec(onEndFrame).ok).toBe(true);
+    const inherited = Object.create({ ...fixture(), renderer: 'remotion' });
+    expect(diagnosticsOf(inherited)).toEqual([{ path: '$', message: 'expected a plain object' }]);
+
     const sparse = fixture();
     sparse.assets = new Array(1);
     expect(diagnosticsOf(sparse)).toContainEqual({
