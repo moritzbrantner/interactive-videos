@@ -1,0 +1,88 @@
+{
+  "specVersion": 1,
+  "project": {
+    "id": "latency-explainer",
+    "title": "Latency explainer"
+  },
+  "format": {
+    "id": "interactive-chart-explainer",
+    "version": 1
+  },
+  "output": {
+    "width": 1280,
+    "height": 720,
+    "fps": 30
+  },
+  "assets": [
+    {
+      "id": "latency-requests",
+      "kind": "dataset",
+      "uri": "generator:latency-requests?seed=20260928&count=200000"
+    }
+  ],
+  "scenes": [
+    {
+      "kind": "binnedChart",
+      "id": "latency-day",
+      "durationInFrames": 360,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 500,
+            "endMs": 3800,
+            "text": "200,000 requests, binned into 48 half-hour buckets."
+          },
+          {
+            "startMs": 4000,
+            "endMs": 7600,
+            "text": "Each bar is the p95 latency of its bucket."
+          },
+          {
+            "startMs": 7800,
+            "endMs": 9900,
+            "text": "Around two o'clock an incident pushes the tail up."
+          },
+          {
+            "startMs": 10000,
+            "endMs": 11900,
+            "text": "Click any bar to inspect its requests."
+          }
+        ]
+      },
+      "interaction": {
+        "terms": [
+          {
+            "id": "term:binned",
+            "term": "binned",
+            "title": "Binning",
+            "body": "Two hundred thousand requests are too many marks to draw per frame. @moritzbrantner/charts aggregates them once into 48 buckets with counts and percentiles; the video only animates those 48 bars."
+          },
+          {
+            "id": "term:p95",
+            "term": "p95",
+            "title": "p95 latency",
+            "body": "95% of requests in the bucket finished faster than this. Unlike the average, it shows the slow tail that users actually notice."
+          },
+          {
+            "id": "term:incident",
+            "term": "incident",
+            "title": "The incident",
+            "body": "Between 14:00 and 15:30 the dataset injects a heavier latency tail and 503 errors. Click one of the orange bars to see the slowest requests in that window."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "API latency · one day",
+        "heading": "Where did the slow requests come from?",
+        "dataset": "latency-requests",
+        "bins": 48,
+        "metric": "p95",
+        "highlight": {
+          "from": 50400,
+          "to": 55800
+        },
+        "inspectable": true
+      }
+    }
+  ]
+}

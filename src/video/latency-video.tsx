@@ -4,22 +4,16 @@ import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { Fade } from '@/components/remotion/fade';
 import { HotspotProvider, SvgHotspot, type HotspotActivation } from '@/components/remotion/hotspot';
 import { Subtitles } from '@/components/remotion/subtitles';
-import {
-  BIN_COUNT,
-  formatClock,
-  INCIDENT_WINDOW,
-  latencyBins,
-  maxP95,
-  REQUEST_COUNT,
-  type LatencyBin,
-} from '@/data/latency';
+import { BIN_COUNT, formatClock, INCIDENT_WINDOW, latencyBins, maxP95, type LatencyBin } from '@/data/latency';
 import { useBudgetCounter } from '@/render-budget';
+import { narrationToSrt } from '@/spec/video-spec';
+import { latencyScene, latencySpec, latencyTimeline, SUBTITLE_LINGER_MS } from '@/video/latency-spec';
 import { barRevealEnd, barRevealProgress } from '@/video/reveal';
 
-export const VIDEO_FPS = 30;
-export const VIDEO_DURATION = 360;
-export const VIDEO_WIDTH = 1280;
-export const VIDEO_HEIGHT = 720;
+export const VIDEO_FPS = latencySpec.output.fps;
+export const VIDEO_DURATION = latencyTimeline.durationInFrames;
+export const VIDEO_WIDTH = latencySpec.output.width;
+export const VIDEO_HEIGHT = latencySpec.output.height;
 
 export type LatencyVideoProps = {
   onActivate?: (activation: HotspotActivation) => void;
@@ -57,27 +51,13 @@ const bars = latencyBins.map((bin, index) => {
 
 const gridValues = [0.25, 0.5, 0.75, 1].map((fraction) => Math.round(maxP95 * fraction));
 
-const subtitleText = `1
-00:00:00,500 --> 00:00:03,800
-${REQUEST_COUNT.toLocaleString('en-US')} requests, binned into ${BIN_COUNT} half-hour buckets.
+const subtitleText = latencyScene.narration ? narrationToSrt(latencyScene.narration) : '';
 
-2
-00:00:04,000 --> 00:00:07,600
-Each bar is the p95 latency of its bucket.
-
-3
-00:00:07,800 --> 00:00:09,900
-Around two o'clock an incident pushes the tail up.
-
-4
-00:00:10,000 --> 00:00:11,900
-Click any bar to inspect its requests.`;
-
-const subtitleHotspots = [
-  { id: 'term:binned', term: 'binned', payload: { kind: 'term' } satisfies TermPayload },
-  { id: 'term:p95', term: 'p95', payload: { kind: 'term' } satisfies TermPayload },
-  { id: 'term:incident', term: 'incident', payload: { kind: 'term' } satisfies TermPayload },
-];
+const subtitleHotspots = (latencyScene.interaction?.terms ?? []).map((term) => ({
+  id: term.id,
+  term: term.term,
+  payload: { kind: 'term' } satisfies TermPayload,
+}));
 
 // Static chart chrome does not read the frame, so it renders once and is skipped afterwards.
 const ChartChrome = memo(function ChartChrome() {
@@ -150,6 +130,25 @@ const BarMark = memo(function BarMark({
   progress: number;
 }) {
   useBudgetCounter('BarMark');
+  // Geometry is fixed; the reveal only animates transform and opacity.
+  const mark = (
+    <rect
+      x={bar.left}
+      y={plot.top + plot.height - bar.height}
+      width={barWidth}
+      height={bar.height}
+      rx={4}
+      fill={bar.incident ? colors.incident : colors.bar}
+      style={{
+        transform: `scaleY(${progress})`,
+        transformBox: 'fill-box',
+        transformOrigin: 'bottom',
+        opacity: 0.35 + 0.65 * progress,
+      }}
+    />
+  );
+  // A spec that does not make the chart inspectable gets no bar hotspots.
+  if (!latencyScene.payload.inspectable) return mark;
   return (
     <SvgHotspot<BinPayload>
       id={bar.id}
@@ -158,21 +157,7 @@ const BarMark = memo(function BarMark({
       from={barRevealEnd(bar.index)}
       selectedStyle={{ stroke: colors.text, strokeWidth: 3 }}
     >
-      {/* Geometry is fixed; the reveal only animates transform and opacity. */}
-      <rect
-        x={bar.left}
-        y={plot.top + plot.height - bar.height}
-        width={barWidth}
-        height={bar.height}
-        rx={4}
-        fill={bar.incident ? colors.incident : colors.bar}
-        style={{
-          transform: `scaleY(${progress})`,
-          transformBox: 'fill-box',
-          transformOrigin: 'bottom',
-          opacity: 0.35 + 0.65 * progress,
-        }}
-      />
+      {mark}
     </SvgHotspot>
   );
 });
@@ -208,10 +193,10 @@ export function LatencyVideo({ onActivate, selectedId }: LatencyVideoProps) {
         <Fade startFrame={0} durationInFrames={20}>
           <div style={{ position: 'absolute', left: plot.left, top: 48 }}>
             <div style={{ fontSize: 18, color: colors.muted, letterSpacing: 2, textTransform: 'uppercase' }}>
-              API latency · one day
+              {latencyScene.payload.eyebrow}
             </div>
             <div style={{ fontSize: 44, fontWeight: 760, letterSpacing: -1.5, marginTop: 6 }}>
-              Where did the slow requests come from?
+              {latencyScene.payload.heading}
             </div>
           </div>
         </Fade>
@@ -227,6 +212,7 @@ export function LatencyVideo({ onActivate, selectedId }: LatencyVideoProps) {
           bottom={112}
           maxWidth="86%"
           highlightMode="none"
+          lingerMs={SUBTITLE_LINGER_MS}
           hotspots={subtitleHotspots}
         />
       </AbsoluteFill>
