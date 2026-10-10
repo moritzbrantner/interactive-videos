@@ -200,6 +200,23 @@ describe('VideoSpec v1', () => {
     expect(parseVideoSpec(ampersand).ok).toBe(true);
   });
 
+  it('accepts only safe integers, so timing stays exact and finite', () => {
+    const huge = fixture();
+    huge.scenes[0].durationInFrames = 1e308;
+    expect(diagnosticsOf(huge)).toContainEqual({
+      path: '$.scenes[0].durationInFrames',
+      message: 'must be a safe integer (at most 2^53 - 1)',
+    });
+    const sum = fixture();
+    sum.scenes[0].durationInFrames = Number.MAX_SAFE_INTEGER;
+    delete sum.scenes[0].narration;
+    delete sum.scenes[0].interaction;
+    sum.scenes.push({ kind: 'title', id: 'end', durationInFrames: 10, payload: { heading: 'End' } });
+    expect(diagnosticsOf(sum)).toEqual([
+      { path: '$.scenes', message: 'the total duration must be a safe integer number of frames' },
+    ]);
+  });
+
   it('derives the timeline from ordered scenes', () => {
     const spec = fixture();
     spec.scenes.unshift({ kind: 'title', id: 'intro', durationInFrames: 45, payload: { heading: 'Hi' } });
@@ -251,6 +268,15 @@ Click any bar to inspect its requests.`);
         delete spec.scenes[0].interaction;
       }),
     ).toThrow(/ends before the reveal/);
+    const silent = (frames: number) =>
+      variant((spec) => {
+        spec.scenes[0].durationInFrames = frames;
+        delete spec.scenes[0].narration;
+        delete spec.scenes[0].interaction;
+      });
+    // Frames run 0..duration-1; the last bar is fully revealed on frame 142.
+    expect(silent(142)).toThrow(/ends before the reveal/);
+    expect(silent(143)()).toMatchObject({ durationInFrames: 143 });
     expect(
       variant((spec) => (spec.scenes[0].interaction.terms[0].id = 'bin-0')),
     ).toThrow(/term id bin-0 is reserved/);

@@ -32,7 +32,8 @@ export function latencyFormatScene(spec: VideoSpec): BinnedChartScene {
   const { payload } = scene;
   // The reveal runs on fixed frames; a shorter scene would end before the chart is shown.
   const revealEnd = barRevealEnd(BIN_COUNT - 1);
-  if (scene.durationInFrames < revealEnd) {
+  // Frames run 0..duration-1, so the fully revealed frame must be inside the scene.
+  if (scene.durationInFrames <= revealEnd) {
     problems.push(`duration ${scene.durationInFrames} frames ends before the reveal (${revealEnd})`);
   }
   // Bar hotspots use these ids, and selection compares ids only.

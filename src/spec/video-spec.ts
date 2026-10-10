@@ -275,6 +275,11 @@ class Reader {
       if (value !== undefined) this.error(path, `expected an integer, got ${describe(value)}`);
       return 0;
     }
+    // Larger integers do not survive JSON round trips or timeline sums exactly.
+    if (!Number.isSafeInteger(value)) {
+      this.error(path, 'must be a safe integer (at most 2^53 - 1)');
+      return 0;
+    }
     if (value < min) this.error(path, `must be at least ${min}`);
     return value;
   }
@@ -387,6 +392,9 @@ function readSpec(r: Reader, input: unknown): VideoSpec | null {
     return scene ? [{ scene, index }] : [];
   });
   spec.scenes = read.map(({ scene }) => scene);
+  if (!Number.isSafeInteger(spec.scenes.reduce((sum, scene) => sum + scene.durationInFrames, 0))) {
+    r.error('$.scenes', 'the total duration must be a safe integer number of frames');
+  }
   r.unique(read.map(({ scene }) => scene.id), (position) => `$.scenes[${read[position].index}].id`, 'scene');
   const termIds = read.flatMap(({ scene, index }) =>
     (scene.interaction?.terms ?? []).map((term, termIndex) => ({
