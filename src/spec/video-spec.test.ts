@@ -256,6 +256,14 @@ describe('VideoSpec v1', () => {
     expect(diagnosticsOf(arrayExtra)).toEqual([
       { path: '$.assets', message: 'unsupported array property renderer' },
     ]);
+    const maxIndex = fixture();
+    maxIndex.assets['4294967295'] = 'evil';
+    expect(diagnosticsOf(maxIndex)).toEqual([
+      { path: '$.assets', message: 'unsupported array property 4294967295' },
+    ]);
+    const negativeZero = parseVideoSpecJson(fixtureText.replace('"startMs": 500', '"startMs": -0'));
+    if (!negativeZero.ok) throw new Error('expected -0 to parse');
+    expect(Object.is(negativeZero.spec.scenes[0].narration!.cues[0].startMs, 0)).toBe(true);
     const slow = fixture();
     slow.output.fps = 5;
     slow.scenes[0].durationInFrames = 400;

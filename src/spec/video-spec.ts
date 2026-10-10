@@ -303,7 +303,8 @@ class Reader {
       return 0;
     }
     if (value < min) this.error(path, `must be at least ${min}`);
-    return value;
+    // -0 would serialize as 0, so the canonical data would change across a round trip.
+    return value === 0 ? 0 : value;
   }
 
   number(value: unknown, path: string): number {
@@ -311,7 +312,7 @@ class Reader {
       if (value !== undefined) this.error(path, `expected a finite number, got ${describe(value)}`);
       return 0;
     }
-    return value;
+    return value === 0 ? 0 : value;
   }
 
   boolean(value: unknown, path: string): boolean {
@@ -350,7 +351,12 @@ function snapshot(value: unknown, path: string, diagnostics: VideoSpecDiagnostic
   if (typeof value !== 'object' || value === null) return value;
   if (Array.isArray(value)) {
     for (const key of Reflect.ownKeys(value)) {
-      if (key === 'length' || (typeof key === 'string' && String(Number(key) >>> 0) === key)) continue;
+      if (key === 'length') continue;
+      // Canonical array indexes only: below 2^32 - 1 and inside the length.
+      const index = typeof key === 'string' ? Number(key) : Number.NaN;
+      if (String(index) === key && Number.isInteger(index) && index >= 0 && index < value.length) {
+        continue;
+      }
       diagnostics.push({ path, message: `unsupported array property ${String(key)}` });
     }
     return Array.from({ length: value.length }, (_, index) =>
