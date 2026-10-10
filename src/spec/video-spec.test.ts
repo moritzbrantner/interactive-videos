@@ -241,7 +241,23 @@ describe('VideoSpec v1', () => {
         throw new Error('boom');
       },
     };
-    expect(diagnosticsOf(throwing)).toEqual([{ path: '$', message: 'could not read input: boom' }]);
+    expect(diagnosticsOf(throwing)).toEqual([
+      { path: '$.specVersion', message: 'accessor properties are not supported' },
+    ]);
+    const hidden = fixture();
+    Object.defineProperty(hidden, 'renderer', { value: 'remotion', enumerable: false });
+    expect(diagnosticsOf(hidden)).toEqual([
+      { path: '$.renderer', message: 'unsupported non-enumerable field' },
+    ]);
+    const slow = fixture();
+    slow.output.fps = 5;
+    slow.scenes[0].durationInFrames = 400;
+    slow.scenes[0].narration.cues.push({ startMs: 64_600, endMs: 64_601, text: 'Late.' });
+    // Frame 323 is 64599.99999999999 ms in the renderer, before the cue; frame 324 is after it.
+    expect(diagnosticsOf(slow)).toContainEqual({
+      path: '$.scenes[0].narration.cues[4]',
+      message: 'is not on screen on any rendered frame',
+    });
 
     const sparse = fixture();
     sparse.assets = new Array(1);

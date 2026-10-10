@@ -85,7 +85,11 @@ export function parseVideoSpec(input: unknown): VideoSpecParseResult {
   const diagnostics: VideoSpecDiagnostic[] = [];
   let spec: VideoSpec | null;
   try {
-    spec = readSpec(new Reader(diagnostics), input);
+    // Validation reads a plain-data snapshot, so getters, hidden keys and proxies cannot change
+    // or hide values between checks.
+    const data = snapshot(input, '$', diagnostics);
+    if (diagnostics.length) return { ok: false, diagnostics };
+    spec = readSpec(new Reader(diagnostics), data);
   } catch (error) {
     // Programmatic input can throw while being read (getters, proxies); that is invalid input.
     return {
@@ -338,6 +342,51 @@ class Reader {
   }
 }
 
+/**
+ * Copies JSON-like input once: own enumerable string-keyed data properties only. Accessors,
+ * symbol or non-enumerable keys are reported, because v1 fails closed on what it cannot see.
+ */
+function snapshot(value: unknown, path: string, diagnostics: VideoSpecDiagnostic[]): unknown {
+  if (typeof value !== 'object' || value === null) return value;
+  if (Array.isArray(value)) {
+    return Array.from({ length: value.length }, (_, index) =>
+      snapshotProperty(value, String(index), `${path}[${index}]`, diagnostics),
+    );
+  }
+  const prototype = Object.getPrototypeOf(value);
+  // Not a plain record: left as is and reported as "expected a plain object" by the reader.
+  if (prototype !== Object.prototype && prototype !== null) return value;
+  const copy: Json = {};
+  for (const key of Reflect.ownKeys(value)) {
+    if (typeof key === 'symbol') {
+      diagnostics.push({ path, message: `unsupported symbol key ${String(key)}` });
+      continue;
+    }
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (descriptor && !descriptor.enumerable) {
+      diagnostics.push({ path: `${path}.${key}`, message: 'unsupported non-enumerable field' });
+      continue;
+    }
+    copy[key] = snapshotProperty(value, key, `${path}.${key}`, diagnostics);
+  }
+  return copy;
+}
+
+function snapshotProperty(
+  owner: object,
+  key: string,
+  path: string,
+  diagnostics: VideoSpecDiagnostic[],
+): unknown {
+  const descriptor = Object.getOwnPropertyDescriptor(owner, key);
+  if (!descriptor) return undefined;
+  if (!('value' in descriptor)) {
+    diagnostics.push({ path, message: 'accessor properties are not supported' });
+    return undefined;
+  }
+  return snapshot(descriptor.value, path, diagnostics);
+}
+
 function errorMessage(error: unknown) {
   try {
     return error instanceof Error ? error.message : String(error);
@@ -568,7 +617,9 @@ function readNarration(
     } else if (fps > 0 && cue.endMs > cue.startMs) {
       // Frames sample time at frame / fps, and a cue is shown through its end time inclusive;
       // a cue strictly between two samples is never shown.
-      const firstFrame = Math.ceil((cue.startMs * fps) / 1000);
+      let firstFrame = Math.ceil((cue.startMs * fps) / 1000);
+      while ((firstFrame / fps) * 1000 < cue.startMs) firstFrame += 1;
+      while (firstFrame > 0 && ((firstFrame - 1) / fps) * 1000 >= cue.startMs) firstFrame -= 1;
       // Same arithmetic order as the subtitle renderer, so float rounding agrees with it.
       if ((firstFrame / fps) * 1000 > cue.endMs || firstFrame >= durationInFrames) {
         r.error(cuePath, 'is not on screen on any rendered frame');
