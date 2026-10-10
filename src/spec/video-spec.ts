@@ -83,7 +83,16 @@ const ID_PATTERN = /^[a-z0-9][a-z0-9._:-]*$/;
 /** Validates untrusted input (for example parsed JSON) and returns the normalized spec. */
 export function parseVideoSpec(input: unknown): VideoSpecParseResult {
   const diagnostics: VideoSpecDiagnostic[] = [];
-  const spec = readSpec(new Reader(diagnostics), input);
+  let spec: VideoSpec | null;
+  try {
+    spec = readSpec(new Reader(diagnostics), input);
+  } catch (error) {
+    // Programmatic input can throw while being read (getters, proxies); that is invalid input.
+    return {
+      ok: false,
+      diagnostics: [...diagnostics, { path: '$', message: `could not read input: ${errorMessage(error)}` }],
+    };
+  }
   return spec && diagnostics.length === 0
     ? { ok: true, spec: normalizeVideoSpec(spec) }
     : { ok: false, diagnostics };
@@ -329,6 +338,14 @@ class Reader {
   }
 }
 
+function errorMessage(error: unknown) {
+  try {
+    return error instanceof Error ? error.message : String(error);
+  } catch {
+    return 'unknown error';
+  }
+}
+
 /** A value for a diagnostic; never throws (BigInt, cycles, symbols). */
 function show(value: unknown): string {
   try {
@@ -552,7 +569,8 @@ function readNarration(
       // Frames sample time at frame / fps, and a cue is shown through its end time inclusive;
       // a cue strictly between two samples is never shown.
       const firstFrame = Math.ceil((cue.startMs * fps) / 1000);
-      if ((firstFrame * 1000) / fps > cue.endMs || firstFrame >= durationInFrames) {
+      // Same arithmetic order as the subtitle renderer, so float rounding agrees with it.
+      if ((firstFrame / fps) * 1000 > cue.endMs || firstFrame >= durationInFrames) {
         r.error(cuePath, 'is not on screen on any rendered frame');
       }
     }

@@ -229,6 +229,20 @@ describe('VideoSpec v1', () => {
     const inherited = Object.create({ ...fixture(), renderer: 'remotion' });
     expect(diagnosticsOf(inherited)).toEqual([{ path: '$', message: 'expected a plain object' }]);
 
+    const rounding = fixture();
+    rounding.scenes[0].durationInFrames = 600;
+    rounding.scenes[0].narration.cues.push({ startMs: 16_099, endMs: 16_100, text: 'Late.' });
+    // Frame 483 is (483 / 30) * 1000 = 16100.000000000002 ms in the renderer: after the cue.
+    expect(diagnosticsOf(rounding)).toEqual([
+      { path: '$.scenes[0].narration.cues[4]', message: 'is not on screen on any rendered frame' },
+    ]);
+    const throwing = {
+      get specVersion() {
+        throw new Error('boom');
+      },
+    };
+    expect(diagnosticsOf(throwing)).toEqual([{ path: '$', message: 'could not read input: boom' }]);
+
     const sparse = fixture();
     sparse.assets = new Array(1);
     expect(diagnosticsOf(sparse)).toContainEqual({
