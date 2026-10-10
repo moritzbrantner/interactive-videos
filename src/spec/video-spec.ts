@@ -80,7 +80,13 @@ export type VideoSpecParseResult =
 
 const ID_PATTERN = /^[a-z0-9][a-z0-9._:-]*$/;
 
-/** Validates untrusted input (for example parsed JSON) and returns the normalized spec. */
+/**
+ * Validates untrusted input and returns the normalized spec. The input is data: parsed JSON or
+ * plain objects and arrays. It is read once as own data properties (accessors, hidden and extra
+ * keys are diagnostics). A Proxy defines its own reflection and can misreport its keys; there is
+ * no portable way to detect one, so proxies are outside this contract. Parse JSON text with
+ * `parseVideoSpecJson` when the source is not trusted to be plain data.
+ */
 export function parseVideoSpec(input: unknown): VideoSpecParseResult {
   const diagnostics: VideoSpecDiagnostic[] = [];
   let spec: VideoSpec | null;
