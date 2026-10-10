@@ -19,6 +19,11 @@ export function latencyFormatScene(spec: VideoSpec): BinnedChartScene {
       `format ${spec.format.id} v${spec.format.version} is not ${LATENCY_FORMAT.id} v${LATENCY_FORMAT.version}`,
     );
   }
+  const { width, height, fps } = spec.output;
+  // Plot geometry and the frame-based reveal are laid out for this profile.
+  if (width !== 1280 || height !== 720 || fps !== 30) {
+    problems.push(`output ${width}x${height}@${fps} is not 1280x720@30`);
+  }
   const [scene] = spec.scenes;
   if (spec.scenes.length !== 1 || scene.kind !== 'binnedChart') {
     throw new Error(`${[...problems, 'this format renders exactly one binnedChart scene'].join('; ')}`);

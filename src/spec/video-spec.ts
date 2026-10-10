@@ -493,6 +493,10 @@ function readNarration(r: Reader, value: unknown, path: string, durationMs: numb
     if (/\n[ \t]*\r?\n|\r[ \t]*\r/.test(cue.text)) {
       r.error(`${path}.cues[${index}].text`, 'must not contain a blank line');
     }
+    // Subtitle parsers read tags and ASS overrides as formatting; narration is literal text.
+    if (/<[^<>]*>|\{\\/.test(cue.text)) {
+      r.error(`${path}.cues[${index}].text`, 'must not contain subtitle markup (<tag> or {\\…})');
+    }
   });
   cues.forEach((cue, index) => {
     const cuePath = `${path}.cues[${index}]`;
@@ -535,17 +539,41 @@ function readInteraction(
       } else {
         seenTerms.set(key, index);
       }
-      if (!narration?.cues.some((cue) => occursAsTerm(cue.text, parsed.term))) {
-        r.error(`${termPath}.term`, `"${parsed.term}" does not occur in this scene's narration`);
-      }
     }
     return parsed;
+  });
+  // Matched like the subtitle hotspot matcher: all terms at once, longest first, so a term whose
+  // only occurrences sit inside a longer term's match is unreachable.
+  const reachable = matchedTerms(
+    (narration?.cues ?? []).map((cue) => cue.text),
+    terms.map((term) => term.term),
+  );
+  terms.forEach((term, index) => {
+    if (term.term && !reachable.has(term.term.toLocaleLowerCase())) {
+      r.error(
+        `${path}.terms[${index}].term`,
+        `"${term.term}" does not occur in this scene's narration outside a longer term`,
+      );
+    }
   });
   return { terms };
 }
 
-/** Whole-term, case-insensitive occurrence, with the subtitle hotspot matcher's boundaries. */
-function occursAsTerm(text: string, term: string) {
-  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, 'iu').test(text);
+/**
+ * Lowercased terms the subtitle hotspot matcher would link in `texts`: whole-term,
+ * case-insensitive, longest alternative first, with its letter/digit boundaries.
+ */
+function matchedTerms(texts: string[], terms: string[]) {
+  const candidates = [...new Set(terms.filter((term) => term.trim()))].sort((a, b) => b.length - a.length);
+  const matched = new Set<string>();
+  if (!candidates.length) return matched;
+  const escape = (term: string) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const pattern = new RegExp(
+    `(?<![\\p{L}\\p{N}])(${candidates.map(escape).join('|')})(?![\\p{L}\\p{N}])`,
+    'giu',
+  );
+  for (const text of texts) {
+    for (const match of text.matchAll(pattern)) matched.add(match[0].toLocaleLowerCase());
+  }
+  return matched;
 }

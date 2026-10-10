@@ -120,7 +120,7 @@ describe('VideoSpec v1', () => {
         '$.scenes[0].payload.metric: unknown metric "mean"; v1 supports p50, p95, p99',
         '$.scenes[0].payload.highlight: "to" must be greater than "from"',
         '$.scenes[0].narration.cues[1].startMs: cues must be in order and must not overlap',
-        '$.scenes[0].interaction.terms[3].term: "jitter" does not occur in this scene\'s narration',
+        '$.scenes[0].interaction.terms[3].term: "jitter" does not occur in this scene\'s narration outside a longer term',
         '$.scenes[1].id: duplicate scene id "latency-day"',
         '$.scenes[1].interaction.terms[0].id: duplicate term id "term:binned"',
       ]),
@@ -167,9 +167,28 @@ describe('VideoSpec v1', () => {
     scene.narration.cues[0].text = 'First line\n\nSecond block';
     expect(diagnosticsOf(spec)).toEqual([
       { path: '$.scenes[0].narration.cues[0].text', message: 'must not contain a blank line' },
-      { path: '$.scenes[0].interaction.terms[0].term', message: '"binned" does not occur in this scene\'s narration' },
       { path: '$.scenes[0].interaction.terms[5].term', message: '"P95" is already defined by terms[1]' },
-      { path: '$.scenes[0].interaction.terms[6].term', message: '"bin" does not occur in this scene\'s narration' },
+      { path: '$.scenes[0].interaction.terms[0].term', message: '"binned" does not occur in this scene\'s narration outside a longer term' },
+      { path: '$.scenes[0].interaction.terms[6].term', message: '"bin" does not occur in this scene\'s narration outside a longer term' },
+    ]);
+
+    const shadowed = fixture();
+    shadowed.scenes[0].interaction.terms.push({ id: 'term:tail', term: 'tail', title: 'T', body: 'x' });
+    shadowed.scenes[0].interaction.terms.push({ id: 'term:tail-up', term: 'the tail up', title: 'T', body: 'x' });
+    expect(diagnosticsOf(shadowed)).toEqual([
+      {
+        path: '$.scenes[0].interaction.terms[3].term',
+        message: '"tail" does not occur in this scene\'s narration outside a longer term',
+      },
+    ]);
+
+    const markup = fixture();
+    markup.scenes[0].narration.cues[1].text = 'Run <fast> mode';
+    markup.scenes[0].narration.cues[2].text = '{\\b1}incident';
+    expect(diagnosticsOf(markup).map((d) => d.path)).toEqual([
+      '$.scenes[0].narration.cues[1].text',
+      '$.scenes[0].narration.cues[2].text',
+      '$.scenes[0].interaction.terms[1].term',
     ]);
   });
 
@@ -216,6 +235,7 @@ Click any bar to inspect its requests.`);
       return () => latencyFormatScene(result.spec);
     };
     expect(variant((spec) => (spec.format.id = 'moenarch-short-v1'))).toThrow(/format moenarch-short-v1/);
+    expect(variant((spec) => (spec.output.width = 640))).toThrow(/output 640x720@30/);
     expect(variant((spec) => (spec.scenes[0].payload.metric = 'p99'))).toThrow(/metric p99/);
     expect(variant((spec) => (spec.scenes[0].payload.bins = 24))).toThrow(/bins 24/);
     expect(variant((spec) => delete spec.scenes[0].payload.highlight)).toThrow(/incident window/);
