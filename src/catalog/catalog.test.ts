@@ -18,6 +18,8 @@ describe('project catalog', () => {
       { id: 'catalog-title-card', title: 'Catalog title card' },
       // #12: the moenarch-short v1 specimen.
       { id: 'moenarch-specimen', title: 'Moenarch short specimen' },
+      // #13: the editorial scene-archetype gallery.
+      { id: 'moenarch-scene-gallery', title: 'Moenarch scene gallery' },
     ]);
     expect(catalog.defaultId).toBe('latency-explainer');
   });

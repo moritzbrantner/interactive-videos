@@ -68,9 +68,74 @@ export type BinnedChartScene = SceneBase & {
   };
 };
 
-export type Scene = TitleScene | BinnedChartScene;
+// Editorial scene archetypes. Payloads are semantic: what the scene says, never how it looks.
+
+/** A statement or emphasis; `emphasis` is a phrase that occurs verbatim in `text`. */
+export type StatementScene = SceneBase & {
+  kind: 'statement';
+  payload: { eyebrow?: string; text: string; emphasis?: string };
+};
+
+/** An illustration revealed full frame; `image` is the id of an `image` asset. */
+export type MediaRevealScene = SceneBase & {
+  kind: 'mediaReveal';
+  payload: { image: string; alt: string; caption?: string };
+};
+
+export type ComparisonItem = { label: string; detail: string };
+
+/** Two sides compared; exactly two items. */
+export type ComparisonScene = SceneBase & {
+  kind: 'comparison';
+  payload: { heading?: string; items: ComparisonItem[] };
+};
+
+/** A quote or callout. */
+export type QuoteScene = SceneBase & {
+  kind: 'quote';
+  payload: { text: string; attribution?: string };
+};
+
+/** One figure with its meaning; `value` is the display figure as text, e.g. "200,000". */
+export type DataPointScene = SceneBase & {
+  kind: 'dataPoint';
+  payload: { value: string; label: string; context?: string };
+};
+
+/** A list; `ordered` marks a progression. */
+export type ListScene = SceneBase & {
+  kind: 'list';
+  payload: { heading?: string; items: string[]; ordered: boolean };
+};
+
+/** The conclusion or outro. */
+export type ConclusionScene = SceneBase & {
+  kind: 'conclusion';
+  payload: { heading: string; takeaway?: string };
+};
+
+export type Scene =
+  | TitleScene
+  | BinnedChartScene
+  | StatementScene
+  | MediaRevealScene
+  | ComparisonScene
+  | QuoteScene
+  | DataPointScene
+  | ListScene
+  | ConclusionScene;
 export type SceneKind = Scene['kind'];
-export const SCENE_KINDS: readonly SceneKind[] = ['title', 'binnedChart'];
+export const SCENE_KINDS: readonly SceneKind[] = [
+  'title',
+  'binnedChart',
+  'statement',
+  'mediaReveal',
+  'comparison',
+  'quote',
+  'dataPoint',
+  'list',
+  'conclusion',
+];
 
 export type VideoSpecDiagnostic = { path: string; message: string };
 
@@ -176,28 +241,59 @@ function normalizeScene(scene: Scene): Scene {
         }
       : {}),
   };
-  if (scene.kind === 'title') {
-    const { eyebrow, heading } = scene.payload;
-    return {
-      kind: 'title',
-      ...base,
-      payload: { ...(eyebrow !== undefined ? { eyebrow } : {}), heading },
-    };
+  return { kind: scene.kind, ...base, payload: normalizePayload(scene) } as Scene;
+}
+
+/** Canonical payload key order per kind; optional fields only when present. */
+function normalizePayload(scene: Scene): Scene['payload'] {
+  const optional = <K extends string, V>(key: K, value: V | undefined) =>
+    (value !== undefined ? { [key]: value } : {}) as Partial<Record<K, V>>;
+  switch (scene.kind) {
+    case 'title': {
+      const { eyebrow, heading } = scene.payload;
+      return { ...optional('eyebrow', eyebrow), heading };
+    }
+    case 'binnedChart': {
+      const { eyebrow, heading, dataset, bins, metric, highlight, inspectable } = scene.payload;
+      return {
+        ...optional('eyebrow', eyebrow),
+        heading,
+        dataset,
+        bins,
+        metric,
+        ...(highlight ? { highlight: { from: highlight.from, to: highlight.to } } : {}),
+        inspectable,
+      };
+    }
+    case 'statement': {
+      const { eyebrow, text, emphasis } = scene.payload;
+      return { ...optional('eyebrow', eyebrow), text, ...optional('emphasis', emphasis) };
+    }
+    case 'mediaReveal': {
+      const { image, alt, caption } = scene.payload;
+      return { image, alt, ...optional('caption', caption) };
+    }
+    case 'comparison': {
+      const { heading, items } = scene.payload;
+      return { ...optional('heading', heading), items: items.map((item) => ({ label: item.label, detail: item.detail })) };
+    }
+    case 'quote': {
+      const { text, attribution } = scene.payload;
+      return { text, ...optional('attribution', attribution) };
+    }
+    case 'dataPoint': {
+      const { value, label, context } = scene.payload;
+      return { value, label, ...optional('context', context) };
+    }
+    case 'list': {
+      const { heading, items, ordered } = scene.payload;
+      return { ...optional('heading', heading), items: [...items], ordered };
+    }
+    case 'conclusion': {
+      const { heading, takeaway } = scene.payload;
+      return { heading, ...optional('takeaway', takeaway) };
+    }
   }
-  const { eyebrow, heading, dataset, bins, metric, highlight, inspectable } = scene.payload;
-  return {
-    kind: 'binnedChart',
-    ...base,
-    payload: {
-      ...(eyebrow !== undefined ? { eyebrow } : {}),
-      heading,
-      dataset,
-      bins,
-      metric,
-      ...(highlight ? { highlight: { from: highlight.from, to: highlight.to } } : {}),
-      inspectable,
-    },
-  };
 }
 
 /** Deterministic JSON: the normalized spec, two-space indented, with a trailing newline. */
@@ -538,36 +634,116 @@ function readScene(
     ...(interaction ? { interaction } : {}),
   };
   const payloadPath = `${path}.payload`;
+  const optionalString = <K extends string>(payload: Json | null, key: K) =>
+    (payload?.[key] !== undefined ? { [key]: r.string(payload[key], `${payloadPath}.${key}`) } : {}) as Partial<
+      Record<K, string>
+    >;
+  const string = (payload: Json | null, key: string) => r.string(payload?.[key], `${payloadPath}.${key}`);
 
-  if (scene.kind === 'title') {
-    const payload = r.object(scene.payload, payloadPath, ['heading'], ['eyebrow']);
-    return {
-      kind: 'title',
-      ...base,
-      payload: {
-        ...(payload?.eyebrow !== undefined ? { eyebrow: r.string(payload.eyebrow, `${payloadPath}.eyebrow`) } : {}),
-        heading: r.string(payload?.heading, `${payloadPath}.heading`),
-      },
-    };
-  }
-
-  const payload = r.object(
-    scene.payload,
-    payloadPath,
-    ['heading', 'dataset', 'bins', 'metric', 'inspectable'],
-    ['eyebrow', 'highlight'],
-  );
-  const dataset = r.id(payload?.dataset, `${payloadPath}.dataset`);
-  if (dataset) {
-    const asset = assets.find((candidate) => candidate.id === dataset);
-    if (!asset) r.error(`${payloadPath}.dataset`, `no asset with id "${dataset}"`);
-    else if (asset.kind !== 'dataset') {
-      r.error(
-        `${payloadPath}.dataset`,
-        `asset "${dataset}" is ${/^[aeiou]/.test(asset.kind) ? 'an' : 'a'} ${asset.kind} asset, not a dataset`,
+  switch (scene.kind as SceneKind) {
+    case 'title': {
+      const payload = r.object(scene.payload, payloadPath, ['heading'], ['eyebrow']);
+      return {
+        kind: 'title',
+        ...base,
+        payload: { ...optionalString(payload, 'eyebrow'), heading: string(payload, 'heading') },
+      };
+    }
+    case 'binnedChart':
+      return { kind: 'binnedChart', ...base, payload: readBinnedChartPayload(r, scene.payload, payloadPath, assets) };
+    case 'statement': {
+      const payload = r.object(scene.payload, payloadPath, ['text'], ['eyebrow', 'emphasis']);
+      const parsed = {
+        ...optionalString(payload, 'eyebrow'),
+        text: string(payload, 'text'),
+        ...optionalString(payload, 'emphasis'),
+      };
+      if (parsed.emphasis && parsed.text.trim() && !parsed.text.includes(parsed.emphasis)) {
+        r.error(`${payloadPath}.emphasis`, `${show(parsed.emphasis)} does not occur in the statement text`);
+      }
+      return { kind: 'statement', ...base, payload: parsed };
+    }
+    case 'mediaReveal': {
+      const payload = r.object(scene.payload, payloadPath, ['image', 'alt'], ['caption']);
+      const image = r.id(payload?.image, `${payloadPath}.image`);
+      if (image) checkAssetKind(r, assets, image, 'image', `${payloadPath}.image`);
+      return {
+        kind: 'mediaReveal',
+        ...base,
+        payload: { image, alt: string(payload, 'alt'), ...optionalString(payload, 'caption') },
+      };
+    }
+    case 'comparison': {
+      const payload = r.object(scene.payload, payloadPath, ['items'], ['heading']);
+      const values = r.array(payload?.items, `${payloadPath}.items`);
+      if (values && values.length !== 2) r.error(`${payloadPath}.items`, 'must have exactly 2 items');
+      const items = (values ?? []).map((value, index) => {
+        const itemPath = `${payloadPath}.items[${index}]`;
+        const item = r.object(value, itemPath, ['label', 'detail']);
+        return { label: r.string(item?.label, `${itemPath}.label`), detail: r.string(item?.detail, `${itemPath}.detail`) };
+      });
+      return { kind: 'comparison', ...base, payload: { ...optionalString(payload, 'heading'), items } };
+    }
+    case 'quote': {
+      const payload = r.object(scene.payload, payloadPath, ['text'], ['attribution']);
+      return {
+        kind: 'quote',
+        ...base,
+        payload: { text: string(payload, 'text'), ...optionalString(payload, 'attribution') },
+      };
+    }
+    case 'dataPoint': {
+      const payload = r.object(scene.payload, payloadPath, ['value', 'label'], ['context']);
+      return {
+        kind: 'dataPoint',
+        ...base,
+        payload: { value: string(payload, 'value'), label: string(payload, 'label'), ...optionalString(payload, 'context') },
+      };
+    }
+    case 'list': {
+      const payload = r.object(scene.payload, payloadPath, ['items', 'ordered'], ['heading']);
+      const items = (r.array(payload?.items, `${payloadPath}.items`, { nonEmpty: true }) ?? []).map((value, index) =>
+        r.string(value, `${payloadPath}.items[${index}]`),
       );
+      return {
+        kind: 'list',
+        ...base,
+        payload: {
+          ...optionalString(payload, 'heading'),
+          items,
+          ordered: r.boolean(payload?.ordered, `${payloadPath}.ordered`),
+        },
+      };
+    }
+    case 'conclusion': {
+      const payload = r.object(scene.payload, payloadPath, ['heading'], ['takeaway']);
+      return {
+        kind: 'conclusion',
+        ...base,
+        payload: { heading: string(payload, 'heading'), ...optionalString(payload, 'takeaway') },
+      };
     }
   }
+}
+
+/** Reports a reference to a missing asset or to an asset of another kind. */
+function checkAssetKind(r: Reader, assets: AssetRef[], id: string, kind: AssetKind, path: string) {
+  const asset = assets.find((candidate) => candidate.id === id);
+  if (!asset) r.error(path, `no asset with id "${id}"`);
+  else if (asset.kind !== kind) {
+    r.error(path, `asset "${id}" is ${/^[aeiou]/.test(asset.kind) ? 'an' : 'a'} ${asset.kind} asset, not ${/^[aeiou]/.test(kind) ? 'an' : 'a'} ${kind}`);
+  }
+}
+
+function readBinnedChartPayload(
+  r: Reader,
+  value: unknown,
+  payloadPath: string,
+  assets: AssetRef[],
+): BinnedChartScene['payload'] {
+  const payload = r.object(value, payloadPath, ['heading', 'dataset', 'bins', 'metric', 'inspectable'], ['eyebrow', 'highlight']);
+  const dataset = r.id(payload?.dataset, `${payloadPath}.dataset`);
+  if (dataset) checkAssetKind(r, assets, dataset, 'dataset', `${payloadPath}.dataset`);
   let highlight: { from: number; to: number } | undefined;
   if (payload?.highlight !== undefined) {
     const record = r.object(payload.highlight, `${payloadPath}.highlight`, ['from', 'to']);
@@ -580,17 +756,13 @@ function readScene(
     }
   }
   return {
-    kind: 'binnedChart',
-    ...base,
-    payload: {
-      ...(payload?.eyebrow !== undefined ? { eyebrow: r.string(payload.eyebrow, `${payloadPath}.eyebrow`) } : {}),
-      heading: r.string(payload?.heading, `${payloadPath}.heading`),
-      dataset,
-      bins: r.integer(payload?.bins, `${payloadPath}.bins`, { min: 1 }),
-      metric: r.oneOf(payload?.metric, `${payloadPath}.metric`, BIN_METRICS, 'metric'),
-      ...(highlight ? { highlight } : {}),
-      inspectable: r.boolean(payload?.inspectable, `${payloadPath}.inspectable`),
-    },
+    ...(payload?.eyebrow !== undefined ? { eyebrow: r.string(payload.eyebrow, `${payloadPath}.eyebrow`) } : {}),
+    heading: r.string(payload?.heading, `${payloadPath}.heading`),
+    dataset,
+    bins: r.integer(payload?.bins, `${payloadPath}.bins`, { min: 1 }),
+    metric: r.oneOf(payload?.metric, `${payloadPath}.metric`, BIN_METRICS, 'metric'),
+    ...(highlight ? { highlight } : {}),
+    inspectable: r.boolean(payload?.inspectable, `${payloadPath}.inspectable`),
   };
 }
 

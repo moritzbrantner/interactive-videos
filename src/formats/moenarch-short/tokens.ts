@@ -110,6 +110,72 @@ const tokens = {
     cornerRadius: 0,
   },
 
+  // Editorial scene archetypes. Each archetype draws its payload texts as blocks; a block has a
+  // text style and a density (characters per line, lines). Text wraps greedily at the density and
+  // is never truncated or shrunk: text over a block's density, or a list longer than `maxItems`,
+  // makes the spec unrenderable. The densities are sized so the fullest scene of every archetype
+  // fits the content frame on the 1080-wide frame.
+  scenes: {
+    // The content frame: the safe area, inset further so text clears the signature mark at the
+    // top and a two-line subtitle at the bottom.
+    inset: { top: 72, bottom: 190 },
+    // Blocks fade in from the first frame their scene is on screen, one after another.
+    entrance: { durationInFrames: 12, staggerInFrames: 4 },
+    gaps: { block: 28, section: 56, item: 24, marker: 24 },
+    rule: { width: 96, thickness: 6 },
+    // Text styles. `font` names a typography family, `weight` a typography weight and `color` a
+    // palette entry; sizes are pixels on the 1080-wide frame.
+    text: {
+      eyebrow: { font: 'sans', size: 34, weight: 'medium', lineHeight: 1.3, letterSpacing: 0.16, uppercase: true, italic: false, color: 'muted' },
+      headline: { font: 'display', size: 96, weight: 'display', lineHeight: 1.04, letterSpacing: -0.012, uppercase: false, italic: false, color: 'text' },
+      statement: { font: 'display', size: 72, weight: 'display', lineHeight: 1.08, letterSpacing: -0.01, uppercase: false, italic: false, color: 'text' },
+      heading: { font: 'display', size: 60, weight: 'display', lineHeight: 1.12, letterSpacing: -0.008, uppercase: false, italic: false, color: 'text' },
+      quote: { font: 'display', size: 60, weight: 'regular', lineHeight: 1.2, letterSpacing: 0, uppercase: false, italic: true, color: 'text' },
+      label: { font: 'display', size: 52, weight: 'display', lineHeight: 1.12, letterSpacing: 0, uppercase: false, italic: false, color: 'text' },
+      value: { font: 'display', size: 160, weight: 'display', lineHeight: 1, letterSpacing: -0.02, uppercase: false, italic: false, color: 'accent' },
+      body: { font: 'sans', size: 46, weight: 'regular', lineHeight: 1.3, letterSpacing: 0, uppercase: false, italic: false, color: 'text' },
+      caption: { font: 'sans', size: 34, weight: 'regular', lineHeight: 1.3, letterSpacing: 0, uppercase: false, italic: false, color: 'muted' },
+    },
+    // Per archetype: each text role with its style and density. The title heading takes its
+    // density from `typography.density`.
+    archetypes: {
+      title: {
+        eyebrow: { style: 'eyebrow', maxCharsPerLine: 28, maxLines: 1 },
+        heading: { style: 'headline' },
+      },
+      statement: {
+        eyebrow: { style: 'eyebrow', maxCharsPerLine: 28, maxLines: 1 },
+        statement: { style: 'statement', maxCharsPerLine: 18, maxLines: 6 },
+      },
+      mediaReveal: {
+        caption: { style: 'body', maxCharsPerLine: 28, maxLines: 4 },
+      },
+      comparison: {
+        heading: { style: 'heading', maxCharsPerLine: 22, maxLines: 2 },
+        label: { style: 'label', maxCharsPerLine: 22, maxLines: 2 },
+        detail: { style: 'body', maxCharsPerLine: 28, maxLines: 3 },
+      },
+      quote: {
+        quote: { style: 'quote', maxCharsPerLine: 22, maxLines: 6 },
+        attribution: { style: 'eyebrow', maxCharsPerLine: 28, maxLines: 1 },
+      },
+      dataPoint: {
+        value: { style: 'value', maxCharsPerLine: 8, maxLines: 1 },
+        label: { style: 'body', maxCharsPerLine: 28, maxLines: 2 },
+        context: { style: 'caption', maxCharsPerLine: 36, maxLines: 3 },
+      },
+      list: {
+        heading: { style: 'heading', maxCharsPerLine: 22, maxLines: 2 },
+        item: { style: 'body', maxCharsPerLine: 24, maxLines: 2 },
+        maxItems: 6,
+      },
+      conclusion: {
+        heading: { style: 'statement', maxCharsPerLine: 18, maxLines: 4 },
+        takeaway: { style: 'body', maxCharsPerLine: 28, maxLines: 4 },
+      },
+    },
+  },
+
   subtitles: {
     placement: 'bottom',
     maxLines: 2,

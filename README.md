@@ -83,11 +83,12 @@ sans for eyebrows and subtitles, and one accent for rules and the signature mark
 - **Tokens** (`tokens.ts`, `moenarchShortV1Tokens`): every format choice as one deep-frozen data
   object: output profile and safe area, type scale and text density, palette, surfaces, spacing,
   pacing ranges, the transition vocabulary (`cut`, `dissolve`, `lift`, `slide`), easing curves,
-  media treatment, subtitle placement, intro/outro/signature, reduced motion and the accents.
+  media treatment, scene archetype text styles and densities, subtitle placement,
+  intro/outro/signature, reduced motion and the accents.
   Other pack files and `src/projects.ts` restate no colours, fonts or easing curves. A new look is
   a new format version.
-- **Plan** (`plan.ts`): `planMoenarchShort(spec)` checks that the spec fits the format (title
-  scenes, the output profile, pacing range, headline density) and places one transition on each
+- **Plan** (`plan.ts`): `planMoenarchShort(spec)` checks that the spec fits the format (scene
+  kinds, the output profile, pacing range, the scene layout) and places one transition on each
   scene boundary, cycling through the vocabulary; `moenarchFrameState(plan, frame)` says what a
   frame shows. Both are plain TypeScript, and the composition only draws that state, so all
   motion comes from `useCurrentFrame()` and token easings.
@@ -97,6 +98,47 @@ sans for eyebrows and subtitles, and one accent for rules and the signature mark
   motionless `reducedMotion.transition` over the same window, and the intro/outro only fade.
 - **Specimen**: `?project=moenarch-specimen` (`src/spec/fixtures/moenarch-specimen.videospec.json`)
   shows every transition, the intro, outro and subtitles.
+
+### Scene archetypes
+
+The pack draws a small editorial vocabulary, so most house-style shorts are assembled from
+semantic VideoSpec payloads instead of a new component per sentence. One renderer per archetype
+lives in `scenes/`:
+
+| Archetype | VideoSpec kind | Draws |
+| --- | --- | --- |
+| hook/title | `title` | eyebrow, serif headline, accent rule |
+| statement/emphasis | `statement` | one sentence, its `emphasis` phrase in the accent |
+| illustration/media reveal | `mediaReveal` | a `static:` image full frame under the scrim, optional caption |
+| comparison | `comparison` | exactly two sides, each a label over its detail |
+| quote/callout | `quote` | the quote in serif italic, optional attribution |
+| diagram/data point | `dataPoint` | one large figure, what it counts, optional context |
+| list/progression | `list` | up to six items; `ordered` numbers them as steps |
+| conclusion/outro | `conclusion` | the closing line and an optional takeaway |
+
+- **Layout** (`layout.ts`, plain TypeScript): `layoutMoenarchScene(scene, tokens, assets)` returns
+  the scene's visible text blocks in reading order and its media. Each block wraps greedily at the
+  characters per line of its archetype's density in `tokens.scenes.archetypes` (the title heading
+  uses `typography.density`). The plan calls it once per scene and carries `kind` and `layout`;
+  frame code never lays text out.
+- **Fit rule**: text is wrapped, never truncated, shrunk or ellipsized. Text over a block's lines, a
+  word longer than a line, or more list items than `maxItems` makes the spec unrenderable, and the
+  error names the scene. The densities are sized so the fullest scene of each archetype stays inside
+  the content frame: the safe area inset by `tokens.scenes.inset`, clear of the signature mark and a
+  two-line subtitle.
+- **Media**: an `image` asset with a `static:<path>` uri is served from `public/<path>`; any other
+  uri is unrenderable in this format.
+- **Motion**: blocks fade in one after another through the installed `Fade` primitive, from the
+  first frame their scene is on screen; the pack's token transitions move whole scenes. Scenes read
+  no frame, clock or randomness themselves, so a frame renders the same from any previous frame,
+  and under reduced motion nothing moves.
+- **Render budget**: each text block (`MoenarchTextBlock`) is memoized on plan data and renders once
+  when its scene mounts; only the composition root (`MoenarchShortVideo`) and the fade wrappers
+  render per frame. `e2e/moenarch-scene-budget.spec.ts` checks this for every long gallery scene.
+- **Gallery**: `?project=moenarch-scene-gallery`
+  (`src/spec/fixtures/moenarch-scene-gallery.videospec.json`) shows every archetype at a short and
+  a long content size. DOM contract: each scene carries `data-moenarch-kind`, each text block is a
+  `[data-moenarch-text="<role>"]` element, and the image is `img[data-moenarch-media]`.
 
 ## Latency explainer
 
@@ -109,7 +151,10 @@ percentiles, and slowest requests; clicking a subtitle term shows a glossary ent
 `src/spec/video-spec.ts` defines `VideoSpec` v1, the versioned data contract for a video's semantic
 intent: project identity, format pack id/version, output profile, ordered scenes with a duration,
 narration cues, asset references, interaction terms and a per-kind semantic payload (v1 kinds:
-`title`, `binnedChart`). Layout pixels, easing, typography and renderer details belong to the
+`title`, `binnedChart` and the editorial archetypes `statement`, `mediaReveal`, `comparison`,
+`quote`, `dataPoint`, `list`, `conclusion`; see the moenarch-short scene archetypes). The
+archetype kinds are additive inside v1: v1 already rejects unknown kinds, so an older reader
+refuses them instead of misreading them. Layout pixels, easing, typography and renderer details belong to the
 format pack and are not representable in a spec.
 
 - `parseVideoSpec` / `parseVideoSpecJson` validate untrusted input and fail closed: unknown fields,

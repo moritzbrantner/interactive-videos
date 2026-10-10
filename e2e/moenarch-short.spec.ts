@@ -157,7 +157,8 @@ test('every representative frame draws what the plan says, inside the safe area'
     signatureSeen ||= dom.signature > 0;
     if (sample.kind === 'scene') {
       const scene = spec.scenes.find((candidate) => candidate.id === state.sceneIds[0])!;
-      expect(dom.headings, sample.label).toEqual([scene.payload.heading]);
+      // The specimen has title scenes only (#13 widened the Scene union).
+      expect(dom.headings, sample.label).toEqual([(scene.payload as { heading: string }).heading]);
       await expectInSafeArea(page, '[data-moenarch-heading]', sample.label);
       if (state.subtitle !== null) await expectInSafeArea(page, '[data-moenarch-subtitle]', sample.label);
     }
