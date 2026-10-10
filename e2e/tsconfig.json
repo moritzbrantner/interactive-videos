@@ -1,14 +1,16 @@
 {
-  "//": "Runtime resolution for Playwright only. Node cannot strip types under node_modules, so `bun run build:pins` copies the pinned react-render-budget source into .cache/pins, where Playwright compiles it. The root tsconfig type-checks against the same pinned source in node_modules.",
+  "//": "Runtime resolution for Playwright only. Node cannot strip types under node_modules, so `bun run build:pins` copies the pinned react-render-budget source into .cache/pins, where Playwright compiles it. The root tsconfig type-checks against the same pinned source in node_modules. `@/*` lets specs import plain-TypeScript app modules (such as the moenarch-short plan) that use the app alias.",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
+    "resolveJsonModule": true,
     "paths": {
       "react-render-budget/playwright": [
         "../.cache/pins/react-render-budget/src/playwright.ts"
-      ]
+      ],
+      "@/*": ["../src/*"]
     }
   }
 }

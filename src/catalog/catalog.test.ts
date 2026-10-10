@@ -12,10 +12,12 @@ import { LatencyVideo } from '@/video/latency-video';
 const clone = <T,>(value: T): T => structuredClone(value);
 
 describe('project catalog', () => {
-  it('lists both fixture projects by id and title, latency first and default', () => {
+  it('lists every fixture project by id and title, latency first and default', () => {
     expect(catalog.projects).toEqual([
       { id: 'latency-explainer', title: 'Latency explainer' },
       { id: 'catalog-title-card', title: 'Catalog title card' },
+      // #12: the moenarch-short v1 specimen.
+      { id: 'moenarch-specimen', title: 'Moenarch short specimen' },
     ]);
     expect(catalog.defaultId).toBe('latency-explainer');
   });

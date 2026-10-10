@@ -1,7 +1,9 @@
 import { createCatalog } from '@/catalog/catalog';
+import { moenarchShort } from '@/formats/moenarch-short';
 import { titleCardFormat } from '@/formats/title-card';
 import latencyExplainer from '@/spec/fixtures/latency-explainer.videospec.json';
 import catalogTitleCard from '@/spec/fixtures/catalog-title-card.videospec.json';
+import moenarchSpecimen from '@/spec/fixtures/moenarch-specimen.videospec.json';
 import { latencyFormat } from '@/video/latency-format';
 
 // Project content lives in the specs; each entry names the format pack that renders it.
@@ -11,6 +13,7 @@ export const catalog = createCatalog(
   [
     { spec: latencyExplainer, format: latencyFormat },
     { spec: catalogTitleCard, format: titleCardFormat },
+    { spec: moenarchSpecimen, format: moenarchShort() },
   ],
   // `/` without a project keeps opening the latency explainer.
   LATENCY_PROJECT_ID,
