@@ -130,6 +130,25 @@ const BarMark = memo(function BarMark({
   progress: number;
 }) {
   useBudgetCounter('BarMark');
+  // Geometry is fixed; the reveal only animates transform and opacity.
+  const mark = (
+    <rect
+      x={bar.left}
+      y={plot.top + plot.height - bar.height}
+      width={barWidth}
+      height={bar.height}
+      rx={4}
+      fill={bar.incident ? colors.incident : colors.bar}
+      style={{
+        transform: `scaleY(${progress})`,
+        transformBox: 'fill-box',
+        transformOrigin: 'bottom',
+        opacity: 0.35 + 0.65 * progress,
+      }}
+    />
+  );
+  // A spec that does not make the chart inspectable gets no bar hotspots.
+  if (!latencyScene.payload.inspectable) return mark;
   return (
     <SvgHotspot<BinPayload>
       id={bar.id}
@@ -138,21 +157,7 @@ const BarMark = memo(function BarMark({
       from={barRevealEnd(bar.index)}
       selectedStyle={{ stroke: colors.text, strokeWidth: 3 }}
     >
-      {/* Geometry is fixed; the reveal only animates transform and opacity. */}
-      <rect
-        x={bar.left}
-        y={plot.top + plot.height - bar.height}
-        width={barWidth}
-        height={bar.height}
-        rx={4}
-        fill={bar.incident ? colors.incident : colors.bar}
-        style={{
-          transform: `scaleY(${progress})`,
-          transformBox: 'fill-box',
-          transformOrigin: 'bottom',
-          opacity: 0.35 + 0.65 * progress,
-        }}
-      />
+      {mark}
     </SvgHotspot>
   );
 });

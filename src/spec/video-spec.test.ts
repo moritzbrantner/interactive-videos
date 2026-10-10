@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { BIN_COUNT, INCIDENT_WINDOW, REQUEST_COUNT } from '@/data/latency';
-import { latencyScene, latencySpec } from '@/video/latency-spec';
+import { latencyFormatScene, latencyScene, latencySpec } from '@/video/latency-spec';
 import {
   narrationToSrt,
   parseVideoSpec,
@@ -86,6 +86,14 @@ describe('VideoSpec v1', () => {
       { path: '$.specVersion', message: 'unsupported specVersion 2; this build reads 1' },
     ]);
 
+    // Another version's fields are not checked against v1.
+    expect(diagnosticsOf({ specVersion: 2, timeline: [] })).toEqual([
+      { path: '$.specVersion', message: 'unsupported specVersion 2; this build reads 1' },
+    ]);
+    expect(diagnosticsOf({ project: {} })).toEqual([
+      { path: '$.specVersion', message: 'missing required field' },
+    ]);
+
     expect(parseVideoSpecJson('{ "specVersion": 1,')).toMatchObject({
       ok: false,
       diagnostics: [{ path: '$', message: expect.stringContaining('invalid JSON') }],
@@ -134,6 +142,37 @@ describe('VideoSpec v1', () => {
     ]);
   });
 
+  it('keeps input indexes in diagnostics after an invalid scene', () => {
+    const spec = fixture();
+    const [chart] = spec.scenes;
+    spec.scenes = [{ ...chart, kind: 'unknown' }, chart, { ...chart, interaction: undefined }];
+    delete spec.scenes[2].interaction;
+    expect(diagnosticsOf(spec)).toEqual([
+      expect.objectContaining({ path: '$.scenes[0].kind' }),
+      { path: '$.scenes[2].id', message: 'duplicate scene id "latency-day"' },
+    ]);
+  });
+
+  it('matches terms like the subtitle hotspots and rejects ambiguous or unsafe narration', () => {
+    const spec = fixture();
+    const scene = spec.scenes[0];
+    scene.interaction.terms.push(
+      { id: 'term:clock', term: "o'clock", title: 'Time', body: 'Two in the afternoon.' },
+      { id: 'term:tail', term: 'pushes the tail', title: 'Tail', body: 'Slow requests.' },
+    );
+    expect(parseVideoSpec(spec).ok).toBe(true);
+
+    scene.interaction.terms.push({ id: 'term:p95-again', term: 'P95', title: 'Again', body: 'x' });
+    scene.interaction.terms.push({ id: 'term:part', term: 'bin', title: 'Bin', body: 'x' });
+    scene.narration.cues[0].text = 'First line\n\nSecond block';
+    expect(diagnosticsOf(spec)).toEqual([
+      { path: '$.scenes[0].narration.cues[0].text', message: 'must not contain a blank line' },
+      { path: '$.scenes[0].interaction.terms[0].term', message: '"binned" does not occur in this scene\'s narration' },
+      { path: '$.scenes[0].interaction.terms[5].term', message: '"P95" is already defined by terms[1]' },
+      { path: '$.scenes[0].interaction.terms[6].term', message: '"bin" does not occur in this scene\'s narration' },
+    ]);
+  });
+
   it('derives the timeline from ordered scenes', () => {
     const spec = fixture();
     spec.scenes.unshift({ kind: 'title', id: 'intro', durationInFrames: 45, payload: { heading: 'Hi' } });
@@ -166,6 +205,24 @@ Around two o'clock an incident pushes the tail up.
 4
 00:00:10,000 --> 00:00:11,900
 Click any bar to inspect its requests.`);
+  });
+
+  it('refuses specs the latency renderer would contradict', () => {
+    const variant = (edit: (spec: Record<string, any>) => void) => {
+      const spec = fixture();
+      edit(spec);
+      const result = parseVideoSpec(spec);
+      if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
+      return () => latencyFormatScene(result.spec);
+    };
+    expect(variant((spec) => (spec.format.id = 'moenarch-short-v1'))).toThrow(/format moenarch-short-v1/);
+    expect(variant((spec) => (spec.scenes[0].payload.metric = 'p99'))).toThrow(/metric p99/);
+    expect(variant((spec) => (spec.scenes[0].payload.bins = 24))).toThrow(/bins 24/);
+    expect(variant((spec) => delete spec.scenes[0].payload.highlight)).toThrow(/incident window/);
+    expect(variant((spec) => (spec.assets[0].uri = 'file:other.json'))).toThrow(/dataset must be/);
+    expect(variant((spec) => (spec.scenes[0].payload.inspectable = false))()).toMatchObject({
+      payload: { inspectable: false },
+    });
   });
 
   it('agrees with the dataset the video renders', () => {

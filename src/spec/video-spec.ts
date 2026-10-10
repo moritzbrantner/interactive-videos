@@ -322,16 +322,22 @@ function describe(value: unknown) {
 }
 
 function readSpec(r: Reader, input: unknown): VideoSpec | null {
+  // The version decides which fields exist, so it is read before any v1 field check: a document
+  // of another version gets only the version diagnostic.
+  if (typeof input === 'object' && input !== null && !Array.isArray(input)) {
+    const version = (input as Json).specVersion;
+    if (version !== VIDEO_SPEC_VERSION) {
+      r.error(
+        '$.specVersion',
+        version === undefined
+          ? 'missing required field'
+          : `unsupported specVersion ${JSON.stringify(version)}; this build reads ${VIDEO_SPEC_VERSION}`,
+      );
+      return null;
+    }
+  }
   const root = r.object(input, '$', ['specVersion', 'project', 'format', 'output', 'assets', 'scenes']);
   if (!root) return null;
-  if (root.specVersion !== VIDEO_SPEC_VERSION) {
-    r.error(
-      '$.specVersion',
-      `unsupported specVersion ${JSON.stringify(root.specVersion)}; this build reads ${VIDEO_SPEC_VERSION}`,
-    );
-    // Fields of another version mean something else; do not report them against v1.
-    return null;
-  }
 
   const project = r.object(root.project, '$.project', ['id', 'title']);
   const format = r.object(root.format, '$.format', ['id', 'version']);
@@ -362,19 +368,22 @@ function readSpec(r: Reader, input: unknown): VideoSpec | null {
       fps,
     },
     assets,
-    scenes: (r.array(root.scenes, '$.scenes', { nonEmpty: true }) ?? []).flatMap((value, index) => {
-      const scene = readScene(r, value, `$.scenes[${index}]`, fps, assets);
-      return scene ? [scene] : [];
-    }),
+    scenes: [],
   };
-  r.unique(spec.scenes.map((scene) => scene.id), (index) => `$.scenes[${index}].id`, 'scene');
-  const termIds = spec.scenes.flatMap((scene, sceneIndex) =>
+  // Scenes that fail to parse are dropped, so later checks keep each scene's input index.
+  const read = (r.array(root.scenes, '$.scenes', { nonEmpty: true }) ?? []).flatMap((value, index) => {
+    const scene = readScene(r, value, `$.scenes[${index}]`, fps, assets);
+    return scene ? [{ scene, index }] : [];
+  });
+  spec.scenes = read.map(({ scene }) => scene);
+  r.unique(read.map(({ scene }) => scene.id), (position) => `$.scenes[${read[position].index}].id`, 'scene');
+  const termIds = read.flatMap(({ scene, index }) =>
     (scene.interaction?.terms ?? []).map((term, termIndex) => ({
       id: term.id,
-      path: `$.scenes[${sceneIndex}].interaction.terms[${termIndex}].id`,
+      path: `$.scenes[${index}].interaction.terms[${termIndex}].id`,
     })),
   );
-  r.unique(termIds.map((term) => term.id), (index) => termIds[index].path, 'term');
+  r.unique(termIds.map((term) => term.id), (position) => termIds[position].path, 'term');
   return spec;
 }
 
@@ -480,6 +489,12 @@ function readNarration(r: Reader, value: unknown, path: string, durationMs: numb
     };
   });
   cues.forEach((cue, index) => {
+    // A blank line ends an SRT cue, so it would split this cue or inject another one.
+    if (/\n[ \t]*\r?\n|\r[ \t]*\r/.test(cue.text)) {
+      r.error(`${path}.cues[${index}].text`, 'must not contain a blank line');
+    }
+  });
+  cues.forEach((cue, index) => {
     const cuePath = `${path}.cues[${index}]`;
     if (cue.endMs <= cue.startMs) r.error(cuePath, 'endMs must be greater than startMs');
     if (cue.endMs > durationMs) {
@@ -500,9 +515,7 @@ function readInteraction(
   narration: Narration | undefined,
 ): Interaction {
   const interaction = r.object(value, path, ['terms']);
-  const words = new Set(
-    (narration?.cues ?? []).flatMap((cue) => cue.text.toLowerCase().split(/[^\p{L}\p{N}]+/u)),
-  );
+  const seenTerms = new Map<string, number>();
   const terms = (r.array(interaction?.terms, `${path}.terms`) ?? []).map((termValue, index) => {
     const termPath = `${path}.terms[${index}]`;
     const term = r.object(termValue, termPath, ['id', 'term', 'title', 'body']);
@@ -512,10 +525,27 @@ function readInteraction(
       title: r.string(term?.title, `${termPath}.title`),
       body: r.string(term?.body, `${termPath}.body`),
     };
-    if (parsed.term && !words.has(parsed.term.toLowerCase())) {
-      r.error(`${termPath}.term`, `"${parsed.term}" does not occur in this scene's narration`);
+    if (parsed.term) {
+      // The subtitle hotspot matcher indexes terms case-insensitively, so a second entry for the
+      // same term would make the first unreachable.
+      const key = parsed.term.toLocaleLowerCase();
+      const first = seenTerms.get(key);
+      if (first !== undefined) {
+        r.error(`${termPath}.term`, `"${parsed.term}" is already defined by terms[${first}]`);
+      } else {
+        seenTerms.set(key, index);
+      }
+      if (!narration?.cues.some((cue) => occursAsTerm(cue.text, parsed.term))) {
+        r.error(`${termPath}.term`, `"${parsed.term}" does not occur in this scene's narration`);
+      }
     }
     return parsed;
   });
   return { terms };
+}
+
+/** Whole-term, case-insensitive occurrence, with the subtitle hotspot matcher's boundaries. */
+function occursAsTerm(text: string, term: string) {
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, 'iu').test(text);
 }
