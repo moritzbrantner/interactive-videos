@@ -74,6 +74,30 @@ not target, and specs a format cannot render are resolve errors, never a fallbac
 - A format with hotspots supplies `renderInsight`, and only then does the app show the insight
   panel.
 
+## moenarch-short-v1 format pack
+
+`src/formats/moenarch-short/` is a reusable portrait short format (1080x1920 at 30 fps). Its look
+is original and deliberately restrained: a warm charcoal ground, off-white serif headlines, a quiet
+sans for eyebrows and subtitles, and one accent for rules and the signature mark.
+
+- **Tokens** (`tokens.ts`, `moenarchShortV1Tokens`): every format choice as one deep-frozen data
+  object: output profile and safe area, type scale and text density, palette, surfaces, spacing,
+  pacing ranges, the transition vocabulary (`cut`, `dissolve`, `lift`, `slide`), easing curves,
+  media treatment, subtitle placement, intro/outro/signature, reduced motion and the accents.
+  Other pack files and `src/projects.ts` restate no colours, fonts or easing curves. A new look is
+  a new format version.
+- **Plan** (`plan.ts`): `planMoenarchShort(spec)` checks that the spec fits the format (title
+  scenes, the output profile, pacing range, headline density) and places one transition on each
+  scene boundary, cycling through the vocabulary; `moenarchFrameState(plan, frame)` says what a
+  frame shows. Both are plain TypeScript, and the composition only draws that state, so all
+  motion comes from `useCurrentFrame()` and token easings.
+- **Overrides**: `moenarchShort({ accent: 'verdigris' })` picks one of the named accents in
+  `tokens.accents`; every other key or value throws.
+- **Reduced motion**: with `prefers-reduced-motion: reduce`, moving transitions become the
+  motionless `reducedMotion.transition` over the same window, and the intro/outro only fade.
+- **Specimen**: `?project=moenarch-specimen` (`src/spec/fixtures/moenarch-specimen.videospec.json`)
+  shows every transition, the intro, outro and subtitles.
+
 ## Latency explainer
 
 `src/video/latency-video.tsx` renders one day of synthetic API traffic (200,000 requests from a
