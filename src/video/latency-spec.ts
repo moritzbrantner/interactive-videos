@@ -6,6 +6,8 @@ import { assertVideoSpec, resolveTimeline, type BinnedChartScene, type VideoSpec
 // The latency explainer's content (output profile, narration, glossary, chart intent) comes from
 // its VideoSpec; layout, colors and the reveal stay in the video's own format code.
 export const LATENCY_FORMAT = { id: 'interactive-chart-explainer', version: 1 } as const;
+/** The subtitle primitive keeps a cue on screen this long after its end. */
+export const SUBTITLE_LINGER_MS = 80;
 export const LATENCY_DATASET_URI = `generator:latency-requests?seed=20260928&count=${REQUEST_COUNT}`;
 
 /**
@@ -36,6 +38,13 @@ export function latencyFormatScene(spec: VideoSpec): BinnedChartScene {
   if (scene.durationInFrames <= revealEnd) {
     problems.push(`duration ${scene.durationInFrames} frames ends before the reveal (${revealEnd})`);
   }
+  // A lingering cue would still be on screen when the next one starts, in the same position.
+  const cues = scene.narration?.cues ?? [];
+  cues.slice(1).forEach((cue, index) => {
+    if (cue.startMs - cues[index].endMs <= SUBTITLE_LINGER_MS) {
+      problems.push(`cue ${index + 1} starts within ${SUBTITLE_LINGER_MS} ms of the previous cue's end`);
+    }
+  });
   // Bar hotspots use these ids, and selection compares ids only.
   for (const term of scene.interaction?.terms ?? []) {
     if (term.id.startsWith('bin-')) problems.push(`term id ${term.id} is reserved for bars`);

@@ -7,7 +7,7 @@ import { Subtitles } from '@/components/remotion/subtitles';
 import { BIN_COUNT, formatClock, INCIDENT_WINDOW, latencyBins, maxP95, type LatencyBin } from '@/data/latency';
 import { useBudgetCounter } from '@/render-budget';
 import { narrationToSrt } from '@/spec/video-spec';
-import { latencyScene, latencySpec, latencyTimeline } from '@/video/latency-spec';
+import { latencyScene, latencySpec, latencyTimeline, SUBTITLE_LINGER_MS } from '@/video/latency-spec';
 import { barRevealEnd, barRevealProgress } from '@/video/reveal';
 
 export const VIDEO_FPS = latencySpec.output.fps;
@@ -212,6 +212,7 @@ export function LatencyVideo({ onActivate, selectedId }: LatencyVideoProps) {
           bottom={112}
           maxWidth="86%"
           highlightMode="none"
+          lingerMs={SUBTITLE_LINGER_MS}
           hotspots={subtitleHotspots}
         />
       </AbsoluteFill>

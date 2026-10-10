@@ -238,7 +238,8 @@ class Reader {
       }
     }
     for (const key of required) {
-      if (!(key in record)) this.error(`${path}.${key}`, 'missing required field');
+      // An explicit undefined (programmatic input) is as missing as an absent key.
+      if (record[key] === undefined) this.error(`${path}.${key}`, 'missing required field');
     }
     return record;
   }
@@ -509,8 +510,12 @@ function readNarration(r: Reader, value: unknown, path: string, durationMs: numb
   });
   cues.forEach((cue, index) => {
     // A blank line ends an SRT cue, so it would split this cue or inject another one.
-    if (/\n[ \t]*\r?\n|\r[ \t]*\r/.test(cue.text)) {
+    if (/\n[ \t]*\n/.test(cue.text)) {
       r.error(`${path}.cues[${index}].text`, 'must not contain a blank line');
+    }
+    // Subtitle parsers turn "\r" into "\n", so terms would no longer match the rendered text.
+    if (cue.text.includes('\r')) {
+      r.error(`${path}.cues[${index}].text`, 'must use "\\n" line breaks, not "\\r"');
     }
     // Subtitle parsers read tags and ASS overrides as formatting; narration is literal text.
     if (/<[^<>]*>|\{\\/.test(cue.text)) {
@@ -552,6 +557,7 @@ function readInteraction(
       title: r.string(term?.title, `${termPath}.title`),
       body: r.string(term?.body, `${termPath}.body`),
     };
+    if (/[\r\n]/.test(parsed.term)) r.error(`${termPath}.term`, 'must be on one line');
     if (parsed.term) {
       // The subtitle hotspot matcher indexes terms case-insensitively, so a second entry for the
       // same term would make the first unreachable.

@@ -195,6 +195,21 @@ describe('VideoSpec v1', () => {
       '$.scenes[0].narration.cues[3].text',
       '$.scenes[0].interaction.terms[1].term',
     ]);
+    const lineEnds = fixture();
+    lineEnds.scenes[0].narration.cues[3].text = 'Click any\rbar.';
+    lineEnds.scenes[0].interaction.terms[0].term = 'binned\ninto';
+    expect(diagnosticsOf(lineEnds)).toEqual([
+      { path: '$.scenes[0].narration.cues[3].text', message: 'must use "\\n" line breaks, not "\\r"' },
+      { path: '$.scenes[0].interaction.terms[0].term', message: 'must be on one line' },
+      {
+        path: '$.scenes[0].interaction.terms[0].term',
+        message: '"binned\ninto" does not occur in this scene\'s narration outside a longer term',
+      },
+    ]);
+    expect(
+      diagnosticsOf({ ...fixture(), project: { id: undefined, title: 'x' } }),
+    ).toEqual([{ path: '$.project.id', message: 'missing required field' }]);
+
     const ampersand = fixture();
     ampersand.scenes[0].narration.cues[3].text = 'Search & inspect any bar.';
     expect(parseVideoSpec(ampersand).ok).toBe(true);
@@ -261,6 +276,9 @@ Click any bar to inspect its requests.`);
     };
     expect(variant((spec) => (spec.format.id = 'moenarch-short-v1'))).toThrow(/format moenarch-short-v1/);
     expect(variant((spec) => (spec.output.width = 640))).toThrow(/output 640x720@30/);
+    expect(variant((spec) => (spec.scenes[0].narration.cues[1].startMs = 3880))).toThrow(
+      /cue 1 starts within 80 ms/,
+    );
     expect(
       variant((spec) => {
         spec.scenes[0].durationInFrames = 30;
