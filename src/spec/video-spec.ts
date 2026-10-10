@@ -298,7 +298,7 @@ class Reader {
   oneOf<T extends string>(value: unknown, path: string, options: readonly T[], what: string): T {
     if (typeof value !== 'string' || !(options as readonly string[]).includes(value)) {
       if (value !== undefined) {
-        this.error(path, `unknown ${what} ${JSON.stringify(value)}; v1 supports ${options.join(', ')}`);
+        this.error(path, `unknown ${what} ${show(value)}; v1 supports ${options.join(', ')}`);
       }
       return options[0];
     }
@@ -313,6 +313,17 @@ class Reader {
       seen.add(id);
     });
   }
+}
+
+/** A value for a diagnostic; never throws (BigInt, cycles, symbols). */
+function show(value: unknown): string {
+  try {
+    const text = JSON.stringify(value);
+    if (text !== undefined) return text.length > 80 ? `${text.slice(0, 77)}...` : text;
+  } catch {
+    // Fall through to the type description.
+  }
+  return typeof value === 'bigint' ? `${value}n` : describe(value);
 }
 
 function describe(value: unknown) {
@@ -331,7 +342,7 @@ function readSpec(r: Reader, input: unknown): VideoSpec | null {
         '$.specVersion',
         version === undefined
           ? 'missing required field'
-          : `unsupported specVersion ${JSON.stringify(version)}; this build reads ${VIDEO_SPEC_VERSION}`,
+          : `unsupported specVersion ${show(version)}; this build reads ${VIDEO_SPEC_VERSION}`,
       );
       return null;
     }
@@ -402,7 +413,7 @@ function readScene(
   if (!(SCENE_KINDS as readonly unknown[]).includes(scene.kind)) {
     r.error(
       `${path}.kind`,
-      `unknown scene kind ${JSON.stringify(scene.kind)}; v1 supports ${SCENE_KINDS.join(', ')}`,
+      `unknown scene kind ${show(scene.kind)}; v1 supports ${SCENE_KINDS.join(', ')}`,
     );
     return null;
   }
@@ -496,6 +507,10 @@ function readNarration(r: Reader, value: unknown, path: string, durationMs: numb
     // Subtitle parsers read tags and ASS overrides as formatting; narration is literal text.
     if (/<[^<>]*>|\{\\/.test(cue.text)) {
       r.error(`${path}.cues[${index}].text`, 'must not contain subtitle markup (<tag> or {\\…})');
+    }
+    // Subtitle parsers decode entity references, so "&amp;" would render as "&".
+    if (/&(?:#\d+|#x[0-9a-f]+|[a-z][a-z0-9]*);/i.test(cue.text)) {
+      r.error(`${path}.cues[${index}].text`, 'must not contain HTML entity references (&name;)');
     }
   });
   cues.forEach((cue, index) => {

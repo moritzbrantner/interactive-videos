@@ -1,5 +1,6 @@
 import { BIN_COUNT, INCIDENT_WINDOW, REQUEST_COUNT } from '@/data/latency';
 import fixture from '@/spec/fixtures/latency-explainer.videospec.json';
+import { barRevealEnd } from '@/video/reveal';
 import { assertVideoSpec, resolveTimeline, type BinnedChartScene, type VideoSpec } from '@/spec/video-spec';
 
 // The latency explainer's content (output profile, narration, glossary, chart intent) comes from
@@ -29,6 +30,15 @@ export function latencyFormatScene(spec: VideoSpec): BinnedChartScene {
     throw new Error(`${[...problems, 'this format renders exactly one binnedChart scene'].join('; ')}`);
   }
   const { payload } = scene;
+  // The reveal runs on fixed frames; a shorter scene would end before the chart is shown.
+  const revealEnd = barRevealEnd(BIN_COUNT - 1);
+  if (scene.durationInFrames < revealEnd) {
+    problems.push(`duration ${scene.durationInFrames} frames ends before the reveal (${revealEnd})`);
+  }
+  // Bar hotspots use these ids, and selection compares ids only.
+  for (const term of scene.interaction?.terms ?? []) {
+    if (term.id.startsWith('bin-')) problems.push(`term id ${term.id} is reserved for bars`);
+  }
   if (payload.metric !== 'p95') problems.push(`metric ${payload.metric} is not drawn (p95 only)`);
   if (payload.bins !== BIN_COUNT) problems.push(`bins ${payload.bins} is not ${BIN_COUNT}`);
   if (payload.highlight?.from !== INCIDENT_WINDOW[0] || payload.highlight?.to !== INCIDENT_WINDOW[1]) {

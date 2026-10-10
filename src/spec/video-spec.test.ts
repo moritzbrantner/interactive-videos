@@ -90,6 +90,9 @@ describe('VideoSpec v1', () => {
     expect(diagnosticsOf({ specVersion: 2, timeline: [] })).toEqual([
       { path: '$.specVersion', message: 'unsupported specVersion 2; this build reads 1' },
     ]);
+    expect(diagnosticsOf({ specVersion: 2n })).toEqual([
+      { path: '$.specVersion', message: 'unsupported specVersion 2n; this build reads 1' },
+    ]);
     expect(diagnosticsOf({ project: {} })).toEqual([
       { path: '$.specVersion', message: 'missing required field' },
     ]);
@@ -185,11 +188,16 @@ describe('VideoSpec v1', () => {
     const markup = fixture();
     markup.scenes[0].narration.cues[1].text = 'Run <fast> mode';
     markup.scenes[0].narration.cues[2].text = '{\\b1}incident';
+    markup.scenes[0].narration.cues[3].text = 'Rock &amp; roll &#38; more';
     expect(diagnosticsOf(markup).map((d) => d.path)).toEqual([
       '$.scenes[0].narration.cues[1].text',
       '$.scenes[0].narration.cues[2].text',
+      '$.scenes[0].narration.cues[3].text',
       '$.scenes[0].interaction.terms[1].term',
     ]);
+    const ampersand = fixture();
+    ampersand.scenes[0].narration.cues[3].text = 'Search & inspect any bar.';
+    expect(parseVideoSpec(ampersand).ok).toBe(true);
   });
 
   it('derives the timeline from ordered scenes', () => {
@@ -236,6 +244,16 @@ Click any bar to inspect its requests.`);
     };
     expect(variant((spec) => (spec.format.id = 'moenarch-short-v1'))).toThrow(/format moenarch-short-v1/);
     expect(variant((spec) => (spec.output.width = 640))).toThrow(/output 640x720@30/);
+    expect(
+      variant((spec) => {
+        spec.scenes[0].durationInFrames = 30;
+        delete spec.scenes[0].narration;
+        delete spec.scenes[0].interaction;
+      }),
+    ).toThrow(/ends before the reveal/);
+    expect(
+      variant((spec) => (spec.scenes[0].interaction.terms[0].id = 'bin-0')),
+    ).toThrow(/term id bin-0 is reserved/);
     expect(variant((spec) => (spec.scenes[0].payload.metric = 'p99'))).toThrow(/metric p99/);
     expect(variant((spec) => (spec.scenes[0].payload.bins = 24))).toThrow(/bins 24/);
     expect(variant((spec) => delete spec.scenes[0].payload.highlight)).toThrow(/incident window/);
