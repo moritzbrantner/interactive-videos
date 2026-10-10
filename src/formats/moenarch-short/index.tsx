@@ -29,9 +29,19 @@ function resolveTokens(overrides: unknown): MoenarchShortTokens {
   if (typeof overrides !== 'object' || overrides === null || Array.isArray(overrides)) {
     throw new Error('moenarch-short overrides must be an object');
   }
-  const unknown = Object.keys(overrides).filter((key) => !ALLOWED_OVERRIDES.has(key));
-  if (unknown.length) throw new Error(`moenarch-short overrides allow only an accent, not: ${unknown.join(', ')}`);
-  const { accent } = overrides as { accent?: unknown };
+  // Fail closed on every own key (non-enumerable and symbol keys included) and accept only plain
+  // objects, so nothing reaches the pack through a prototype.
+  const prototype = Object.getPrototypeOf(overrides);
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new Error('moenarch-short overrides must be a plain object');
+  }
+  const unknown = Reflect.ownKeys(overrides).filter((key) => typeof key !== 'string' || !ALLOWED_OVERRIDES.has(key));
+  if (unknown.length) {
+    throw new Error(`moenarch-short overrides allow only an accent, not: ${unknown.map(String).join(', ')}`);
+  }
+  const descriptor = Object.getOwnPropertyDescriptor(overrides, 'accent');
+  if (descriptor && !('value' in descriptor)) throw new Error('moenarch-short accent must be a data property');
+  const accent: unknown = descriptor?.value;
   if (accent === undefined) return moenarchShortV1Tokens;
   const accents = moenarchShortV1Tokens.accents;
   if (typeof accent !== 'string' || !Object.hasOwn(accents, accent)) {
