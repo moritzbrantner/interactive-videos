@@ -256,6 +256,9 @@ describe('VideoSpec v1', () => {
     expect(diagnosticsOf(arrayExtra)).toEqual([
       { path: '$.assets', message: 'unsupported array property renderer' },
     ]);
+    const subclassed = fixture();
+    Object.setPrototypeOf(subclassed.assets, Object.assign(Object.create(Array.prototype), { renderer: 'x' }));
+    expect(diagnosticsOf(subclassed)).toEqual([{ path: '$.assets', message: 'expected a plain array' }]);
     const maxIndex = fixture();
     maxIndex.assets['4294967295'] = 'evil';
     expect(diagnosticsOf(maxIndex)).toEqual([

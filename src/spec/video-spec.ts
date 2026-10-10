@@ -356,6 +356,11 @@ class Reader {
 function snapshot(value: unknown, path: string, diagnostics: VideoSpecDiagnostic[]): unknown {
   if (typeof value !== 'object' || value === null) return value;
   if (Array.isArray(value)) {
+    // Plain arrays only: a subclass or swapped prototype could carry inherited data.
+    if (Object.getPrototypeOf(value) !== Array.prototype) {
+      diagnostics.push({ path, message: 'expected a plain array' });
+      return [];
+    }
     for (const key of Reflect.ownKeys(value)) {
       if (key === 'length') continue;
       // Canonical array indexes only: below 2^32 - 1 and inside the length.
