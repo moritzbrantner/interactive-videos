@@ -3,6 +3,7 @@ import { moenarchShort } from '@/formats/moenarch-short';
 import { titleCardFormat } from '@/formats/title-card';
 import latencyExplainer from '@/spec/fixtures/latency-explainer.videospec.json';
 import catalogTitleCard from '@/spec/fixtures/catalog-title-card.videospec.json';
+import moenarchSceneGallery from '@/spec/fixtures/moenarch-scene-gallery.videospec.json';
 import moenarchSpecimen from '@/spec/fixtures/moenarch-specimen.videospec.json';
 import { latencyFormat } from '@/video/latency-format';
 
@@ -14,6 +15,7 @@ export const catalog = createCatalog(
     { spec: latencyExplainer, format: latencyFormat },
     { spec: catalogTitleCard, format: titleCardFormat },
     { spec: moenarchSpecimen, format: moenarchShort() },
+    { spec: moenarchSceneGallery, format: moenarchShort() },
   ],
   // `/` without a project keeps opening the latency explainer.
   LATENCY_PROJECT_ID,

@@ -2,18 +2,18 @@
 // shows. Plain TypeScript with no React or Remotion, so it is tested directly and the composition
 // only draws what `moenarchFrameState` returns. Every answer is a pure function of the plan and
 // the frame, so seeking to a frame gives the same result from any previous frame.
-import { resolveTimeline, type NarrationCue, type TitleScene, type VideoSpec } from '@/spec/video-spec';
+import { resolveTimeline, type NarrationCue, type SceneKind, type VideoSpec } from '@/spec/video-spec';
 
+import { layoutMoenarchScene, type MoenarchSceneLayout } from './layout';
 import { moenarchShortV1Tokens, type MoenarchShortTokens, type MoenarchTransitionName } from './tokens';
 
 export type MoenarchPlanScene = {
   id: string;
+  kind: SceneKind;
   from: number;
   durationInFrames: number;
-  eyebrow: string | null;
-  heading: string;
-  /** The heading wrapped by the token density rule. */
-  headingLines: string[];
+  /** Text blocks and media, laid out once here; frame code only draws them. */
+  layout: MoenarchSceneLayout;
   cues: NarrationCue[];
 };
 
@@ -49,26 +49,10 @@ export type MoenarchFrameState = {
   subtitle: string | null;
 };
 
-/** Greedy word wrap; null when a single word is longer than a line. */
-function wrap(text: string, maxChars: number): string[] | null {
-  const lines: string[] = [];
-  let line = '';
-  for (const word of text.trim().split(/\s+/)) {
-    if (word.length > maxChars) return null;
-    if (!line) line = word;
-    else if (line.length + 1 + word.length <= maxChars) line = `${line} ${word}`;
-    else {
-      lines.push(line);
-      line = word;
-    }
-  }
-  if (line) lines.push(line);
-  return lines;
-}
-
 /**
  * Plans a spec for the pack, or throws naming what the format cannot render: other scene kinds,
- * another output profile, scene lengths outside the pacing range and text over the density limit.
+ * another output profile, scene lengths outside the pacing range, and text or media the scene layout
+ * cannot fit (see layout.ts).
  */
 export function planMoenarchShort(spec: VideoSpec, tokens: MoenarchShortTokens = moenarchShortV1Tokens): MoenarchPlan {
   const problems: string[] = [];
@@ -82,26 +66,23 @@ export function planMoenarchShort(spec: VideoSpec, tokens: MoenarchShortTokens =
     );
   }
   const { minSceneDurationInFrames: min, maxSceneDurationInFrames: max } = tokens.pacing;
-  const { maxCharsPerLine, maxLines } = tokens.typography.density;
   const subtitleLimit = tokens.typography.subtitleMaxCharsPerLine * tokens.subtitles.maxLines;
   const timeline = resolveTimeline(spec);
 
   const scenes: MoenarchPlanScene[] = [];
   spec.scenes.forEach((scene, index) => {
-    if (scene.kind !== 'title') {
+    if (scene.kind === 'binnedChart') {
       problems.push(`${scene.id}: ${scene.kind} scenes are not part of ${tokens.id} v${tokens.version}`);
       return;
     }
-    const { payload } = scene as TitleScene;
     if (scene.durationInFrames < min || scene.durationInFrames > max) {
       problems.push(`${scene.id}: ${scene.durationInFrames} frames is outside the pacing range ${min}-${max}`);
     }
-    const headingLines = wrap(payload.heading, maxCharsPerLine);
-    if (!headingLines || headingLines.length > maxLines) {
-      problems.push(`${scene.id}: heading exceeds ${maxLines} lines of ${maxCharsPerLine} characters`);
-    }
-    if (payload.eyebrow && payload.eyebrow.length > maxCharsPerLine * 2) {
-      problems.push(`${scene.id}: eyebrow exceeds ${maxCharsPerLine * 2} characters`);
+    let layout: MoenarchSceneLayout | null = null;
+    try {
+      layout = layoutMoenarchScene(scene, tokens, spec.assets);
+    } catch (error) {
+      problems.push((error as Error).message);
     }
     const cues = scene.narration?.cues ?? [];
     for (const cue of cues) {
@@ -109,11 +90,10 @@ export function planMoenarchShort(spec: VideoSpec, tokens: MoenarchShortTokens =
     }
     scenes.push({
       id: scene.id,
+      kind: scene.kind,
       from: timeline.scenes[index].from,
       durationInFrames: scene.durationInFrames,
-      eyebrow: payload.eyebrow ?? null,
-      heading: payload.heading,
-      headingLines: headingLines ?? [],
+      layout: layout ?? { kind: scene.kind, blocks: [], media: null, ordered: false },
       cues: cues.map((cue) => ({ ...cue })),
     });
   });

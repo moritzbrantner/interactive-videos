@@ -1,11 +1,15 @@
 import { useMemo, useSyncExternalStore, type CSSProperties } from 'react';
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame } from 'remotion';
 
+import { useBudgetCounter } from '@/render-budget';
+
 import { moenarchFrameState, type MoenarchPlan, type MoenarchPlanScene } from './plan';
+import { MOENARCH_SCENES } from './scenes';
 import type { MoenarchEasingName, MoenarchShortTokens, MoenarchTransitionName } from './tokens';
 
 // The moenarch-short composition. All motion is a function of `useCurrentFrame()` through the
 // plan's frame state and token easings; every colour, size and curve is read from the tokens.
+// Scenes draw the layout the plan computed, through the archetype renderers in `scenes/`.
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
@@ -73,67 +77,21 @@ function layerStyle(
   }
 }
 
-function SceneLayer({ tokens, scene, style }: { tokens: MoenarchShortTokens; scene: MoenarchPlanScene; style: CSSProperties }) {
-  const { safeArea } = tokens.output;
-  const { typography, palette, spacing } = tokens;
-  const innerHeight = tokens.output.height - safeArea.top - safeArea.bottom;
+function SceneLayer({
+  tokens,
+  scene,
+  enterFrom,
+  style,
+}: {
+  tokens: MoenarchShortTokens;
+  scene: MoenarchPlanScene;
+  enterFrom: number;
+  style: CSSProperties;
+}) {
+  const Scene = MOENARCH_SCENES[scene.kind as keyof typeof MOENARCH_SCENES];
   return (
-    <AbsoluteFill data-moenarch-scene={scene.id} style={style}>
-      <div
-        style={{
-          position: 'absolute',
-          top: safeArea.top,
-          right: safeArea.right,
-          bottom: safeArea.bottom,
-          left: safeArea.left,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          paddingBottom: innerHeight * (1 - 2 * spacing.headlineAnchor),
-        }}
-      >
-        {scene.eyebrow ? (
-          <div
-            style={{
-              fontFamily: typography.fontFamily,
-              fontSize: typography.scale.eyebrow,
-              fontWeight: typography.weight.medium,
-              letterSpacing: `${typography.letterSpacing.eyebrow}em`,
-              textTransform: 'uppercase',
-              color: palette.muted,
-              marginBottom: spacing.eyebrowGap,
-            }}
-          >
-            {scene.eyebrow}
-          </div>
-        ) : null}
-        <div
-          data-moenarch-heading=""
-          style={{
-            fontFamily: typography.displayFamily,
-            fontSize: typography.scale.display,
-            fontWeight: typography.weight.display,
-            lineHeight: typography.lineHeight.display,
-            letterSpacing: `${typography.letterSpacing.display}em`,
-            color: palette.text,
-          }}
-        >
-          {scene.headingLines.map((line, index) => (
-            <span key={index}>
-              {index > 0 ? ' ' : null}
-              <span style={{ display: 'block' }}>{line}</span>
-            </span>
-          ))}
-        </div>
-        <div
-          style={{
-            marginTop: spacing.ruleGap,
-            width: spacing.ruleWidth,
-            height: spacing.ruleThickness,
-            background: palette.accent,
-          }}
-        />
-      </div>
+    <AbsoluteFill data-moenarch-scene={scene.id} data-moenarch-kind={scene.kind} style={style}>
+      <Scene scene={scene} tokens={tokens} enterFrom={enterFrom} />
     </AbsoluteFill>
   );
 }
@@ -266,8 +224,16 @@ function Subtitle({ tokens, text }: { tokens: MoenarchShortTokens; text: string 
 export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTokens) {
   const scenes = new Map(plan.scenes.map((scene) => [scene.id, scene]));
   const eases = createEases(tokens);
+  // A scene's entrance starts on its first frame on screen: the start of its incoming transition.
+  const enterFrom = new Map(
+    plan.scenes.map((scene) => [
+      scene.id,
+      plan.transitions.find((transition) => transition.toSceneId === scene.id)?.from ?? scene.from,
+    ]),
+  );
 
   function MoenarchShortVideo() {
+    useBudgetCounter('MoenarchShortVideo');
     const frame = useCurrentFrame();
     const reducedMotion = usePrefersReducedMotion();
     const state = useMemo(() => moenarchFrameState(plan, frame, { reducedMotion }), [frame, reducedMotion]);
@@ -282,7 +248,7 @@ export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTok
       >
         {state.sceneIds.map((id, index) => {
           const role: Role = state.sceneIds.length === 1 ? 'only' : index === 0 ? 'out' : 'in';
-          return <SceneLayer key={id} tokens={tokens} scene={scenes.get(id)!} style={layerStyle(tokens, eases, role, state.transition)} />;
+          return <SceneLayer key={id} tokens={tokens} scene={scenes.get(id)!} enterFrom={enterFrom.get(id)!} style={layerStyle(tokens, eases, role, state.transition)} />;
         })}
         {state.transition ? <div data-moenarch-transition={state.transition.name} hidden /> : null}
         <div data-moenarch-signature="" style={{ position: 'absolute', top: safeArea.top, left: safeArea.left }}>
