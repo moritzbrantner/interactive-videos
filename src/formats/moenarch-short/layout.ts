@@ -83,7 +83,9 @@ const STATIC_URI = /^static:(.+)$/;
 /** The `public/` path of a `static:` uri, or null for any other uri or an unsafe path. */
 function staticPath(uri: string): string | null {
   const path = STATIC_URI.exec(uri)?.[1];
-  if (!path || /[\\?#]/.test(path) || path.startsWith('/')) return null;
+  // Percent escapes are refused outright: the browser would decode `%2e%2e` or `%2f` while
+  // resolving the image URL, so an encoded segment could leave `public/`.
+  if (!path || /[\\?#%]/.test(path) || path.startsWith('/')) return null;
   const segments = path.split('/');
   return segments.every((segment) => segment && segment !== '.' && segment !== '..') ? path : null;
 }
