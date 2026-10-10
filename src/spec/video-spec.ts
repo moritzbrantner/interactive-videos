@@ -349,6 +349,10 @@ class Reader {
 function snapshot(value: unknown, path: string, diagnostics: VideoSpecDiagnostic[]): unknown {
   if (typeof value !== 'object' || value === null) return value;
   if (Array.isArray(value)) {
+    for (const key of Reflect.ownKeys(value)) {
+      if (key === 'length' || (typeof key === 'string' && String(Number(key) >>> 0) === key)) continue;
+      diagnostics.push({ path, message: `unsupported array property ${String(key)}` });
+    }
     return Array.from({ length: value.length }, (_, index) =>
       snapshotProperty(value, String(index), `${path}[${index}]`, diagnostics),
     );
@@ -356,7 +360,8 @@ function snapshot(value: unknown, path: string, diagnostics: VideoSpecDiagnostic
   const prototype = Object.getPrototypeOf(value);
   // Not a plain record: left as is and reported as "expected a plain object" by the reader.
   if (prototype !== Object.prototype && prototype !== null) return value;
-  const copy: Json = {};
+  // A null prototype keeps an own "__proto__" key as a field instead of invoking the setter.
+  const copy: Json = Object.create(null);
   for (const key of Reflect.ownKeys(value)) {
     if (typeof key === 'symbol') {
       diagnostics.push({ path, message: `unsupported symbol key ${String(key)}` });

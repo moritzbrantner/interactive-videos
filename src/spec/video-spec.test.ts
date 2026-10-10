@@ -249,6 +249,13 @@ describe('VideoSpec v1', () => {
     expect(diagnosticsOf(hidden)).toEqual([
       { path: '$.renderer', message: 'unsupported non-enumerable field' },
     ]);
+    const proto = parseVideoSpecJson(fixtureText.replace('{\n  "specVersion"', '{\n  "__proto__": "evil",\n  "specVersion"'));
+    expect(proto).toMatchObject({ ok: false, diagnostics: [{ path: '$.__proto__' }] });
+    const arrayExtra = fixture();
+    arrayExtra.assets.renderer = 'remotion';
+    expect(diagnosticsOf(arrayExtra)).toEqual([
+      { path: '$.assets', message: 'unsupported array property renderer' },
+    ]);
     const slow = fixture();
     slow.output.fps = 5;
     slow.scenes[0].durationInFrames = 400;
