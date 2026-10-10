@@ -1,0 +1,270 @@
+{
+  "specVersion": 1,
+  "project": {
+    "id": "moenarch-scene-gallery",
+    "title": "Moenarch scene gallery"
+  },
+  "format": {
+    "id": "moenarch-short",
+    "version": 1
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "assets": [
+    {
+      "id": "gallery-media",
+      "kind": "image",
+      "uri": "static:fixtures/scene-gallery/media-reveal.png"
+    }
+  ],
+  "scenes": [
+    {
+      "kind": "title",
+      "id": "title-short",
+      "durationInFrames": 90,
+      "payload": {
+        "eyebrow": "Scene gallery",
+        "heading": "Eight scenes"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "title-long",
+      "durationInFrames": 150,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2400,
+            "text": "Long content has to fit the same frame."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Archetypes at full length",
+        "heading": "Every scene at its longest size"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "statement-short",
+      "durationInFrames": 90,
+      "payload": {
+        "text": "Format first.",
+        "emphasis": "first"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "statement-long",
+      "durationInFrames": 150,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2400,
+            "text": "One decision, reused by every video."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Statement",
+        "text": "Decide the look once, then let every new video start from that decision instead of a blank page.",
+        "emphasis": "once"
+      }
+    },
+    {
+      "kind": "mediaReveal",
+      "id": "media-reveal-short",
+      "durationInFrames": 90,
+      "payload": {
+        "image": "gallery-media",
+        "alt": "Ochre disc and charcoal rules on a dark ground"
+      }
+    },
+    {
+      "kind": "mediaReveal",
+      "id": "media-reveal-long",
+      "durationInFrames": 150,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2400,
+            "text": "Images fill the frame behind the text."
+          }
+        ]
+      },
+      "payload": {
+        "image": "gallery-media",
+        "alt": "Ochre disc and charcoal rules on a dark ground",
+        "caption": "A committed fixture image, revealed full frame with the format's crop and scrim."
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "comparison-short",
+      "durationInFrames": 90,
+      "payload": {
+        "items": [
+          {
+            "label": "Before",
+            "detail": "Prompts"
+          },
+          {
+            "label": "After",
+            "detail": "Tokens"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "comparison-long",
+      "durationInFrames": 150,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2400,
+            "text": "Two options side by side."
+          }
+        ]
+      },
+      "payload": {
+        "heading": "Two ways to make a short",
+        "items": [
+          {
+            "label": "Every video from scratch",
+            "detail": "Typography, pacing and colour are restated and drift between videos."
+          },
+          {
+            "label": "One versioned format",
+            "detail": "The format owns the look, and each video only states what it says."
+          }
+        ]
+      }
+    },
+    {
+      "kind": "quote",
+      "id": "quote-short",
+      "durationInFrames": 90,
+      "payload": {
+        "text": "Less, but better."
+      }
+    },
+    {
+      "kind": "quote",
+      "id": "quote-long",
+      "durationInFrames": 150,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2400,
+            "text": "A quote with its source."
+          }
+        ]
+      },
+      "payload": {
+        "text": "The format should do the remembering, so the author only decides what the video is about and what it leaves behind.",
+        "attribution": "Moenarch format notes"
+      }
+    },
+    {
+      "kind": "dataPoint",
+      "id": "data-point-short",
+      "durationInFrames": 90,
+      "payload": {
+        "value": "48",
+        "label": "half-hour bins"
+      }
+    },
+    {
+      "kind": "dataPoint",
+      "id": "data-point-long",
+      "durationInFrames": 150,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2400,
+            "text": "One number, with context."
+          }
+        ]
+      },
+      "payload": {
+        "value": "200,000",
+        "label": "requests in one day of synthetic traffic",
+        "context": "Every request comes from a fixed seed, so each render shows the same number."
+      }
+    },
+    {
+      "kind": "list",
+      "id": "list-short",
+      "durationInFrames": 90,
+      "payload": {
+        "items": [
+          "Hook",
+          "Point",
+          "Close"
+        ],
+        "ordered": false
+      }
+    },
+    {
+      "kind": "list",
+      "id": "list-long",
+      "durationInFrames": 150,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2400,
+            "text": "Steps in order."
+          }
+        ]
+      },
+      "payload": {
+        "heading": "From brief to render",
+        "items": [
+          "Write a short brief of the idea",
+          "Turn it into a validated VideoSpec",
+          "Resolve every asset it references",
+          "Plan scenes and transitions",
+          "Render headlessly with a receipt"
+        ],
+        "ordered": true
+      }
+    },
+    {
+      "kind": "conclusion",
+      "id": "conclusion-short",
+      "durationInFrames": 90,
+      "payload": {
+        "heading": "That's all"
+      }
+    },
+    {
+      "kind": "conclusion",
+      "id": "conclusion-long",
+      "durationInFrames": 150,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 300,
+            "endMs": 2400,
+            "text": "And a closing thought."
+          }
+        ]
+      },
+      "payload": {
+        "heading": "Reuse the format, not the prompts",
+        "takeaway": "Everything a video repeats lives in the format, so each new short only adds what is new."
+      }
+    }
+  ]
+}

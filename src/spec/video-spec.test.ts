@@ -76,7 +76,9 @@ describe('VideoSpec v1', () => {
     expect(diagnosticsOf(unknownKind)).toEqual([
       {
         path: '$.scenes[0].kind',
-        message: 'unknown scene kind "flatStoriesCharacter"; v1 supports title, binnedChart',
+        // #13 adds the editorial scene archetypes to v1 (additive kinds; see video-spec-archetypes.test.ts).
+        message:
+          'unknown scene kind "flatStoriesCharacter"; v1 supports title, binnedChart, statement, mediaReveal, comparison, quote, dataPoint, list, conclusion',
       },
     ]);
 
