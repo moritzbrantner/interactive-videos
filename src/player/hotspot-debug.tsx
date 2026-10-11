@@ -82,6 +82,9 @@ export function HotspotDebug({
     instance.addEventListener('play', schedule);
     const resize = new ResizeObserver(schedule);
     resize.observe(root);
+    // Selection can change at a paused frame without emitting a frameupdate.
+    const selection = new MutationObserver(schedule);
+    selection.observe(root, { attributes: true, subtree: true, attributeFilter: ['aria-pressed'] });
     schedule();
 
     return () => {
@@ -89,6 +92,7 @@ export function HotspotDebug({
       instance.removeEventListener('pause', schedule);
       instance.removeEventListener('play', schedule);
       resize.disconnect();
+      selection.disconnect();
       if (scheduled) window.cancelAnimationFrame(scheduled);
     };
   }, [frame, player]);
