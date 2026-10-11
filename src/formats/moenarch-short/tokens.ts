@@ -80,6 +80,10 @@ const tokens = {
     minSceneDurationInFrames: 60,
     defaultSceneDurationInFrames: 90,
     maxSceneDurationInFrames: 180,
+    // Narrated scenes: silence before and after the narration audio is bounded, so a scene's
+    // length stays the voice's length and not padding. Milliseconds.
+    maxLeadInMs: 1000,
+    maxLeadOutMs: 1000,
     // Scene boundaries take transitions from this cycle in order, so a plan is deterministic and
     // a short with five boundaries shows the whole vocabulary.
     transitionCycle: ['lift', 'dissolve', 'slide', 'cut'],

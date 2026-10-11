@@ -1,6 +1,8 @@
 import { useMemo, useSyncExternalStore, type CSSProperties } from 'react';
-import { AbsoluteFill, Easing, interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Audio, Easing, interpolate, Sequence, useCurrentFrame } from 'remotion';
 
+import { Subtitles } from '@/components/remotion/subtitles';
+import type { SubtitleTrack } from '@/lib/remotion/subtitle-formats';
 import { useBudgetCounter } from '@/render-budget';
 
 import { moenarchFrameState, type MoenarchPlan, type MoenarchPlanScene } from './plan';
@@ -183,10 +185,34 @@ function Outro({ tokens, eases, plan, frame, reducedMotion }: OverlayProps) {
 
 type OverlayProps = { tokens: MoenarchShortTokens; eases: Eases; plan: MoenarchPlan; frame: number; reducedMotion: boolean };
 
-function Subtitle({ tokens, text }: { tokens: MoenarchShortTokens; text: string }) {
+/**
+ * The current subtitle, drawn by the installed `Subtitles` primitive. The plan decides which cue a
+ * frame shows (end-exclusive frame windows); the primitive gets that one cue over exactly its
+ * window, so its own inclusive-end timing agrees with the plan.
+ */
+function Subtitle({ tokens, cue, fps }: { tokens: MoenarchShortTokens; cue: MoenarchCueWindow; fps: number }) {
   const { safeArea } = tokens.output;
   const { typography, surfaces, spacing, subtitles } = tokens;
   const surface = surfaces.subtitle;
+  const track = useMemo<SubtitleTrack>(
+    () => ({
+      format: 'srt',
+      cues: [
+        {
+          id: `${cue.from}`,
+          // Same arithmetic as the primitive's frame time, so the first and last frames match exactly.
+          startMs: (cue.from / fps) * 1000,
+          endMs: ((cue.from + cue.durationInFrames - 1) / fps) * 1000,
+          text: cue.text,
+          spans: [{ text: cue.text }],
+        },
+      ],
+    }),
+    [cue, fps],
+  );
+  // The primitive positions its cues absolutely over the frame; here the cue sits in the
+  // subtitle band's flow, so the band (and its box) is the cue's box.
+  const flow = { position: 'relative', left: 'auto', right: 'auto', top: 'auto', bottom: 'auto', transform: 'none' } as const;
   return (
     <div
       style={{
@@ -198,25 +224,49 @@ function Subtitle({ tokens, text }: { tokens: MoenarchShortTokens; text: string 
         justifyContent: 'center',
       }}
     >
-      <div
-        data-moenarch-subtitle=""
-        style={{
-          maxWidth: '100%',
-          boxSizing: 'border-box',
-          padding: `${surface.paddingY}px ${surface.paddingX}px`,
-          borderRadius: surface.radius,
-          background: surface.background,
-          color: tokens.palette.text,
-          fontFamily: typography.fontFamily,
-          fontSize: typography.scale.subtitle,
-          fontWeight: typography.weight.medium,
-          lineHeight: typography.lineHeight.text,
-          textAlign: subtitles.align,
-        }}
-      >
-        {text}
+      <div data-moenarch-subtitle="" style={{ maxWidth: '100%' }}>
+        <Subtitles
+          track={track}
+          lingerMs={0}
+          preserveTrackStyles={false}
+          highlightMode="none"
+          activeColor={tokens.palette.text}
+          inactiveColor={tokens.palette.text}
+          backgroundColor={surface.background}
+          fontSize={typography.scale.subtitle}
+          fontWeight={typography.weight.medium}
+          lineHeight={typography.lineHeight.text}
+          maxWidth="100%"
+          padding={`${surface.paddingY}px ${surface.paddingX}px`}
+          borderRadius={surface.radius}
+          textShadow="none"
+          style={{ position: 'relative', inset: 'auto' }}
+          cueStyle={{
+            ...flow,
+            boxSizing: 'border-box',
+            fontFamily: typography.fontFamily,
+            textAlign: subtitles.align,
+          }}
+        />
       </div>
     </div>
+  );
+}
+
+type MoenarchCueWindow = MoenarchPlanScene['cues'][number];
+
+/** Narration audio: one Remotion `Audio` per scheduled segment, trimmed to its audio frames. */
+function NarrationAudio({ plan }: { plan: MoenarchPlan }) {
+  return (
+    <>
+      {plan.scenes.flatMap((scene) =>
+        scene.audio.map((segment) => (
+          <Sequence key={`${scene.id}-${segment.from}`} from={segment.from} durationInFrames={segment.durationInFrames} layout="none">
+            <Audio src={`${import.meta.env.BASE_URL}${segment.staticPath}`} trimBefore={segment.trimBeforeInFrames} />
+          </Sequence>
+        )),
+      )}
+    </>
   );
 }
 
@@ -238,6 +288,10 @@ export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTok
     const reducedMotion = usePrefersReducedMotion();
     const state = useMemo(() => moenarchFrameState(plan, frame, { reducedMotion }), [frame, reducedMotion]);
     const { safeArea } = tokens.output;
+    const subtitleCue =
+      state.subtitle === null
+        ? null
+        : (plan.scenes.flatMap((scene) => scene.cues).find((cue) => frame >= cue.from && frame < cue.from + cue.durationInFrames) ?? null);
     return (
       <AbsoluteFill
         data-moenarch-root=""
@@ -256,7 +310,9 @@ export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTok
         </div>
         {state.intro ? <Intro tokens={tokens} eases={eases} plan={plan} frame={frame} reducedMotion={reducedMotion} /> : null}
         {state.outro ? <Outro tokens={tokens} eases={eases} plan={plan} frame={frame} reducedMotion={reducedMotion} /> : null}
-        {state.subtitle !== null ? <Subtitle tokens={tokens} text={state.subtitle} /> : null}
+        {subtitleCue ? <Subtitle tokens={tokens} cue={subtitleCue} fps={plan.fps} /> : null}
+        {state.mark !== null ? <div data-moenarch-mark={state.mark} hidden /> : null}
+        <NarrationAudio plan={plan} />
       </AbsoluteFill>
     );
   }

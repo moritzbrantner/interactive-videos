@@ -1,0 +1,186 @@
+{
+  "specVersion": 1,
+  "project": {
+    "id": "moenarch-narration",
+    "title": "Moenarch narration timing"
+  },
+  "format": {
+    "id": "moenarch-short",
+    "version": 1
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "assets": [
+    {
+      "id": "narration.hook",
+      "kind": "audio",
+      "uri": "static:fixtures/narration/hook.wav"
+    },
+    {
+      "id": "narration.point",
+      "kind": "audio",
+      "uri": "static:fixtures/narration/point.wav"
+    }
+  ],
+  "scenes": [
+    {
+      "kind": "title",
+      "id": "hook",
+      "narration": {
+        "audio": {
+          "asset": "narration.hook",
+          "durationMs": 2450
+        },
+        "leadInMs": 400,
+        "leadOutMs": 510,
+        "cues": [
+          {
+            "startMs": 120,
+            "endMs": 1180,
+            "text": "Narration sets the pace."
+          },
+          {
+            "startMs": 1300,
+            "endMs": 2380,
+            "text": "Every cue lands on a frame."
+          }
+        ],
+        "words": [
+          {
+            "startMs": 120,
+            "endMs": 610,
+            "text": "Narration"
+          },
+          {
+            "startMs": 640,
+            "endMs": 830,
+            "text": "sets"
+          },
+          {
+            "startMs": 850,
+            "endMs": 930,
+            "text": "the"
+          },
+          {
+            "startMs": 960,
+            "endMs": 1180,
+            "text": "pace."
+          },
+          {
+            "startMs": 1300,
+            "endMs": 1520,
+            "text": "Every"
+          },
+          {
+            "startMs": 1540,
+            "endMs": 1760,
+            "text": "cue"
+          },
+          {
+            "startMs": 1780,
+            "endMs": 2010,
+            "text": "lands"
+          },
+          {
+            "startMs": 2030,
+            "endMs": 2110,
+            "text": "on"
+          },
+          {
+            "startMs": 2130,
+            "endMs": 2170,
+            "text": "a"
+          },
+          {
+            "startMs": 2190,
+            "endMs": 2380,
+            "text": "frame."
+          }
+        ],
+        "marks": [
+          {
+            "id": "pace",
+            "atMs": 640
+          },
+          {
+            "id": "frames",
+            "atMs": 1300
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Narration",
+        "heading": "Voice sets the pace"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "point",
+      "narration": {
+        "audio": {
+          "asset": "narration.point",
+          "durationMs": 3000
+        },
+        "leadOutMs": 300,
+        "holds": [
+          {
+            "atMs": 1500,
+            "durationMs": 600
+          }
+        ],
+        "cues": [
+          {
+            "startMs": 100,
+            "endMs": 1500,
+            "text": "Holds add silence on purpose."
+          },
+          {
+            "startMs": 1600,
+            "endMs": 2900,
+            "text": "Then the voice comes back."
+          }
+        ],
+        "marks": [
+          {
+            "id": "silence",
+            "atMs": 1200
+          },
+          {
+            "id": "return",
+            "atMs": 1500
+          }
+        ]
+      },
+      "payload": {
+        "text": "Silence is part of the script.",
+        "emphasis": "Silence"
+      }
+    },
+    {
+      "kind": "conclusion",
+      "id": "close",
+      "durationInFrames": 90,
+      "narration": {
+        "cues": [
+          {
+            "startMs": 200,
+            "endMs": 2600,
+            "text": "Explicit scenes keep their timing."
+          }
+        ],
+        "marks": [
+          {
+            "id": "closing",
+            "atMs": 1000
+          }
+        ]
+      },
+      "payload": {
+        "heading": "Explicit scenes keep their length."
+      }
+    }
+  ]
+}

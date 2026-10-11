@@ -1,10 +1,12 @@
 // The moenarch-short timing model: which scenes, transition, intro/outro and subtitle a frame
 // shows. Plain TypeScript with no React or Remotion, so it is tested directly and the composition
 // only draws what `moenarchFrameState` returns. Every answer is a pure function of the plan and
-// the frame, so seeking to a frame gives the same result from any previous frame.
-import { resolveTimeline, type NarrationCue, type SceneKind, type VideoSpec } from '@/spec/video-spec';
+// the frame, so seeking to a frame gives the same result from any previous frame. Scene starts and
+// lengths, subtitles, semantic cues (marks) and narration audio come from `narrationSchedule`.
+import { narrationSchedule, type ScheduledCue, type ScheduledMark } from '@/spec/narration-schedule';
+import type { SceneKind, VideoSpec } from '@/spec/video-spec';
 
-import { layoutMoenarchScene, type MoenarchSceneLayout } from './layout';
+import { layoutMoenarchScene, staticPath, type MoenarchSceneLayout } from './layout';
 import { moenarchShortV1Tokens, type MoenarchShortTokens, type MoenarchTransitionName } from './tokens';
 
 export type MoenarchPlanScene = {
@@ -14,8 +16,16 @@ export type MoenarchPlanScene = {
   durationInFrames: number;
   /** Text blocks and media, laid out once here; frame code only draws them. */
   layout: MoenarchSceneLayout;
-  cues: NarrationCue[];
+  /** Subtitle windows in absolute frames, end-exclusive. */
+  cues: ScheduledCue[];
+  /** Semantic cues in absolute frames, in order. */
+  marks: ScheduledMark[];
+  /** Narration audio segments, played from `public/<staticPath>`; empty for a silent scene. */
+  audio: MoenarchAudioSegment[];
 };
+
+/** Plays `staticPath` from audio frame `trimBeforeInFrames` during the window. */
+export type MoenarchAudioSegment = { staticPath: string; from: number; durationInFrames: number; trimBeforeInFrames: number };
 
 export type MoenarchPlanTransition = {
   name: MoenarchTransitionName;
@@ -47,6 +57,8 @@ export type MoenarchFrameState = {
   intro: boolean;
   outro: boolean;
   subtitle: string | null;
+  /** The current scene's latest semantic cue at or before the frame; null before its first one. */
+  mark: string | null;
 };
 
 /**
@@ -67,7 +79,8 @@ export function planMoenarchShort(spec: VideoSpec, tokens: MoenarchShortTokens =
   }
   const { minSceneDurationInFrames: min, maxSceneDurationInFrames: max } = tokens.pacing;
   const subtitleLimit = tokens.typography.subtitleMaxCharsPerLine * tokens.subtitles.maxLines;
-  const timeline = resolveTimeline(spec);
+  const { maxLeadInMs, maxLeadOutMs } = tokens.pacing;
+  const timeline = narrationSchedule(spec);
 
   const scenes: MoenarchPlanScene[] = [];
   spec.scenes.forEach((scene, index) => {
@@ -75,8 +88,25 @@ export function planMoenarchShort(spec: VideoSpec, tokens: MoenarchShortTokens =
       problems.push(`${scene.id}: ${scene.kind} scenes are not part of ${tokens.id} v${tokens.version}`);
       return;
     }
-    if (scene.durationInFrames < min || scene.durationInFrames > max) {
-      problems.push(`${scene.id}: ${scene.durationInFrames} frames is outside the pacing range ${min}-${max}`);
+    const scheduled = timeline.scenes[index];
+    // The pacing range applies to the scene's length, whether stated or derived from narration.
+    if (scheduled.durationInFrames < min || scheduled.durationInFrames > max) {
+      problems.push(`${scene.id}: ${scheduled.durationInFrames} frames is outside the pacing range ${min}-${max}`);
+    }
+    const narration = scene.narration;
+    if ((narration?.leadInMs ?? 0) > maxLeadInMs) {
+      problems.push(`${scene.id}: lead-in ${narration!.leadInMs} ms exceeds the maximum ${maxLeadInMs} ms`);
+    }
+    if ((narration?.leadOutMs ?? 0) > maxLeadOutMs) {
+      problems.push(`${scene.id}: lead-out ${narration!.leadOutMs} ms exceeds the maximum ${maxLeadOutMs} ms`);
+    }
+    let audioPath: string | null = null;
+    if (scheduled.audio) {
+      const asset = spec.assets.find((candidate) => candidate.id === scheduled.audio!.asset)!;
+      audioPath = staticPath(asset.uri);
+      if (audioPath === null) {
+        problems.push(`${scene.id}: audio "${asset.id}" has uri "${asset.uri}"; ${tokens.id} serves only static:<path> audio from public/`);
+      }
     }
     let layout: MoenarchSceneLayout | null = null;
     try {
@@ -84,17 +114,18 @@ export function planMoenarchShort(spec: VideoSpec, tokens: MoenarchShortTokens =
     } catch (error) {
       problems.push((error as Error).message);
     }
-    const cues = scene.narration?.cues ?? [];
-    for (const cue of cues) {
+    for (const cue of scheduled.cues) {
       if (cue.text.length > subtitleLimit) problems.push(`${scene.id}: subtitle "${cue.text}" exceeds ${subtitleLimit} characters`);
     }
     scenes.push({
       id: scene.id,
       kind: scene.kind,
-      from: timeline.scenes[index].from,
-      durationInFrames: scene.durationInFrames,
+      from: scheduled.from,
+      durationInFrames: scheduled.durationInFrames,
       layout: layout ?? { kind: scene.kind, blocks: [], media: null, ordered: false },
-      cues: cues.map((cue) => ({ ...cue })),
+      cues: scheduled.cues.map((cue) => ({ ...cue })),
+      marks: scheduled.marks.map((mark) => ({ ...mark })),
+      audio: (scheduled.audio?.segments ?? []).map((segment) => ({ staticPath: audioPath ?? '', ...segment })),
     });
   });
 
@@ -145,8 +176,9 @@ export function moenarchFrameState(
   const current = plan.scenes.find((scene) => within(frame, scene))!;
   const active = plan.transitions.find((transition) => within(frame, transition));
 
-  const localMs = ((frame - current.from) * 1000) / plan.fps;
-  const cue = current.cues.find((candidate) => localMs >= candidate.startMs && localMs < candidate.endMs);
+  const cue = current.cues.find((candidate) => within(frame, candidate));
+  let mark: string | null = null;
+  for (const candidate of current.marks) if (candidate.frame <= frame) mark = candidate.id;
 
   return {
     frame,
@@ -160,5 +192,6 @@ export function moenarchFrameState(
     intro: within(frame, plan.intro),
     outro: within(frame, plan.outro),
     subtitle: cue ? cue.text : null,
+    mark,
   };
 }

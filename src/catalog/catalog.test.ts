@@ -20,6 +20,8 @@ describe('project catalog', () => {
       { id: 'moenarch-specimen', title: 'Moenarch short specimen' },
       // #13: the editorial scene-archetype gallery.
       { id: 'moenarch-scene-gallery', title: 'Moenarch scene gallery' },
+      // #14: narration, cue and subtitle timing.
+      { id: 'moenarch-narration', title: 'Moenarch narration timing' },
     ]);
     expect(catalog.defaultId).toBe('latency-explainer');
   });

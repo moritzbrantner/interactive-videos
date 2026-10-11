@@ -81,7 +81,7 @@ function emphasisRuns(lines: string[], phrase: string): MoenarchTextRun[][] | nu
 const STATIC_URI = /^static:(.+)$/;
 
 /** The `public/` path of a `static:` uri, or null for any other uri or an unsafe path. */
-function staticPath(uri: string): string | null {
+export function staticPath(uri: string): string | null {
   const path = STATIC_URI.exec(uri)?.[1];
   // Percent escapes are refused outright: the browser would decode `%2e%2e` or `%2f` while
   // resolving the image URL, so an encoded segment could leave `public/`.
