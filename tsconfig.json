@@ -37,6 +37,7 @@
     "src/**/*.tsx",
     "vite.config.ts",
     "vitest.config.ts",
+    "vitest.render.config.ts",
     "source-pins.ts",
     "e2e/**/*.ts",
     "playwright.config.ts"
