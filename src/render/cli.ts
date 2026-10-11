@@ -15,7 +15,14 @@ import { renderMedia, selectComposition } from '@remotion/renderer';
 import { catalog } from '@/projects';
 
 import { appAlias, sourcePinAliases } from '../../source-pins.ts';
-import { createRenderFailure, createRenderResult, parseRenderArgs, resolveRenderJob, type RenderError, type RenderJob } from './render-job';
+import {
+  createRenderFailure,
+  createRenderResult,
+  parseRenderArgs,
+  resolveRenderJob,
+  type RenderError,
+  type RenderJob,
+} from './render-job';
 
 const ROOT = join(import.meta.dirname, '..', '..');
 const ENTRY_POINT = join(import.meta.dirname, 'root.tsx');
@@ -38,37 +45,61 @@ function webpackAliases(): Record<string, string> {
 
 const sha256File = (path: string) => {
   const bytes = readFileSync(path);
-  return { sha256: createHash('sha256').update(bytes).digest('hex'), bytes: bytes.length };
+  return {
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    bytes: bytes.length,
+  };
 };
 
 async function render(job: RenderJob) {
   const browserExecutable = chromium.executablePath();
-  log(`video:render: bundling ${ENTRY_POINT}`);
-  const serveUrl = await bundle({
-    entryPoint: ENTRY_POINT,
-    publicDir: PUBLIC_DIR,
-    onProgress: () => undefined,
-    webpackOverride: (config) => ({
-      ...config,
-      resolve: { ...config.resolve, alias: { ...(config.resolve?.alias as Record<string, string> | undefined), ...webpackAliases() } },
-      plugins: [
-        ...(config.plugins ?? []),
-        // The app reads Vite's import.meta.env; a render is a production build served by Remotion.
-        new webpack.DefinePlugin({
-          'import.meta.env.MODE': JSON.stringify('production'),
-          'import.meta.env.BASE_URL': '(window.remotion_staticBase + "/")',
-        }),
-      ],
-    }),
-  });
-
   // Rendered beside the target under a temporary name (keeping the container extension Remotion
-  // checks), then moved into place, so a failed render never leaves a file at the output path.
-  const partial = join(dirname(job.outPath), `.${basename(job.outPath)}.partial-${process.pid}.${job.profile.container}`);
+  // checks). Hashing and every cleanup happen before the final rename, so a failure at any step
+  // leaves no file at the output path; the bundle directory is removed even if bundling rejects.
+  const partial = join(
+    dirname(job.outPath),
+    `.${basename(job.outPath)}.partial-${process.pid}.${job.profile.container}`,
+  );
+  let bundleDir: string | undefined;
   try {
-    const composition = await selectComposition({ serveUrl, id: job.composition.id, browserExecutable, logLevel: 'error' });
+    log(`video:render: bundling ${ENTRY_POINT}`);
+    const serveUrl = await bundle({
+      entryPoint: ENTRY_POINT,
+      publicDir: PUBLIC_DIR,
+      onProgress: () => undefined,
+      onDirectoryCreated: (dir) => {
+        bundleDir = dir;
+      },
+      webpackOverride: (config) => ({
+        ...config,
+        resolve: {
+          ...config.resolve,
+          alias: {
+            ...(config.resolve?.alias as Record<string, string> | undefined),
+            ...webpackAliases(),
+          },
+        },
+        plugins: [
+          ...(config.plugins ?? []),
+          // The app reads Vite's import.meta.env; a render is a production build served by Remotion.
+          new webpack.DefinePlugin({
+            'import.meta.env.MODE': JSON.stringify('production'),
+            'import.meta.env.BASE_URL': '(window.remotion_staticBase + "/")',
+          }),
+        ],
+      }),
+    });
+    bundleDir ??= serveUrl;
+    const composition = await selectComposition({
+      serveUrl,
+      id: job.composition.id,
+      browserExecutable,
+      logLevel: 'error',
+    });
     mkdirSync(dirname(job.outPath), { recursive: true });
-    log(`video:render: rendering ${job.composition.id} frames ${job.frames.from}-${job.frames.to} with ${browserExecutable}`);
+    log(
+      `video:render: rendering ${job.composition.id} frames ${job.frames.from}-${job.frames.to} with ${browserExecutable}`,
+    );
     await renderMedia({
       serveUrl,
       composition,
@@ -80,12 +111,15 @@ async function render(job: RenderJob) {
       logLevel: 'error',
       overwrite: true,
     });
+    const digest = sha256File(partial);
+    if (bundleDir) rmSync(bundleDir, { recursive: true, force: true });
+    bundleDir = undefined;
     renameSync(partial, job.outPath);
+    return { path: job.outPath, ...digest };
   } finally {
     rmSync(partial, { force: true });
-    rmSync(serveUrl, { recursive: true, force: true });
+    if (bundleDir) rmSync(bundleDir, { recursive: true, force: true });
   }
-  return { path: job.outPath, ...sha256File(job.outPath) };
 }
 
 function finish(line: object, code: number): never {
@@ -102,17 +136,38 @@ function failWith(error: RenderError): never {
 async function main() {
   const parsed = parseRenderArgs(process.argv.slice(2));
   if (!parsed.ok) return failWith(parsed.error);
-  const resolved = resolveRenderJob(parsed.args, { catalog, cwd: process.cwd(), publicDir: PUBLIC_DIR });
+  let resolved: ReturnType<typeof resolveRenderJob>;
+  try {
+    resolved = resolveRenderJob(parsed.args, {
+      catalog,
+      cwd: process.cwd(),
+      publicDir: PUBLIC_DIR,
+    });
+  } catch (error) {
+    // I/O failures while reading a spec or asset (unreadable, removed mid-check) are failures too.
+    return failWith({
+      reason: 'render-failed',
+      message: error instanceof Error ? error.message : String(error),
+    });
+  }
   if (!resolved.ok) return failWith(resolved.error);
   const { job } = resolved;
   let output;
   try {
     output = await render(job);
   } catch (error) {
-    return failWith({ reason: 'render-failed', message: error instanceof Error ? error.message : String(error) });
+    return failWith({
+      reason: 'render-failed',
+      message: error instanceof Error ? error.message : String(error),
+    });
   }
   log(`video:render: wrote ${output.path} (${output.bytes} bytes)`);
   return finish(createRenderResult(job, output), 0);
 }
 
-void main();
+main().catch((error: unknown) =>
+  failWith({
+    reason: 'render-failed',
+    message: error instanceof Error ? error.message : String(error),
+  }),
+);
