@@ -6,7 +6,7 @@
       "name": "interactive-videos",
       "dependencies": {
         "@moritzbrantner/charts": "github:moritzbrantner/charts#29c978898e9aaead1995a6499707d4570c01bdef",
-        "@moritzbrantner/tables": "github:moritzbrantner/tables#955dc18855342df5821a1c37ef423df72c8edc95",
+        "@moritzbrantner/tables": "github:moritzbrantner/tables#02974d5df2bda75306d3fad22c446624fd51af4f",
         "@remotion/captions": "4.0.534",
         "@remotion/player": "4.0.534",
         "react": "19.2.8",
@@ -37,7 +37,7 @@
 
     "@moritzbrantner/charts": ["@moritzbrantner/charts@github:moritzbrantner/charts#29c9788", { "dependencies": { "@chenglou/pretext": "0.0.7" }, "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0", "recharts": "^3.0.0" } }, "moritzbrantner-charts-29c9788", "sha512-guYz2NJlTVFDGyaZmMF0dOjXimCZ1UhDeKSXCy4ZfltTkMCBrj9J5aK7qorg4rrjsVtN3BePh7T07fu0mB42yg=="],
 
-    "@moritzbrantner/tables": ["@moritzbrantner/tables@github:moritzbrantner/tables#955dc18", { "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0" } }, "moritzbrantner-tables-955dc18", "sha512-SzrVB/U8KvfuHsFaMINpEHYcuys62WsqJarZOmIV+UPNopAM1jNI8pWu3B8owo7AJv6Fmv6LFtNsNcMorxjlsg=="],
+    "@moritzbrantner/tables": ["@moritzbrantner/tables@github:moritzbrantner/tables#02974d5", { "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0" } }, "moritzbrantner-tables-02974d5", "sha512-pasH6t+k4aJa+zKpASL6uP/soPiR6LoXqthX7sCyIpnUlQTpDiIX9cg8BVw/b09Rc74hzrC6gGQfg6eGWC5Gfg=="],
 
     "@oxc-project/types": ["@oxc-project/types@0.151.0", "", {}, "sha512-J1yXrIlNDZVzE3ada310xeAw7nH8yCAyLPuUIsjKatFPmfn5bS1oW+cM+QsGOtVWd5nhSpbwZWx/rue+r5Z+PA=="],
 
