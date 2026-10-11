@@ -988,12 +988,13 @@ function readNarration(
       const holdValues: unknown[] = Array.isArray(narration.holds) ? narration.holds : [];
       const validAt = (index: number) => {
         const raw = (holdValues[index] as { atMs?: unknown } | null | undefined)?.atMs;
-        return typeof raw === 'number' && Number.isInteger(raw) && raw >= 0;
+        return typeof raw === 'number' && Number.isSafeInteger(raw) && raw >= 0;
       };
       holds.forEach((hold, index) => {
-        if (!validAt(index) || (index > 0 && !validAt(index - 1))) return;
+        if (!validAt(index)) return;
         const atPath = `${path}.holds[${index}].atMs`;
-        const previous = holds![index - 1];
+        // Order and same-frame checks compare with the predecessor, so they need it to be valid too.
+        const previous = index > 0 && validAt(index - 1) ? holds![index - 1] : undefined;
         const inside = cues.findIndex((cue) => cue.startMs < hold.atMs && hold.atMs < cue.endMs);
         if (audioMs !== null && (hold.atMs <= 0 || hold.atMs >= audioMs)) {
           r.error(atPath, `must be inside the narration audio (between 0 and ${audioMs} ms, exclusive)`);
