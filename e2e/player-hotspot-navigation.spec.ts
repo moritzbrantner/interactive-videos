@@ -16,11 +16,11 @@ async function openAtInspectableFrame(page: Page, debug = false) {
 
 test('playback has a dedicated pause control independent of the Player transport overlay', async ({ page }) => {
   await page.goto('/?project=latency-explainer');
-  const play = page.getByRole('button', { name: 'Play video' });
+  const play = page.locator('.player-toolbar').getByRole('button', { name: 'Play video' });
   await expect(play).toBeVisible();
   await play.click();
-  await expect(page.getByRole('button', { name: 'Pause video' })).toBeVisible();
-  await page.getByRole('button', { name: 'Pause video' }).click();
+  await expect(page.locator('.player-toolbar').getByRole('button', { name: 'Pause video' })).toBeVisible();
+  await page.locator('.player-toolbar').getByRole('button', { name: 'Pause video' }).click();
   await expect(play).toBeVisible();
 });
 
@@ -41,11 +41,11 @@ test('keyboard focus freezes playback; Tab, Shift+Tab and Enter traverse and ins
   await expect(first).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('.insight')).toContainText('Slowest requests');
   await page.getByRole('button', { name: 'Resume' }).click();
-  await expect(page.getByRole('button', { name: 'Pause video' })).toBeVisible();
+  await expect(page.locator('.player-toolbar').getByRole('button', { name: 'Pause video' })).toBeVisible();
 
   // Keyboard focus itself pauses playback, even without activating a hotspot.
   await second.focus();
-  await expect(page.getByRole('button', { name: 'Play video' })).toBeVisible();
+  await expect(page.locator('.player-toolbar').getByRole('button', { name: 'Play video' })).toBeVisible();
 });
 
 test('developer mode highlights only active hitboxes and shows the same accessible hotspot labels', async ({ page }) => {
@@ -66,6 +66,7 @@ test('developer mode highlights only active hitboxes and shows the same accessib
 
   await inspector.getByRole('button', { name: /14:30 to 15:00/ }).click();
   await expect(page.locator('g[data-hotspot="bin-29"]')).toBeFocused();
+  await expect(page.locator('[data-debug-hotspot="bin-29"]')).toHaveAttribute('data-selected', 'true');
 
   await page.getByLabel('Developer mode').uncheck();
   await expect(inspector).toHaveCount(0);
