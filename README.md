@@ -21,6 +21,20 @@ bun run dev
 
 `bun run verify` type-checks, runs the data tests, builds, and runs the render budget tests.
 
+## Player navigation and developer mode
+
+- The player has an explicit **Play/Pause** button outside Remotion's transport controls.
+  The normal seek bar remains available.
+- Select **Focus first clickable** to pause and focus the first *currently available* hotspot.
+  Use **Tab / Shift+Tab** to move among clickable items, then **Enter / Space** to inspect
+  an item. Focusing a hotspot while the video plays pauses it so the target stays put.
+  If nothing is clickable yet, play or seek to a later frame.
+- **Developer mode** overlays numbered hitboxes for currently clickable HTML subtitle terms
+  and SVG chart elements, with an inspectable list of their accessible labels and IDs.
+  Its URL state is `?debug=hotspots` and is preserved on project navigation/reload.
+  Hitboxes do not intercept clicks. The overlay lives in the browser Player shell and is
+  absent from rendered/exported videos. It is only measured while developer mode is active.
+
 ## Render budget
 
 `bun run test:budget` (part of `bun run verify`) builds the app with `--mode render-budget`, in
