@@ -66,6 +66,9 @@ test('developer mode highlights only active hitboxes and shows the same accessib
 
   await inspector.getByRole('button', { name: /14:30 to 15:00/ }).click();
   await expect(page.locator('g[data-hotspot="bin-29"]')).toBeFocused();
+  // The inspector navigates; activation remains an explicit Enter/Space action.
+  await page.keyboard.press('Enter');
+  await expect(page.locator('g[data-hotspot="bin-29"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('[data-debug-hotspot="bin-29"]')).toHaveAttribute('data-selected', 'true');
 
   await page.getByLabel('Developer mode').uncheck();
