@@ -66,7 +66,12 @@ const WIDE = new Set('WM@%&'.split(''));
 const LOWER_WIDE = new Set('mw'.split(''));
 const UPPER_NARROW = new Set('BEFJKLPSTXYZ'.split(''));
 
-function glyphClass(glyph: string): GlyphClass {
+// Combining marks, variation selectors and zero-width format characters have no advance of their
+// own: they render as part of the preceding glyph.
+const ZERO_ADVANCE = /^[\p{Mn}\p{Me}\u200b-\u200d\u2060\ufeff\ufe00-\ufe0f]$/u;
+
+function glyphClass(glyph: string): GlyphClass | null {
+  if (ZERO_ADVANCE.test(glyph)) return null;
   const code = glyph.codePointAt(0)!;
   if (/\s/.test(glyph)) return 'space';
   if (code < 0x80) {
@@ -105,7 +110,10 @@ export function estimateLineWidth(line: string, tokens: MoenarchShortTokens, sty
   const advance = tokens.scenes.glyphAdvance;
   const text = style.uppercase ? line.toUpperCase() : line;
   let em = 0;
-  for (const glyph of text) em += advance[glyphClass(glyph)] + style.letterSpacing;
+  for (const glyph of text) {
+    const kind = glyphClass(glyph);
+    if (kind !== null) em += advance[kind] + style.letterSpacing;
+  }
   return em * style.size;
 }
 
