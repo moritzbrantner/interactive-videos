@@ -993,8 +993,10 @@ function readNarration(
       holds.forEach((hold, index) => {
         if (!validAt(index)) return;
         const atPath = `${path}.holds[${index}].atMs`;
-        // Order and same-frame checks compare with the predecessor, so they need it to be valid too.
-        const previous = index > 0 && validAt(index - 1) ? holds![index - 1] : undefined;
+        // Order and same-frame checks compare with the nearest preceding valid hold.
+        let previousIndex = index - 1;
+        while (previousIndex >= 0 && !validAt(previousIndex)) previousIndex -= 1;
+        const previous = previousIndex >= 0 ? holds![previousIndex] : undefined;
         const inside = cues.findIndex((cue) => cue.startMs < hold.atMs && hold.atMs < cue.endMs);
         if (audioMs !== null && (hold.atMs <= 0 || hold.atMs >= audioMs)) {
           r.error(atPath, `must be inside the narration audio (between 0 and ${audioMs} ms, exclusive)`);
@@ -1007,7 +1009,7 @@ function readNarration(
           // frame, would leave an audio segment with no frames.
           const cut = frameOf(hold.atMs);
           if (previous && cut === frameOf(previous.atMs)) {
-            r.error(atPath, `lands on the same frame as holds[${index - 1}]`);
+            r.error(atPath, `lands on the same frame as holds[${previousIndex}]`);
           } else if (cut >= frameOf(audioMs)) {
             r.error(atPath, 'lands on the last frame of the narration audio');
           }

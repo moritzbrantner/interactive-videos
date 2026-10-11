@@ -52,3 +52,18 @@ describe('narration hold validation after an invalid predecessor', () => {
     expect(messagesAt(spec, 'holds[0].atMs')).toHaveLength(1);
   });
 });
+
+describe('narration hold order across an invalid hold', () => {
+  it('compares with the nearest preceding valid hold', () => {
+    const spec = narrated();
+    const scene = firstAudioScene(spec);
+    const valid = scene.narration.holds?.[0]?.atMs;
+    if (valid === undefined) return;
+    scene.narration.holds = [
+      { atMs: valid, durationMs: 100 },
+      { atMs: -1, durationMs: 100 },
+      { atMs: valid, durationMs: 100 },
+    ];
+    expect(messagesAt(spec, 'holds[2].atMs').join(' ')).toContain('holds must be in increasing order');
+  });
+});
