@@ -63,6 +63,11 @@ export function titleCardScenes(spec: VideoSpec): TitleScene[] {
       `the title-card format renders only title scenes (${unsupported.map((scene) => `${scene.id}: ${scene.kind}`).join(', ')})`,
     );
   }
+  // This format plays no audio; a narrated scene's length and cues would be meaningless silence.
+  const narrated = spec.scenes.filter((scene) => scene.narration?.audio);
+  if (narrated.length) {
+    throw new Error(`the title-card format does not play narration audio (${narrated.map((scene) => scene.id).join(', ')})`);
+  }
   return spec.scenes as TitleScene[];
 }
 
@@ -75,7 +80,7 @@ export const titleCardFormat: FormatPack = {
       return (
         <AbsoluteFill style={{ background: colors.background }}>
           {scenes.map((scene, index) => (
-            <Sequence key={scene.id} from={timeline[index].from} durationInFrames={scene.durationInFrames}>
+            <Sequence key={scene.id} from={timeline[index].from} durationInFrames={timeline[index].durationInFrames}>
               <TitleSceneView scene={scene} />
             </Sequence>
           ))}

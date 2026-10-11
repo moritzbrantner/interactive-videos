@@ -26,10 +26,34 @@ export type AssetKind = (typeof ASSET_KINDS)[number];
 
 export type AssetRef = { id: string; kind: AssetKind; uri: string };
 
-/** Times are milliseconds from the start of the scene. */
+/**
+ * Times are milliseconds on the narration clock: from the first sample of the narration audio
+ * when the scene has audio, otherwise from the start of the scene.
+ */
 export type NarrationCue = { startMs: number; endMs: number; text: string };
 
-export type Narration = { cues: NarrationCue[] };
+/** Pre-recorded narration: an `audio` asset and its declared length (never measured at render time). */
+export type NarrationAudio = { asset: string; durationMs: number };
+
+/** Silence inserted into the narration audio at `atMs` (audio clock), between cues. */
+export type NarrationHold = { atMs: number; durationMs: number };
+
+/** A semantic cue: a named point in the narration that scene state can change at. */
+export type NarrationMark = { id: string; atMs: number };
+
+export type Narration = {
+  audio?: NarrationAudio;
+  /** Silence before the audio starts; requires audio. */
+  leadInMs?: number;
+  /** Silence after the audio ends; requires audio. */
+  leadOutMs?: number;
+  holds?: NarrationHold[];
+  /** Sentence cues: the subtitles. */
+  cues: NarrationCue[];
+  /** Word cues: one word each, in order, each inside a sentence cue. */
+  words?: NarrationCue[];
+  marks?: NarrationMark[];
+};
 
 /** A narration word the viewer can click to pause and read an explanation. */
 export type TermHotspot = { id: string; term: string; title: string; body: string };
@@ -38,7 +62,11 @@ export type Interaction = { terms: TermHotspot[] };
 
 type SceneBase = {
   id: string;
-  durationInFrames: number;
+  /**
+   * The scene length. Required without narration audio; omitted with it, because the narration
+   * then sets the length (see `sceneDurationInFrames`).
+   */
+  durationInFrames?: number;
   narration?: Narration;
   interaction?: Interaction;
 };
@@ -216,18 +244,8 @@ export function normalizeVideoSpec(spec: VideoSpec): VideoSpec {
 function normalizeScene(scene: Scene): Scene {
   const base = {
     id: scene.id,
-    durationInFrames: scene.durationInFrames,
-    ...(scene.narration
-      ? {
-          narration: {
-            cues: scene.narration.cues.map((cue) => ({
-              startMs: cue.startMs,
-              endMs: cue.endMs,
-              text: cue.text,
-            })),
-          },
-        }
-      : {}),
+    ...(scene.durationInFrames !== undefined ? { durationInFrames: scene.durationInFrames } : {}),
+    ...(scene.narration ? { narration: normalizeNarration(scene.narration) } : {}),
     ...(scene.interaction
       ? {
           interaction: {
@@ -242,6 +260,21 @@ function normalizeScene(scene: Scene): Scene {
       : {}),
   };
   return { kind: scene.kind, ...base, payload: normalizePayload(scene) } as Scene;
+}
+
+/** Canonical narration key order; optional fields only when present. */
+function normalizeNarration(narration: Narration): Narration {
+  const cue = (c: NarrationCue) => ({ startMs: c.startMs, endMs: c.endMs, text: c.text });
+  const { audio, leadInMs, leadOutMs, holds, cues, words, marks } = narration;
+  return {
+    ...(audio ? { audio: { asset: audio.asset, durationMs: audio.durationMs } } : {}),
+    ...(leadInMs !== undefined ? { leadInMs } : {}),
+    ...(leadOutMs !== undefined ? { leadOutMs } : {}),
+    ...(holds ? { holds: holds.map((hold) => ({ atMs: hold.atMs, durationMs: hold.durationMs })) } : {}),
+    cues: cues.map(cue),
+    ...(words ? { words: words.map(cue) } : {}),
+    ...(marks ? { marks: marks.map((mark) => ({ id: mark.id, atMs: mark.atMs })) } : {}),
+  };
 }
 
 /** Canonical payload key order per kind; optional fields only when present. */
@@ -303,12 +336,42 @@ export function serializeVideoSpec(spec: VideoSpec): string {
 
 export type ResolvedScene = { id: string; kind: SceneKind; from: number; durationInFrames: number };
 
+/**
+ * The first frame whose sample time is at or after `ms`: ceil(ms * fps / 1000). Narration times
+ * map to frames with this one rule (see narration-schedule.ts).
+ */
+export function frameOfMs(ms: number, fps: number): number {
+  // `|| 0` keeps -0 (from ceil of a small negative) out of the data.
+  return Math.ceil((ms * fps) / 1000) || 0;
+}
+
+/** Frame lengths of a narrated scene's parts: lead-in | audio (split by holds) | lead-out. */
+export function narrationAudioFrames(narration: Narration & { audio: NarrationAudio }, fps: number) {
+  const leadIn = frameOfMs(narration.leadInMs ?? 0, fps);
+  const audio = frameOfMs(narration.audio.durationMs, fps);
+  const holds = (narration.holds ?? []).map((hold) => ({ cut: frameOfMs(hold.atMs, fps), length: frameOfMs(hold.durationMs, fps) }));
+  const leadOut = frameOfMs(narration.leadOutMs ?? 0, fps);
+  const total = leadIn + audio + holds.reduce((sum, hold) => sum + hold.length, 0) + leadOut;
+  return { leadIn, audio, holds, leadOut, total };
+}
+
+/**
+ * A scene's length in frames: from its narration when the narration has audio, otherwise its
+ * explicit `durationInFrames`. There is exactly one source per scene.
+ */
+export function sceneDurationInFrames(scene: Scene, fps: number): number {
+  const narration = scene.narration;
+  if (narration?.audio) return narrationAudioFrames(narration as Narration & { audio: NarrationAudio }, fps).total;
+  return scene.durationInFrames ?? 0;
+}
+
 /** Project timing derived from the spec: where each scene starts and the total length. */
 export function resolveTimeline(spec: VideoSpec) {
   let from = 0;
   const scenes: ResolvedScene[] = spec.scenes.map((scene) => {
-    const resolved = { id: scene.id, kind: scene.kind, from, durationInFrames: scene.durationInFrames };
-    from += scene.durationInFrames;
+    const durationInFrames = sceneDurationInFrames(scene, spec.output.fps);
+    const resolved = { id: scene.id, kind: scene.kind, from, durationInFrames };
+    from += durationInFrames;
     return resolved;
   });
   return { durationInFrames: from, scenes };
@@ -585,7 +648,7 @@ function readSpec(r: Reader, input: unknown): VideoSpec | null {
     return scene ? [{ scene, index }] : [];
   });
   spec.scenes = read.map(({ scene }) => scene);
-  if (!Number.isSafeInteger(spec.scenes.reduce((sum, scene) => sum + scene.durationInFrames, 0))) {
+  if (!Number.isSafeInteger(spec.scenes.reduce((sum, scene) => sum + sceneDurationInFrames(scene, fps), 0))) {
     r.error('$.scenes', 'the total duration must be a safe integer number of frames');
   }
   r.unique(read.map(({ scene }) => scene.id), (position) => `$.scenes[${read[position].index}].id`, 'scene');
@@ -599,8 +662,9 @@ function readSpec(r: Reader, input: unknown): VideoSpec | null {
   return spec;
 }
 
-const SCENE_FIELDS = ['id', 'kind', 'durationInFrames', 'payload'];
-const SCENE_OPTIONAL_FIELDS = ['narration', 'interaction'];
+const SCENE_FIELDS = ['id', 'kind', 'payload'];
+// durationInFrames is required exactly when the narration has no audio (checked in readScene).
+const SCENE_OPTIONAL_FIELDS = ['durationInFrames', 'narration', 'interaction'];
 
 function readScene(
   r: Reader,
@@ -618,18 +682,32 @@ function readScene(
     );
     return null;
   }
-  const durationInFrames = r.integer(scene.durationInFrames, `${path}.durationInFrames`, { min: 1 });
+  // A scene with narration audio takes its length from the narration; one without states it.
+  const rawNarration = scene.narration;
+  const hasAudio =
+    typeof rawNarration === 'object' && rawNarration !== null && !Array.isArray(rawNarration) && (rawNarration as Json).audio !== undefined;
+  let durationInFrames: number | undefined;
+  if (hasAudio) {
+    if (scene.durationInFrames !== undefined) {
+      r.error(`${path}.durationInFrames`, 'must be omitted when the narration has audio; the narration sets the scene length');
+    }
+  } else if (scene.durationInFrames === undefined) {
+    r.error(`${path}.durationInFrames`, 'missing required field');
+    durationInFrames = 0;
+  } else {
+    durationInFrames = r.integer(scene.durationInFrames, `${path}.durationInFrames`, { min: 1 });
+  }
   const narration =
-    scene.narration === undefined
+    rawNarration === undefined
       ? undefined
-      : readNarration(r, scene.narration, `${path}.narration`, fps, durationInFrames);
+      : readNarration(r, rawNarration, `${path}.narration`, fps, durationInFrames ?? 0, assets);
   const interaction =
     scene.interaction === undefined
       ? undefined
       : readInteraction(r, scene.interaction, `${path}.interaction`, narration);
   const base = {
     id: r.id(scene.id, `${path}.id`),
-    durationInFrames,
+    ...(durationInFrames !== undefined ? { durationInFrames } : {}),
     ...(narration ? { narration } : {}),
     ...(interaction ? { interaction } : {}),
   };
@@ -772,18 +850,53 @@ function readNarration(
   path: string,
   fps: number,
   durationInFrames: number,
+  assets: AssetRef[],
 ): Narration {
-  const durationMs = fps > 0 ? (durationInFrames / fps) * 1000 : Number.POSITIVE_INFINITY;
-  const narration = r.object(value, path, ['cues']);
-  const cues = (r.array(narration?.cues, `${path}.cues`, { nonEmpty: true }) ?? []).map((cueValue, index) => {
-    const cuePath = `${path}.cues[${index}]`;
-    const cue = r.object(cueValue, cuePath, ['startMs', 'endMs', 'text']);
-    return {
-      startMs: r.integer(cue?.startMs, `${cuePath}.startMs`),
-      endMs: r.integer(cue?.endMs, `${cuePath}.endMs`),
-      text: r.string(cue?.text, `${cuePath}.text`),
-    };
-  });
+  const narration = r.object(value, path, ['cues'], ['audio', 'leadInMs', 'leadOutMs', 'holds', 'words', 'marks']);
+
+  // Audio: the reference and its declared length. `audioMs` is null when absent or invalid, so
+  // checks against the audio length only run on a valid length.
+  let audio: NarrationAudio | undefined;
+  let audioMs: number | null = null;
+  if (narration?.audio !== undefined) {
+    const audioPath = `${path}.audio`;
+    const record = r.object(narration.audio, audioPath, ['asset', 'durationMs']);
+    const asset = r.id(record?.asset, `${audioPath}.asset`);
+    if (asset) checkAssetKind(r, assets, asset, 'audio', `${audioPath}.asset`);
+    const before = r.diagnostics.length;
+    const durationMs = r.integer(record?.durationMs, `${audioPath}.durationMs`, { min: 1 });
+    if (record && r.diagnostics.length === before && record.durationMs !== undefined) audioMs = durationMs;
+    audio = { asset, durationMs };
+  }
+  const optionalMs = (key: 'leadInMs' | 'leadOutMs') => {
+    if (narration?.[key] === undefined) return {};
+    const ms = r.integer(narration[key], `${path}.${key}`);
+    if (!audio) r.error(`${path}.${key}`, 'requires narration audio');
+    return { [key]: ms } as Partial<Record<typeof key, number>>;
+  };
+  const leadIn = optionalMs('leadInMs');
+  const leadOut = optionalMs('leadOutMs');
+
+  // On the audio clock with audio; scene-relative otherwise.
+  const sceneMs = fps > 0 ? (durationInFrames / fps) * 1000 : Number.POSITIVE_INFINITY;
+  const frameOf = (ms: number) => frameOfMs(ms, fps);
+  const endsAfter = (endMs: number): string | null => {
+    if (audio) return audioMs !== null && endMs > audioMs ? `ends after the narration audio (${audioMs} ms)` : null;
+    return endMs > sceneMs ? `ends after the scene (${Math.round(sceneMs)} ms)` : null;
+  };
+
+  const readCues = (key: 'cues' | 'words', raw: unknown) =>
+    (r.array(raw, `${path}.${key}`, { nonEmpty: true }) ?? []).map((cueValue, index) => {
+      const cuePath = `${path}.${key}[${index}]`;
+      const cue = r.object(cueValue, cuePath, ['startMs', 'endMs', 'text']);
+      return {
+        startMs: r.integer(cue?.startMs, `${cuePath}.startMs`),
+        endMs: r.integer(cue?.endMs, `${cuePath}.endMs`),
+        text: r.string(cue?.text, `${cuePath}.text`),
+      };
+    });
+
+  const cues = readCues('cues', narration?.cues);
   cues.forEach((cue, index) => {
     // A blank line ends an SRT cue, so it would split this cue or inject another one.
     if (/\n[ \t]*\n/.test(cue.text)) {
@@ -806,25 +919,138 @@ function readNarration(
   cues.forEach((cue, index) => {
     const cuePath = `${path}.cues[${index}]`;
     if (cue.endMs <= cue.startMs) r.error(cuePath, 'endMs must be greater than startMs');
-    if (cue.endMs > durationMs) {
-      r.error(`${cuePath}.endMs`, `ends after the scene (${Math.round(durationMs)} ms)`);
+    const after = endsAfter(cue.endMs);
+    if (after) {
+      r.error(`${cuePath}.endMs`, after);
     } else if (fps > 0 && cue.endMs > cue.startMs) {
-      // Frames sample time at frame / fps, and a cue is shown through its end time inclusive;
-      // a cue strictly between two samples is never shown.
-      let firstFrame = Math.ceil((cue.startMs * fps) / 1000);
-      while ((firstFrame / fps) * 1000 < cue.startMs) firstFrame += 1;
-      while (firstFrame > 0 && ((firstFrame - 1) / fps) * 1000 >= cue.startMs) firstFrame -= 1;
-      // Same arithmetic order as the subtitle renderer, so float rounding agrees with it.
-      if ((firstFrame / fps) * 1000 > cue.endMs || firstFrame >= durationInFrames) {
-        r.error(cuePath, 'is not on screen on any rendered frame');
+      let hidden: boolean;
+      if (audio) {
+        // A narrated cue is on screen on the frames [frameOf(startMs), frameOf(endMs)); one
+        // strictly between two frame samples is never shown.
+        hidden = frameOf(cue.startMs) >= frameOf(cue.endMs);
+      } else {
+        // Frames sample time at frame / fps, and a scene-relative cue is shown through its end
+        // time inclusive; a cue strictly between two samples is never shown.
+        let firstFrame = Math.ceil((cue.startMs * fps) / 1000);
+        while ((firstFrame / fps) * 1000 < cue.startMs) firstFrame += 1;
+        while (firstFrame > 0 && ((firstFrame - 1) / fps) * 1000 >= cue.startMs) firstFrame -= 1;
+        // Same arithmetic order as the subtitle renderer, so float rounding agrees with it.
+        hidden = (firstFrame / fps) * 1000 > cue.endMs || firstFrame >= durationInFrames;
       }
+      if (hidden) r.error(cuePath, 'is not on screen on any rendered frame');
     }
     const previous = cues[index - 1];
     if (previous && cue.startMs < previous.endMs) {
       r.error(`${cuePath}.startMs`, 'cues must be in order and must not overlap');
     }
   });
-  return { cues };
+
+  let words: NarrationCue[] | undefined;
+  if (narration?.words !== undefined) {
+    words = readCues('words', narration.words);
+    words.forEach((word, index) => {
+      const wordPath = `${path}.words[${index}]`;
+      if (word.text.trim() && /\s/.test(word.text)) r.error(`${wordPath}.text`, 'must be a single word without whitespace');
+      if (word.endMs <= word.startMs) {
+        r.error(wordPath, 'endMs must be greater than startMs');
+      } else {
+        const after = endsAfter(word.endMs);
+        if (after) r.error(`${wordPath}.endMs`, after);
+      }
+      const previous = words![index - 1];
+      if (previous && word.startMs < previous.endMs) {
+        r.error(`${wordPath}.startMs`, 'words must be in order and must not overlap');
+      } else if (!cues.some((cue) => cue.startMs <= word.startMs && word.endMs <= cue.endMs)) {
+        r.error(wordPath, 'is not inside any cue');
+      }
+    });
+  }
+
+  let holds: NarrationHold[] | undefined;
+  if (narration?.holds !== undefined) {
+    if (!audio) {
+      r.error(`${path}.holds`, 'requires narration audio');
+    } else {
+      holds = (r.array(narration.holds, `${path}.holds`) ?? []).map((holdValue, index) => {
+        const holdPath = `${path}.holds[${index}]`;
+        const hold = r.object(holdValue, holdPath, ['atMs', 'durationMs']);
+        return {
+          atMs: r.integer(hold?.atMs, `${holdPath}.atMs`),
+          durationMs: r.integer(hold?.durationMs, `${holdPath}.durationMs`, { min: 1 }),
+        };
+      });
+      holds.forEach((hold, index) => {
+        const atPath = `${path}.holds[${index}].atMs`;
+        const previous = holds![index - 1];
+        const inside = cues.findIndex((cue) => cue.startMs < hold.atMs && hold.atMs < cue.endMs);
+        if (audioMs !== null && (hold.atMs <= 0 || hold.atMs >= audioMs)) {
+          r.error(atPath, `must be inside the narration audio (between 0 and ${audioMs} ms, exclusive)`);
+        } else if (previous && hold.atMs <= previous.atMs) {
+          r.error(atPath, 'holds must be in increasing order');
+        } else if (inside >= 0) {
+          r.error(atPath, `falls inside cues[${inside}]; holds go between cues`);
+        } else if (fps > 0 && audioMs !== null) {
+          // Each hold cuts the audio on a frame; two cuts on one frame, or one on the audio's last
+          // frame, would leave an audio segment with no frames.
+          const cut = frameOf(hold.atMs);
+          if (previous && cut === frameOf(previous.atMs)) {
+            r.error(atPath, `lands on the same frame as holds[${index - 1}]`);
+          } else if (cut >= frameOf(audioMs)) {
+            r.error(atPath, 'lands on the last frame of the narration audio');
+          }
+        }
+      });
+    }
+  }
+
+  let marks: NarrationMark[] | undefined;
+  if (narration?.marks !== undefined) {
+    marks = (r.array(narration.marks, `${path}.marks`) ?? []).map((markValue, index) => {
+      const markPath = `${path}.marks[${index}]`;
+      const mark = r.object(markValue, markPath, ['id', 'atMs']);
+      return { id: r.id(mark?.id, `${markPath}.id`), atMs: r.integer(mark?.atMs, `${markPath}.atMs`) };
+    });
+    r.unique(marks.map((mark) => mark.id), (index) => `${path}.marks[${index}].id`, 'mark');
+    // Where a mark lands in the scene, for the on-a-frame check (holds shift later frames).
+    const sceneFrames =
+      audio && audioMs !== null
+        ? narrationAudioFrames({ ...leadIn, ...leadOut, audio: { asset: audio.asset, durationMs: audioMs }, holds, cues }, fps)
+        : null;
+    marks.forEach((mark, index) => {
+      const atPath = `${path}.marks[${index}].atMs`;
+      const previous = marks![index - 1];
+      if (mark.atMs < 0) return;
+      if (audio) {
+        if (audioMs !== null && mark.atMs >= audioMs) {
+          r.error(atPath, `must be before the end of the narration audio (${audioMs} ms)`);
+          return;
+        }
+      }
+      if (previous && mark.atMs <= previous.atMs) {
+        r.error(atPath, 'marks must be in increasing order');
+      } else if (fps > 0 && previous && previous.atMs >= 0 && frameOf(mark.atMs) === frameOf(previous.atMs)) {
+        r.error(atPath, `lands on the same frame as marks[${index - 1}]`);
+      } else if (fps > 0) {
+        const frame = sceneFrames
+          ? sceneFrames.leadIn + frameOf(mark.atMs) + sceneFrames.holds.filter((hold) => hold.cut <= frameOf(mark.atMs)).reduce((sum, hold) => sum + hold.length, 0)
+          : audio
+            ? null
+            : frameOf(mark.atMs);
+        const length = sceneFrames ? sceneFrames.total : durationInFrames;
+        if (frame !== null && length > 0 && frame >= length) r.error(atPath, 'is not on any rendered frame of the scene');
+      }
+    });
+  }
+
+  return {
+    ...(audio ? { audio } : {}),
+    ...leadIn,
+    ...leadOut,
+    ...(holds ? { holds } : {}),
+    cues,
+    ...(words ? { words } : {}),
+    ...(marks ? { marks } : {}),
+  };
 }
 
 function readInteraction(

@@ -149,8 +149,8 @@ percentiles, and slowest requests; clicking a subtitle term shows a glossary ent
 ## VideoSpec
 
 `src/spec/video-spec.ts` defines `VideoSpec` v1, the versioned data contract for a video's semantic
-intent: project identity, format pack id/version, output profile, ordered scenes with a duration,
-narration cues, asset references, interaction terms and a per-kind semantic payload (v1 kinds:
+intent: project identity, format pack id/version, output profile, ordered scenes with a duration
+(or narration audio that sets it), narration cues, asset references, interaction terms and a per-kind semantic payload (v1 kinds:
 `title`, `binnedChart` and the editorial archetypes `statement`, `mediaReveal`, `comparison`,
 `quote`, `dataPoint`, `list`, `conclusion`; see the moenarch-short scene archetypes). The
 archetype kinds are additive inside v1: v1 already rejects unknown kinds, so an older reader
@@ -167,6 +167,45 @@ format pack and are not representable in a spec.
 The latency explainer's spec is `src/spec/fixtures/latency-explainer.videospec.json`. The video
 reads its output profile, length, title, narration and glossary terms from it, and tests check
 that the fixture round-trips byte for byte and agrees with the generated dataset.
+
+### Narration timing
+
+Pre-recorded narration is the timing input of a scene that has it. Everything is declared data:
+nothing decodes, measures or synthesizes audio at render time, and no LLM, TTS or network service
+is involved.
+
+- **Fields** (additive inside v1; an older v1 reader refuses them as unknown):
+  `scene.narration = { audio?: { asset, durationMs }, leadInMs?, leadOutMs?, holds?: [{ atMs,
+  durationMs }], cues, words?: [{ startMs, endMs, text }], marks?: [{ id, atMs }] }`. `audio.asset`
+  is an `audio` asset; `durationMs` is its declared length. `leadInMs`, `leadOutMs` and `holds`
+  require audio. `cues` are the subtitles, `words` one word each inside a cue, and `marks` named
+  semantic cues that scene state can change at.
+- **Length**: a scene with narration audio takes its length from the narration and must omit
+  `durationInFrames`; a scene without audio states it. With audio, every narration time is on the
+  audio's own clock; without it, times are from the scene start.
+- **Frames**: `frameOf(ms) = ceil(ms * fps / 1000)`. A narrated scene is
+  `lead-in | audio (split at each hold) | lead-out`. A start time lands after any hold cutting at
+  or before it, an end time before a hold cutting at it, so a cue ending at a hold ends where the
+  hold starts. Every window is end-exclusive.
+- **Schedule**: `src/spec/narration-schedule.ts` exports `narrationSchedule(spec)`, a pure function
+  giving each scene's start, length, timing source, audio lead-in/lead-out/hold windows, audio
+  segments (`from`, `durationInFrames`, `trimBeforeInFrames`), cue, word and mark frames, all
+  absolute. `resolveTimeline` reports the same scene starts and lengths.
+- **Validation** fails closed with a JSON path: unknown fields, a length stated twice, unknown or
+  non-audio assets, cues or words that overlap, end after the audio or are never on screen, words
+  outside every cue, marks out of order or on the frame of the previous mark, and holds outside
+  the audio, out of order or inside a cue.
+- **moenarch-short** plans on the schedule: the pacing range applies to the derived length,
+  `tokens.pacing.maxLeadInMs`/`maxLeadOutMs` bound the silences, and audio must be a
+  `static:<path>` asset served from `public/<path>`. `moenarchFrameState` adds `mark`, the scene's
+  latest mark at or before the frame. The composition draws the subtitle through the installed
+  `Subtitles` primitive (`[data-moenarch-subtitle]`), marks as `[data-moenarch-mark="<id>"]`, and
+  plays each audio segment with Remotion's `Audio` and `trimBefore`.
+- Formats that play no audio (`title-card`, the latency explainer) refuse specs with narration
+  audio.
+- **Fixture**: `?project=moenarch-narration`
+  (`src/spec/fixtures/moenarch-narration.videospec.json`, audio in `public/fixtures/narration/`)
+  covers lead-in/out, a hold, words, marks and an explicit scene.
 
 ## Rules
 

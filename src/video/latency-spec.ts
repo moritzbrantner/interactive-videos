@@ -1,7 +1,7 @@
 import { BIN_COUNT, INCIDENT_WINDOW, REQUEST_COUNT } from '@/data/latency';
 import fixture from '@/spec/fixtures/latency-explainer.videospec.json';
 import { barRevealEnd } from '@/video/reveal';
-import { assertVideoSpec, type BinnedChartScene, type VideoSpec } from '@/spec/video-spec';
+import { assertVideoSpec, resolveTimeline, type BinnedChartScene, type VideoSpec } from '@/spec/video-spec';
 
 // The latency explainer's content (output profile, narration, glossary, chart intent) comes from
 // its VideoSpec; layout, colors and the reveal stay in the video's own format code.
@@ -32,11 +32,14 @@ export function latencyFormatScene(spec: VideoSpec): BinnedChartScene {
     throw new Error(`${[...problems, 'this format renders exactly one binnedChart scene'].join('; ')}`);
   }
   const { payload } = scene;
+  // The latency video plays no audio and times its subtitles from the scene start.
+  if (scene.narration?.audio) problems.push('narration audio is not played by this format');
+  const durationInFrames = resolveTimeline(spec).durationInFrames;
   // The reveal runs on fixed frames; a shorter scene would end before the chart is shown.
   const revealEnd = barRevealEnd(BIN_COUNT - 1);
   // Frames run 0..duration-1, so the fully revealed frame must be inside the scene.
-  if (scene.durationInFrames <= revealEnd) {
-    problems.push(`duration ${scene.durationInFrames} frames ends before the reveal (${revealEnd})`);
+  if (durationInFrames <= revealEnd) {
+    problems.push(`duration ${durationInFrames} frames ends before the reveal (${revealEnd})`);
   }
   // A lingering cue would still be on screen when the next one starts, in the same position.
   const cues = scene.narration?.cues ?? [];
