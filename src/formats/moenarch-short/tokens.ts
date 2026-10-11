@@ -127,6 +127,26 @@ const tokens = {
     entrance: { durationInFrames: 12, staggerInFrames: 4 },
     gaps: { block: 28, section: 56, item: 24, marker: 24 },
     rule: { width: 96, thickness: 6 },
+    // Font-independent width bound for planned lines (issue #38). Lines render unwrapped, so a
+    // line that passes its characters-per-line limit could still be wider than the content
+    // frame. Each glyph counts with a conservative advance in em for its class, plus the style's
+    // letter spacing; upper case styles measure the upper-cased text. The bounds sit at or above
+    // the widest member of each class in the pack's font stacks at the pack's weights:
+    // `upperNarrow` is B E F J K L P S T X Y Z, `upper` any other capital, Latin letter with a
+    // diacritic or ASCII symbol, `lowerWide` m and w, `wide` M W @ % &. `fullwidth` covers CJK,
+    // kana, Hangul and fullwidth forms; `unknown` any other glyph (emoji, other scripts).
+    glyphAdvance: {
+      space: 0.35,
+      narrow: 0.4,
+      lower: 0.62,
+      digit: 0.66,
+      upperNarrow: 0.72,
+      upper: 0.86,
+      lowerWide: 0.95,
+      wide: 1.12,
+      fullwidth: 1.0,
+      unknown: 1.25,
+    },
     // Text styles. `font` names a typography family, `weight` a typography weight and `color` a
     // palette entry; sizes are pixels on the 1080-wide frame.
     text: {

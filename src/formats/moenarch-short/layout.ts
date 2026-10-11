@@ -3,9 +3,10 @@
 // the planned lines.
 //
 // Fit rule, the same for every archetype: text wraps greedily at its block's characters per line
+// and at its box width, estimated per glyph from the token advance classes (no DOM measurement),
 // and is never truncated, shrunk or ellipsized. More lines than the block allows, a word longer
-// than a line or more list items than the format allows make the scene unrenderable, and
-// `layoutMoenarchScene` throws naming the scene.
+// or wider than a line or more list items than the format allows make the scene unrenderable,
+// and `layoutMoenarchScene` throws naming the scene.
 import type { AssetRef, Scene, SceneKind } from '@/spec/video-spec';
 
 import type { MoenarchShortTokens } from './tokens';
@@ -38,15 +39,16 @@ export type MoenarchSceneLayout = {
   ordered: boolean;
 };
 
-/** Greedy word wrap; null when a single word is longer than a line. */
-export function wrapText(text: string, maxChars: number): string[] | null {
+/** Greedy word wrap; null when a single word is longer (or wider) than a line. */
+export function wrapText(text: string, maxChars: number, fits: (line: string) => boolean = () => true): string[] | null {
   const lines: string[] = [];
   let line = '';
   for (const word of text.trim().split(/\s+/)) {
     if (!word) continue;
-    if (word.length > maxChars) return null;
+    if (word.length > maxChars || !fits(word)) return null;
+    const joined = `${line} ${word}`;
     if (!line) line = word;
-    else if (line.length + 1 + word.length <= maxChars) line = `${line} ${word}`;
+    else if (joined.length <= maxChars && fits(joined)) line = joined;
     else {
       lines.push(line);
       line = word;
@@ -54,6 +56,71 @@ export function wrapText(text: string, maxChars: number): string[] | null {
   }
   if (line) lines.push(line);
   return lines;
+}
+
+type GlyphAdvance = MoenarchShortTokens['scenes']['glyphAdvance'];
+type GlyphClass = keyof GlyphAdvance;
+
+const NARROW = new Set("iIjltf.,:;'!|()[]{}`-".split(''));
+const WIDE = new Set('WM@%&'.split(''));
+const LOWER_WIDE = new Set('mw'.split(''));
+const UPPER_NARROW = new Set('BEFJKLPSTXYZ'.split(''));
+
+// Combining marks, variation selectors and zero-width format characters have no advance of their
+// own: they render as part of the preceding glyph.
+const ZERO_ADVANCE = /^[\p{Mn}\p{Me}\u200b-\u200d\u2060\ufeff\ufe00-\ufe0f]$/u;
+
+function glyphClass(glyph: string): GlyphClass | null {
+  if (ZERO_ADVANCE.test(glyph)) return null;
+  const code = glyph.codePointAt(0)!;
+  if (/\s/.test(glyph)) return 'space';
+  if (code < 0x80) {
+    if (WIDE.has(glyph)) return 'wide';
+    if (LOWER_WIDE.has(glyph)) return 'lowerWide';
+    if (NARROW.has(glyph)) return 'narrow';
+    if (/[0-9]/.test(glyph)) return 'digit';
+    if (UPPER_NARROW.has(glyph)) return 'upperNarrow';
+    if (/[A-Z]/.test(glyph)) return 'upper';
+    if (/[a-z]/.test(glyph)) return 'lower';
+    return 'upper';
+  }
+  // Latin-1 and Latin Extended letters (accented forms) are bounded like capitals.
+  if (code >= 0xc0 && code <= 0x24f) return 'upper';
+  if (
+    (code >= 0x1100 && code <= 0x115f) ||
+    (code >= 0x2e80 && code <= 0xa4cf) ||
+    (code >= 0xac00 && code <= 0xd7a3) ||
+    (code >= 0xf900 && code <= 0xfaff) ||
+    (code >= 0xfe30 && code <= 0xfe4f) ||
+    (code >= 0xff00 && code <= 0xff60) ||
+    (code >= 0xffe0 && code <= 0xffe6) ||
+    (code >= 0x20000 && code <= 0x3fffd)
+  ) {
+    return 'fullwidth';
+  }
+  return 'unknown';
+}
+
+/**
+ * A conservative estimate of a line's rendered width in pixels at a text style: per-glyph advance
+ * classes from the tokens plus the style's letter spacing. Pure; never measures the DOM.
+ */
+export function estimateLineWidth(line: string, tokens: MoenarchShortTokens, styleName: MoenarchTextStyleName): number {
+  const style = tokens.scenes.text[styleName];
+  const advance = tokens.scenes.glyphAdvance;
+  const text = style.uppercase ? line.toUpperCase() : line;
+  let em = 0;
+  for (const glyph of text) {
+    const kind = glyphClass(glyph);
+    if (kind !== null) em += advance[kind] + style.letterSpacing;
+  }
+  return em * style.size;
+}
+
+/** The content frame's width: the safe area's width. */
+export function contentWidth(tokens: MoenarchShortTokens): number {
+  const { width, safeArea } = tokens.output;
+  return width - safeArea.left - safeArea.right;
 }
 
 /** Splits planned lines into runs around the first occurrence of `phrase` (whitespace-collapsed). */
@@ -101,6 +168,7 @@ export function layoutMoenarchScene(
 ): MoenarchSceneLayout {
   const { archetypes } = tokens.scenes;
   const blocks: MoenarchTextBlock[] = [];
+  const width = contentWidth(tokens);
   const fail = (problem: string): never => {
     throw new Error(`${scene.id}: ${problem}`);
   };
@@ -109,10 +177,13 @@ export function layoutMoenarchScene(
     text: string,
     fit: { style: MoenarchTextStyleName; maxCharsPerLine: number; maxLines: number },
     emphasis?: string,
+    boxWidth = width,
   ) => {
-    const lines = wrapText(text, fit.maxCharsPerLine);
+    const lines = wrapText(text, fit.maxCharsPerLine, (line) => estimateLineWidth(line, tokens, fit.style) <= boxWidth);
     if (!lines || !lines.length || lines.length > fit.maxLines) {
-      fail(`${role} needs more than ${fit.maxLines} line${fit.maxLines === 1 ? '' : 's'} of ${fit.maxCharsPerLine} characters`);
+      fail(
+        `${role} needs more than ${fit.maxLines} line${fit.maxLines === 1 ? '' : 's'} of ${fit.maxCharsPerLine} characters within ${boxWidth}px`,
+      );
     }
     blocks.push({
       role,
@@ -183,7 +254,10 @@ export function layoutMoenarchScene(
         fail(`${items.length} list items; ${tokens.id} draws 1 to ${fit.maxItems}`);
       }
       optional('heading', scene.payload.heading, fit.heading);
-      for (const item of items) block('item', item, fit.item);
+      // An item shares its row with a marker as wide as the item text's size.
+      const itemStyle = tokens.scenes.text[fit.item.style];
+      const itemWidth = width - itemStyle.size - tokens.scenes.gaps.marker;
+      for (const item of items) block('item', item, fit.item, undefined, itemWidth);
       ordered = scene.payload.ordered;
       break;
     }
