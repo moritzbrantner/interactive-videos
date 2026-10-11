@@ -11,6 +11,7 @@ import {
   serializeVideoSpec,
   type VideoSpec,
 } from './video-spec';
+import { narrationSchedule } from './narration-schedule';
 
 const fixturePath = new URL('./fixtures/latency-explainer.videospec.json', import.meta.url);
 const fixtureText = readFileSync(fixturePath, 'utf8');
@@ -226,8 +227,10 @@ describe('VideoSpec v1', () => {
     ]);
     const onEndFrame = fixture();
     onEndFrame.scenes[0].narration.cues[0] = { startMs: 999, endMs: 1000, text: 'All binned.' };
-    // The only sampled frame (30, at 1000 ms) is the cue's end time, which is still shown.
-    expect(parseVideoSpec(onEndFrame).ok).toBe(true);
+    // Frame 30 (1000 ms) is the exclusive end, so this cue schedules zero frames.
+    expect(diagnosticsOf(onEndFrame)).toEqual([
+      { path: '$.scenes[0].narration.cues[0]', message: 'is not on screen on any rendered frame' },
+    ]);
     const inherited = Object.create({ ...fixture(), renderer: 'remotion' });
     expect(diagnosticsOf(inherited)).toEqual([{ path: '$', message: 'expected a plain object' }]);
 
@@ -273,10 +276,14 @@ describe('VideoSpec v1', () => {
     slow.output.fps = 5;
     slow.scenes[0].durationInFrames = 400;
     slow.scenes[0].narration.cues.push({ startMs: 64_600, endMs: 64_601, text: 'Late.' });
-    // Frame 323 is 64599.99999999999 ms in the renderer, before the cue; frame 324 is after it.
-    expect(diagnosticsOf(slow)).toContainEqual({
-      path: '$.scenes[0].narration.cues[4]',
-      message: 'is not on screen on any rendered frame',
+    // The frame-index contract is exact: [frameOf(64600), frameOf(64601)) = [323, 324).
+    // The former time-sample check rounded 323 / 5 * 1000 below 64600 and rejected it.
+    const slowResult = parseVideoSpec(slow);
+    if (!slowResult.ok) throw new Error(JSON.stringify(slowResult.diagnostics));
+    expect(narrationSchedule(slowResult.spec).scenes[0].cues[4]).toEqual({
+      from: 323,
+      durationInFrames: 1,
+      text: 'Late.',
     });
 
     const sparse = fixture();
