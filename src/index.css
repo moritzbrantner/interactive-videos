@@ -61,9 +61,159 @@ h1 {
 }
 
 .player-frame {
+  position: relative;
   justify-self: center;
   max-width: 100%;
 }
+
+.player-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+  padding: 14px;
+}
+
+.player-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.player-toolbar button {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  color: inherit;
+  cursor: pointer;
+}
+
+.player-toolbar button:hover,
+.hotspot-debug-panel button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.developer-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.developer-toggle input {
+  accent-color: #facc15;
+}
+
+.player-toolbar button:focus-visible,
+.developer-toggle input:focus-visible,
+.hotspot-debug-panel button:focus-visible,
+.player-frame button[data-hotspot]:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 3px;
+}
+
+.player-frame [data-hotspot][role="button"]:focus-visible rect {
+  stroke: #facc15;
+  stroke-width: 4px;
+}
+
+.keyboard-help,
+.focus-hint {
+  align-self: stretch;
+  margin: 0;
+  color: #a1a1aa;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.focus-hint {
+  color: #facc15;
+}
+
+.hotspot-debug-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hotspot-debug-bounds {
+  position: absolute;
+  border: 2px solid #facc15;
+  background: rgba(250, 204, 21, 0.13);
+  pointer-events: none;
+}
+
+.hotspot-debug-bounds[data-selected="true"] {
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.18);
+}
+
+.hotspot-debug-index {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1px 3px;
+  transform: translateY(-100%);
+  background: #facc15;
+  color: #111827;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hotspot-debug-panel {
+  align-self: stretch;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid rgba(250, 204, 21, 0.35);
+  border-radius: 8px;
+}
+
+.hotspot-debug-panel p {
+  margin: 0;
+  color: #a1a1aa;
+  font-size: 12px;
+}
+
+.hotspot-debug-panel ol {
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hotspot-debug-panel li + li {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.hotspot-debug-panel button {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12px;
+}
+
+.hotspot-debug-panel code {
+  color: #facc15;
+  white-space: nowrap;
+}
+
 
 .projects ul {
   display: flex;
