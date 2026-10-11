@@ -200,7 +200,8 @@ is involved.
 - **Frames**: `frameOf(ms) = ceil(ms * fps / 1000)`. A narrated scene is
   `lead-in | audio (split at each hold) | lead-out`. A start time lands after any hold cutting at
   or before it, an end time before a hold cutting at it, so a cue ending at a hold ends where the
-  hold starts. Every window is end-exclusive.
+  hold starts. Every window is end-exclusive. A cue or word must occupy at least one frame
+  under this rule, whether the scene has audio or an explicit length.
 - **Schedule**: `src/spec/narration-schedule.ts` exports `narrationSchedule(spec)`, a pure function
   giving each scene's start, length, timing source, audio lead-in/lead-out/hold windows, audio
   segments (`from`, `durationInFrames`, `trimBeforeInFrames`), cue, word and mark frames, all

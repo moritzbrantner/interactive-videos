@@ -884,6 +884,12 @@ function readNarration(
     if (audio) return audioMs !== null && endMs > audioMs ? `ends after the narration audio (${audioMs} ms)` : null;
     return endMs > sceneMs ? `ends after the scene (${Math.round(sceneMs)} ms)` : null;
   };
+  // The scheduler uses [frameOf(startMs), frameOf(endMs)) for both timing sources.
+  // An explicit scene must also have that first frame inside its declared length.
+  const hasScheduledFrame = (startMs: number, endMs: number) => {
+    const first = frameOf(startMs);
+    return first < frameOf(endMs) && (audio !== undefined || first < durationInFrames);
+  };
 
   const readCues = (key: 'cues' | 'words', raw: unknown) =>
     (r.array(raw, `${path}.${key}`, { nonEmpty: true }) ?? []).map((cueValue, index) => {
@@ -922,22 +928,8 @@ function readNarration(
     const after = endsAfter(cue.endMs);
     if (after) {
       r.error(`${cuePath}.endMs`, after);
-    } else if (fps > 0 && cue.endMs > cue.startMs) {
-      let hidden: boolean;
-      if (audio) {
-        // A narrated cue is on screen on the frames [frameOf(startMs), frameOf(endMs)); one
-        // strictly between two frame samples is never shown.
-        hidden = frameOf(cue.startMs) >= frameOf(cue.endMs);
-      } else {
-        // Frames sample time at frame / fps, and a scene-relative cue is shown through its end
-        // time inclusive; a cue strictly between two samples is never shown.
-        let firstFrame = Math.ceil((cue.startMs * fps) / 1000);
-        while ((firstFrame / fps) * 1000 < cue.startMs) firstFrame += 1;
-        while (firstFrame > 0 && ((firstFrame - 1) / fps) * 1000 >= cue.startMs) firstFrame -= 1;
-        // Same arithmetic order as the subtitle renderer, so float rounding agrees with it.
-        hidden = (firstFrame / fps) * 1000 > cue.endMs || firstFrame >= durationInFrames;
-      }
-      if (hidden) r.error(cuePath, 'is not on screen on any rendered frame');
+    } else if (fps > 0 && cue.endMs > cue.startMs && !hasScheduledFrame(cue.startMs, cue.endMs)) {
+      r.error(cuePath, 'is not on screen on any rendered frame');
     }
     const previous = cues[index - 1];
     if (previous && cue.startMs < previous.endMs) {
@@ -956,8 +948,8 @@ function readNarration(
       } else {
         const after = endsAfter(word.endMs);
         if (after) r.error(`${wordPath}.endMs`, after);
-        else if (audio && fps > 0 && frameOf(word.startMs) >= frameOf(word.endMs)) {
-          // Same rule as sentence cues: a word must cover at least one rendered frame.
+        else if (fps > 0 && !hasScheduledFrame(word.startMs, word.endMs)) {
+          // Words and sentences obey the same end-exclusive window rule in every scene.
           r.error(wordPath, 'is not on screen on any rendered frame');
         }
       }
