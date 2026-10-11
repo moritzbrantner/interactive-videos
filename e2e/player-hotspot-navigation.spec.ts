@@ -81,3 +81,24 @@ test('non-interactive projects show no fake clickable regions', async ({ page })
   await expect(inspector).toContainText('0 clickable elements');
   await expect(page.locator('.hotspot-debug-bounds')).toHaveCount(0);
 });
+
+test('subtitle terms are keyboard-operable and developer mode ignores inert future bars', async ({ page }) => {
+  await page.goto('/?project=latency-explainer&debug=hotspots');
+  await page.waitForFunction(() => window.__latencyPlayer !== undefined);
+  await page.evaluate(() => {
+    window.__latencyPlayer!.pause();
+    window.__latencyPlayer!.seekTo(0);
+  });
+  await expect(page.locator('g[data-hotspot="bin-0"]')).toHaveCount(1);
+  await expect(page.locator('[data-debug-hotspot="bin-0"]')).toHaveCount(0);
+
+  // The second narration cue contains an interactive HTML word.
+  await page.evaluate(() => window.__latencyPlayer!.seekTo(165));
+  const word = page.locator('button[data-hotspot="term:p95"]');
+  await expect(word).toBeVisible();
+  await expect(page.locator('[data-debug-hotspot="term:p95"]')).toHaveCount(1);
+  await word.focus();
+  await page.keyboard.press('Space');
+  await expect(page.locator('.insight h2')).toHaveText('p95 latency');
+  await expect(word).toHaveAttribute('aria-pressed', 'true');
+});
