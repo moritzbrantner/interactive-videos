@@ -956,6 +956,10 @@ function readNarration(
       } else {
         const after = endsAfter(word.endMs);
         if (after) r.error(`${wordPath}.endMs`, after);
+        else if (audio && fps > 0 && frameOf(word.startMs) >= frameOf(word.endMs)) {
+          // Same rule as sentence cues: a word must cover at least one rendered frame.
+          r.error(wordPath, 'is not on screen on any rendered frame');
+        }
       }
       const previous = words![index - 1];
       if (previous && word.startMs < previous.endMs) {
@@ -979,7 +983,15 @@ function readNarration(
           durationMs: r.integer(hold?.durationMs, `${holdPath}.durationMs`, { min: 1 }),
         };
       });
+      // Bounds and order are only checked for timestamps that are themselves valid, so a broken
+      // field gets exactly one diagnostic.
+      const holdValues: unknown[] = Array.isArray(narration.holds) ? narration.holds : [];
+      const validAt = (index: number) => {
+        const raw = (holdValues[index] as { atMs?: unknown } | null | undefined)?.atMs;
+        return typeof raw === 'number' && Number.isInteger(raw) && raw >= 0;
+      };
       holds.forEach((hold, index) => {
+        if (!validAt(index) || (index > 0 && !validAt(index - 1))) return;
         const atPath = `${path}.holds[${index}].atMs`;
         const previous = holds![index - 1];
         const inside = cues.findIndex((cue) => cue.startMs < hold.atMs && hold.atMs < cue.endMs);
