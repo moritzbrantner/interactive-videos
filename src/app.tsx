@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } fr
 import type { Catalog, ResolvedComposition } from '@/catalog/catalog';
 import type { HotspotActivation } from '@/components/remotion/hotspot';
 import { catalog as defaultCatalog } from '@/projects';
+import { focusFirstHotspot, HotspotDebug } from '@/player/hotspot-debug';
 import { exposePlayerForBudgetTests } from '@/render-budget';
 
 const PROJECT_PARAM = 'project';
@@ -68,7 +69,13 @@ function ProjectNav({
 
 function ProjectView({ composition }: { composition: ResolvedComposition }) {
   const player = useRef<PlayerRef>(null);
+  const frame = useRef<HTMLDivElement>(null);
   const [activation, setActivation] = useState<HotspotActivation>();
+  const [playing, setPlaying] = useState(false);
+  const [focusHint, setFocusHint] = useState<string>();
+  const [debugMode, setDebugMode] = useState(
+    () => new URLSearchParams(window.location.search).get('debug') === 'hotspots',
+  );
   const { renderInsight } = composition;
 
   const onActivate = useCallback((next: HotspotActivation) => {
@@ -85,10 +92,46 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
     const current = player.current;
     exposePlayerForBudgetTests(current);
     if (!current) return;
-    const dismiss = () => setActivation(undefined);
-    current.addEventListener('play', dismiss);
-    return () => current.removeEventListener('play', dismiss);
+    const onPlay = () => {
+      setPlaying(true);
+      setActivation(undefined);
+    };
+    const onPause = () => setPlaying(false);
+    current.addEventListener('play', onPlay);
+    current.addEventListener('pause', onPause);
+    current.addEventListener('ended', onPause);
+    return () => {
+      current.removeEventListener('play', onPlay);
+      current.removeEventListener('pause', onPause);
+      current.removeEventListener('ended', onPause);
+    };
   }, []);
+
+  useEffect(() => {
+    const restore = () => setDebugMode(new URLSearchParams(window.location.search).get('debug') === 'hotspots');
+    window.addEventListener('popstate', restore);
+    return () => window.removeEventListener('popstate', restore);
+  }, []);
+
+  const changeDebugMode = (enabled: boolean) => {
+    const url = new URL(window.location.href);
+    if (enabled) url.searchParams.set('debug', 'hotspots');
+    else url.searchParams.delete('debug');
+    window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+    setDebugMode(enabled);
+  };
+
+  const togglePlayback = () => {
+    if (playing) player.current?.pause();
+    else player.current?.play();
+  };
+
+  const focusClickable = () => {
+    player.current?.pause();
+    setFocusHint(
+      focusFirstHotspot(frame.current) ? undefined : 'No clickable elements at this frame. Play or seek forward.',
+    );
+  };
 
   const inputProps = useMemo(
     () => (renderInsight ? { onActivate, selectedId: activation?.id } : {}),
@@ -99,31 +142,59 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
 
   return (
     <section className={renderInsight ? 'stage' : 'stage stage-solo'}>
-      <div
-        className="player-frame"
-        data-composition-id={composition.id}
-        data-width={width}
-        data-height={height}
-        data-fps={fps}
-        data-duration-in-frames={durationInFrames}
-        style={{
-          aspectRatio: `${width} / ${height}`,
-          // Fit the frame inside the column and a share of the viewport height.
-          width: `min(100%, calc(80vh * ${width} / ${height}))`,
-        }}
-      >
-        <Player
-          ref={player}
-          component={composition.component}
-          inputProps={inputProps}
-          durationInFrames={durationInFrames}
-          compositionWidth={width}
-          compositionHeight={height}
-          fps={fps}
-          controls
-          clickToPlay={false}
-          style={{ width: '100%', height: '100%' }}
-        />
+      <div className="player-column">
+        <div className="player-toolbar" role="group" aria-label="Video controls">
+          <button type="button" onClick={togglePlayback} aria-label={playing ? 'Pause video' : 'Play video'}>
+            {playing ? 'Pause' : 'Play'}
+          </button>
+          <button type="button" onClick={focusClickable}>Focus first clickable</button>
+          <label className="developer-toggle">
+            <input
+              type="checkbox"
+              checked={debugMode}
+              onChange={(event) => changeDebugMode(event.target.checked)}
+            />
+            Developer mode
+          </label>
+        </div>
+        {focusHint ? <p className="focus-hint" role="status">{focusHint}</p> : null}
+        <div
+          ref={frame}
+          className="player-frame"
+          data-composition-id={composition.id}
+          data-width={width}
+          data-height={height}
+          data-fps={fps}
+          data-duration-in-frames={durationInFrames}
+          onFocusCapture={(event) => {
+            // Freeze the current frame before Tab navigation or keyboard activation can lose its target.
+            if ((event.target as Element).matches('button[data-hotspot], [data-hotspot][role="button"]')) {
+              player.current?.pause();
+            }
+          }}
+          style={{
+            aspectRatio: `${width} / ${height}`,
+            // Fit the frame inside the column and a share of the viewport height.
+            width: `min(100%, calc(80vh * ${width} / ${height}))`,
+          }}
+        >
+          <Player
+            ref={player}
+            component={composition.component}
+            inputProps={inputProps}
+            durationInFrames={durationInFrames}
+            compositionWidth={width}
+            compositionHeight={height}
+            fps={fps}
+            controls
+            clickToPlay={false}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
+        {debugMode ? <HotspotDebug frame={frame} player={player} /> : null}
+        <p className="keyboard-help">
+          Tab / Shift+Tab: navigate visible clickable elements · Enter / Space: inspect
+        </p>
       </div>
       {renderInsight ? (
         <aside className="insight" aria-live="polite">
