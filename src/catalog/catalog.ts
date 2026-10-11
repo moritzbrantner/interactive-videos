@@ -53,6 +53,8 @@ export type Catalog = {
   projects: readonly ProjectSummary[];
   defaultId: string;
   resolve: (id: string) => ResolveResult;
+  /** The validated, normalized spec registered under `id`, or undefined for an unknown id. */
+  spec: (id: string) => VideoSpec | undefined;
 };
 
 /**
@@ -85,6 +87,7 @@ export function createCatalog(sources: readonly ProjectSource[], defaultId: stri
     projects: [...entries.values()].map(({ spec }) => ({ id: spec.project.id, title: spec.project.title })),
     defaultId,
     resolve,
+    spec: (id) => entries.get(id)?.spec,
   };
 }
 

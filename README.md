@@ -221,6 +221,60 @@ is involved.
   (`src/spec/fixtures/moenarch-narration.videospec.json`, audio in `public/fixtures/narration/`)
   covers lead-in/out, a hold, words, marks and an explicit scene.
 
+## Headless render
+
+```sh
+bun run video:render --project <id-or-spec-path> [--out <path>] [--frames <a>-<b>] [--profile social-portrait]
+```
+
+renders a catalog project to a video file without the Player, for example
+`bun run video:render --project catalog-title-card --frames 0-11 --out out/title.mp4`.
+
+- **Project**: a catalog id, or the path of a project's checked-in spec. A spec file selects the
+  catalog project whose registered spec it is (compared in normalized form); a file that is not a
+  registered spec is refused, so there is no second way into the renderer.
+- **Profile**: `social-portrait` (the default) encodes H.264 in MP4 and accepts only exactly 9:16
+  compositions. Profiles live in `src/render/render-job.ts`.
+- **Frames**: an inclusive range `a-b` or a single frame; the default is the whole composition.
+- **Out**: resolved against the working directory; the default is
+  `out/<project>.<profile>.mp4` (ignored by git). The file is rendered under a temporary name and
+  moved into place, so a failed render leaves no output file.
+- **How**: `src/render/render-job.ts` resolves the project, format, profile, size, fps, length,
+  frame range, scene schedule and `static:` assets before anything is bundled.
+  `src/render/cli.ts` then bundles `src/render/root.tsx` with `@remotion/bundler` (with the
+  `source-pins.ts` aliases) and renders it with `@remotion/renderer` (`selectComposition` +
+  `renderMedia`, concurrency 1) in Playwright's installed Chromium (`browserExecutable`), so
+  Remotion downloads no browser. `bunx playwright install chromium` provides it. The render root is
+  the only `<Composition>` list and takes every composition from `catalog.resolve` in
+  `src/projects.ts`, the same catalog the Player uses. Nothing in the render path calls a network
+  service, model or subprocess.
+- `bun run test:render` (part of `bun run verify`) runs the smoke in
+  `src/render/render.smoke.test.ts`: 12 frames of `catalog-title-card`, twice, byte-identical.
+
+stdout carries exactly one line, the JSON result; logs and progress go to stderr. Schema v1:
+
+```jsonc
+{
+  "schema": "interactive-videos/render-result", "schemaVersion": 1, "ok": true,
+  "request": { "project": "<selector as given>", "profile": "social-portrait", "frames": "0-11" | null },
+  "project": { "id", "title", "specSha256" },          // sha256 of serializeVideoSpec(spec)
+  "format": { "id", "version" },
+  "profile": { "id": "social-portrait", "codec": "h264", "container": "mp4" },
+  "composition": { "id", "width", "height", "fps", "durationInFrames" },
+  "frames": { "from", "to", "count" },                  // inclusive range rendered
+  "scenes": [{ "id", "kind", "from", "durationInFrames" }],
+  "assets": [{ "id", "kind", "uri" } | { "id", "kind", "uri", "publicPath", "sha256", "bytes" }],
+  "output": { "path", "sha256", "bytes" }               // absolute path of the written file
+}
+```
+
+A failure exits non-zero, prints the message on stderr and writes
+`{ "schema", "schemaVersion": 1, "ok": false, "error": { "reason", "message" } }`. Reasons:
+`invalid-arguments`, `unknown-profile`, `unknown-project`, `spec-not-found`, `invalid-spec`,
+`spec-mismatch`, `format-mismatch`, `unrenderable`, `profile-mismatch`, `missing-asset`,
+`frames-out-of-range` and `render-failed`. Neither object contains timestamps or other
+time-dependent values, so the same inputs give the same result and the same bytes.
+
 ## Rules
 
 This app follows the performance rules from `remotion-primitives`:
