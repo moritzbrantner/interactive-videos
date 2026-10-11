@@ -133,10 +133,14 @@ lives in `scenes/`:
 - **Layout** (`layout.ts`, plain TypeScript): `layoutMoenarchScene(scene, tokens, assets)` returns
   the scene's visible text blocks in reading order and its media. Each block wraps greedily at the
   characters per line of its archetype's density in `tokens.scenes.archetypes` (the title heading
-  uses `typography.density`). The plan calls it once per scene and carries `kind` and `layout`;
+  uses `typography.density`) and at its box width: the content frame's width (a list item's minus
+  its marker), with each line's width estimated by `estimateLineWidth` from the per-glyph advance
+  classes in `tokens.scenes.glyphAdvance` plus the style's letter spacing. The estimate is
+  conservative and font-independent; nothing is measured in the DOM. The plan calls it once per scene and carries `kind` and `layout`;
   frame code never lays text out.
 - **Fit rule**: text is wrapped, never truncated, shrunk or ellipsized. Text over a block's lines, a
-  word longer than a line, or more list items than `maxItems` makes the spec unrenderable, and the
+  word longer or wider than a line (for example 14 × "W" or a run of CJK without spaces as a
+  headline), or more list items than `maxItems` makes the spec unrenderable, and the
   error names the scene. The densities are sized so the fullest scene of each archetype stays inside
   the content frame: the safe area inset by `tokens.scenes.inset`, clear of the signature mark and a
   two-line subtitle.
