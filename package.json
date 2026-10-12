@@ -16,7 +16,7 @@
     "video:render": "bun src/render/cli.ts"
   },
   "dependencies": {
-    "@moritzbrantner/charts": "github:moritzbrantner/charts#29c978898e9aaead1995a6499707d4570c01bdef",
+    "@moritzbrantner/charts": "github:moritzbrantner/charts#d74fa63fd33e98e201cba5ff4326f204f41939ef",
     "@moritzbrantner/tables": "github:moritzbrantner/tables#1173c132da01bf5cf1e5221a78f40ebe711420b8",
     "@remotion/bundler": "4.0.534",
     "@remotion/captions": "4.0.534",
