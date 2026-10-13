@@ -129,6 +129,14 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **3.17** [question] **How interactive should council-location maps be?**  
   Unresolved 2026-10-13: for places mentioned in the Seven Councils series, should viewers (A) inspect a simple labeled map inside a contextual panel, (B) explore a pannable/zoomable map with selectable council and participant-location pins and localized historical notes, or (C) navigate a historical time-aware map whose boundaries and relevant locations change across the councils' dates? The maps must support the historical explanation without disrupting the linear episode; do not choose a reusable map engine or invent historical border accuracy before the viewer experience is settled.
+  Answered by Decision 3.18; retained for historical traceability.
+
+- **3.18 Interactive historical maps with a time-aware timeline.**  
+  Status: owner-approved 2026-10-13. **Answers 3.17 (combined options B and C).**  
+  Council viewers can **pan and zoom** a map, **select councils, participants and relevant places** to inspect localized historical context, and **scrub a historical timeline** showing how supported locations and political/territorial boundaries change across the periods relevant to the seven councils (325–787). Both selectable locations **and** historically changing geography are required; the timeline must not merely animate unrelated decorative maps. Keep these overlays historically contextual rather than changing the video's linear narrative or forcing video playback to advance. Use the reusable `maps` Map View and Map-Scoped Timeline as the geographic interaction owner; `interactive-videos` owns the council episodes, historic people/place descriptions, localization and evidence-backed period datasets. Mark speculative or disputed historical boundary reconstructions as illustrative or uncertain rather than implying exact contemporary measurements. Source coverage and exact boundary interpretations remain subject to Question 3.19.
+
+- **3.19** [question] **Council-era historical boundary evidence and uncertain periods.**  
+  Unresolved 2026-10-13: what should the series display when scholarly geographic sources cannot establish a reliable political boundary for a particular council date? (A) show only source-backed dated boundaries and leave unsupported intervals without an asserted polygon; (B) also allow visibly marked approximate/reconstructed territorial extents, with evidence and uncertainty labels; or (C) omit political borders entirely for such periods and prioritize confidently located sites. Do not silently extrapolate the Maps demo's post-1816 CShapes boundaries into the fourth through eighth centuries.
 
 ## Evidence and related work
 
