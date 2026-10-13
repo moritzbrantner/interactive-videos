@@ -89,6 +89,14 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **3.7** [question] **How should viewers move through the seven-council series?**  
   Unresolved 2026-10-13: should episodes (A) appear together in a dedicated series overview with manual previous/next navigation, (B) remain independently selectable from the existing project catalog without a special series flow, or (C) form a continuous playlist that automatically starts the next episode (while keeping individual episodes accessible)? This determines the default multi-episode viewer journey without changing the seven independent episodes or their short duration (3.1).
+  Answered by Decision 3.8; retained for historical traceability.
+
+- **3.8 Dedicated Seven Councils series overview with manual episode navigation.**  
+  Status: owner-approved 2026-10-13. **Answers 3.7 (option A).**  
+  Provide a dedicated, directly accessible series overview presenting all **seven councils in chronological order** (3.1), with clear entry points to available episodes. Each episode remains individually addressable and watchable on its own, and viewers can deliberately navigate **previous/next** episodes and return to the overview. **Do not automatically start the next episode** when the current one ends. Preserve the existing project catalog for other videos and the linear in-episode narrative; a series overview is a navigational experience, not a second video source or a branching storyline.
+
+- **3.9** [question] **Which spoken and subtitle languages should the Seven Councils series initially offer?**  
+  Unresolved 2026-10-13: should the release (A) use English narration with English subtitles, (B) use English narration with selectable English, German and Spanish subtitles, or (C) provide English, German and Spanish narration plus subtitles? Regardless of the choice, historical source excerpts must identify their original language and any translation (3.3). This changes episode production and player accessibility, so do not silently select a localization tier.
 
 ## Evidence and related work
 
