@@ -38,6 +38,11 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **1.7** [question] **May viewer choices change the video timeline?**  
   Unresolved 2026-10-13: should interactivity (A) remain contextual disclosures on a fixed linear narrative; (B) additionally allow chapter jumps or seeking to linked segments, without conditional branches; or (C) support genuine branching paths whose subsequent content depends on viewer choices? All options must preserve an understandable uninterrupted watch-through per 1.1. Do not infer branching from the existing hotspot demos or council-source panels.
+  Answered by Decision 1.8; retained for historical traceability.
+
+- **1.8 Viewers can navigate chapters without branching the narrative.**  
+  Status: owner-approved 2026-10-13. **Answers 1.7 (option B).**  
+  In the interactive player, viewers can deliberately jump or seek to named chapters and related segments of a video, in addition to opening contextual details. These actions navigate a **single, fixed narrative timeline**: earlier choices do not condition which scenes exist, and no choose-your-own-adventure branch or alternate ending is implied. The viewer can still watch the complete video linearly without interacting (1.1); a deterministic rendered/exported video preserves that linear ordering.
 
 ## 2. Live GitHub Pages showcase
 
@@ -81,6 +86,9 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 - **3.6 Explicitly Catholic editorial perspective.**  
   Status: owner-approved 2026-10-13. **Answers 3.5 (option B).**  
   Narrate all seven council episodes from an explicitly **Catholic perspective**, making the standpoint clear to the viewer rather than implying a tradition-neutral or universally shared interpretation. Explain relevant Catholic doctrine and the councils' significance for Catholic Christianity while **fairly and accurately representing how other Christian traditions understand or receive the councils**. Distinguish contemporary council acts, later historical developments, and explicitly confessional interpretations; do not describe disputed Catholic understandings as consensus among all Christians. The two-to-three-minute narrative remains coherent without interactions; deeper source details and contrasting receptions may be explored in optional interactive context.
+
+- **3.7** [question] **How should viewers move through the seven-council series?**  
+  Unresolved 2026-10-13: should episodes (A) appear together in a dedicated series overview with manual previous/next navigation, (B) remain independently selectable from the existing project catalog without a special series flow, or (C) form a continuous playlist that automatically starts the next episode (while keeping individual episodes accessible)? This determines the default multi-episode viewer journey without changing the seven independent episodes or their short duration (3.1).
 
 ## Evidence and related work
 
