@@ -97,6 +97,14 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **3.9** [question] **Which spoken and subtitle languages should the Seven Councils series initially offer?**  
   Unresolved 2026-10-13: should the release (A) use English narration with English subtitles, (B) use English narration with selectable English, German and Spanish subtitles, or (C) provide English, German and Spanish narration plus subtitles? Regardless of the choice, historical source excerpts must identify their original language and any translation (3.3). This changes episode production and player accessibility, so do not silently select a localization tier.
+  Answered by Decision 3.10; retained for historical traceability.
+
+- **3.10 English narration with selectable English, German and Spanish subtitles.**  
+  Status: owner-approved 2026-10-13. **Answers 3.9 (option B).**  
+  Each Seven Councils episode uses **English spoken narration** and makes **English, German and Spanish subtitle tracks selectable** in the interactive video player. Viewers can switch subtitle languages without losing their place in the episode; all tracks communicate the same narrated content while retaining accurate theological and historical terminology. Multi-language dubbed narration is **not** part of the initial series commitment. This Decision settles spoken/subtitle tracks, **not** the localization of all surrounding controls, contextual disclosures or source translations; source excerpts retain clear original-language/translation labeling under 3.3.
+
+- **3.11** [question] **Localization of interactive historical context.**  
+  Unresolved 2026-10-13: with selectable English, German and Spanish subtitles (3.10), should (A) only subtitles change language, while the series UI and source/person/map explanations remain English; (B) subtitles and player/series navigation labels be translated, but contextual historical explanations remain English; or (C) subtitles, series/navigation controls and interactive contextual explanations also be localized? Original historical-language quotations would remain identifiable as original text in all cases. This changes the usefulness of the interactive experience for German- and Spanish-speaking viewers; do not infer this scope from the subtitle decision alone.
 
 ## Evidence and related work
 
