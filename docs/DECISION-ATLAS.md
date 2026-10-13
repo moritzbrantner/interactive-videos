@@ -137,6 +137,11 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **3.19** [question] **Council-era historical boundary evidence and uncertain periods.**  
   Unresolved 2026-10-13: what should the series display when scholarly geographic sources cannot establish a reliable political boundary for a particular council date? (A) show only source-backed dated boundaries and leave unsupported intervals without an asserted polygon; (B) also allow visibly marked approximate/reconstructed territorial extents, with evidence and uncertainty labels; or (C) omit political borders entirely for such periods and prioritize confidently located sites. Do not silently extrapolate the Maps demo's post-1816 CShapes boundaries into the fourth through eighth centuries.
+  Answered by Decision 3.20; retained for historical traceability.
+
+- **3.20 Approximate council-era boundaries are allowed when visibly qualified and sourced.**  
+  Status: owner-approved 2026-10-13. **Answers 3.19 (option B).**  
+  Historical maps in the Seven Councils series may show **scholarly approximate or reconstructed territorial extents** for periods in AD 325–787 even when no exact contemporary political boundary is established. Such regions must be **visibly distinguishable** from better-supported dated boundaries, with clear **approximate/reconstructed/uncertain labeling**, an identified relevant date or period, and inspectable **scholarly evidence, source attribution and limitations** in the viewer's selected English, German or Spanish language (3.12). Do not imply precise borders, fabricated confidence values or more historical consensus than the sources support. If there is no defensible basis for a reconstruction, show reliably located sites without fabricating a polygon. Source provenance and uncertainty travel with the time-aware data and remain legible under pan, zoom, selection and timeline changes (3.18). Reuse the `maps` Map View to present source/uncertainty distinctions; `interactive-videos` remains responsible for selecting and reviewing the historical datasets and their claims. This choice **does not decide** the separate Maps Question 1.2 about interpolation or display between dated source snapshots, and does not permit reusing its post-1816 CShapes demo as ancient evidence.
 
 ## Evidence and related work
 
