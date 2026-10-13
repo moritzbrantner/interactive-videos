@@ -121,6 +121,14 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **3.15** [question] **How should historical scenes be illustrated?**  
   Unresolved 2026-10-13: should the Seven Councils series (A) rely chiefly on surviving artworks, manuscripts, photographs of sites and maps; (B) also use clearly identified stylized illustrations or reconstructed scenes where documentary images are unavailable; or (C) use cinematic dramatized reenactments as a central visual mode? Whatever is selected, invented depictions must not be presented as documentary footage or contemporary evidence. This affects episode visual identity, asset production and the viewer's ability to distinguish history from illustration.
+  Answered by Decision 3.16; retained for historical traceability.
+
+- **3.16 Combine documentary visuals with clearly identified historical illustrations and reconstructions.**  
+  Status: owner-approved 2026-10-13. **Answers 3.15 (option B).**  
+  The Seven Councils episodes may combine surviving manuscripts, artworks, locations, maps and other attributable historical material with **stylized illustrations or reconstructed scenes** when documentary visuals are unavailable or insufficient. The viewer must be able to distinguish **historical evidence from modern interpretation or imagined reconstruction**; label illustrative and reconstructed depictions honestly, and do not portray them as contemporary documentation of an event or authentic likeness of a participant without evidence. Preserve provenance, source attribution and usage rights for documentary material and illustrations. Use this visual freedom to make the educational narrative clearer; **cinematic dramatized reenactments are not the defining style requirement**. This decision does not mandate a new generation provider, animation engine or a reconstruction for every episode.
+
+- **3.17** [question] **How interactive should council-location maps be?**  
+  Unresolved 2026-10-13: for places mentioned in the Seven Councils series, should viewers (A) inspect a simple labeled map inside a contextual panel, (B) explore a pannable/zoomable map with selectable council and participant-location pins and localized historical notes, or (C) navigate a historical time-aware map whose boundaries and relevant locations change across the councils' dates? The maps must support the historical explanation without disrupting the linear episode; do not choose a reusable map engine or invent historical border accuracy before the viewer experience is settled.
 
 ## Evidence and related work
 
