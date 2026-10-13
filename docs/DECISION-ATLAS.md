@@ -30,6 +30,11 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **1.5** [question] **Playback while an expanded disclosure is open.**  
   Unresolved 2026-10-13: should a newly opened dialog or expanded contextual panel always pause (like the current click-to-inspect latency example), allow the video to continue, or vary by disclosure type? Hover itself must not pause under 1.3. Keep the current pause-to-inspect behavior until the owner chooses a broader rule; do not infer a new global rule from an example.
+  Answered by Decision 1.6; retained here for historical traceability.
+
+- **1.6 Context-dependent playback during disclosure.**  
+  Status: owner-approved 2026-10-13. **Answers 1.5 (option C).**  
+  Small, non-modal popovers and accordion sections permit the video to **continue playing** while they are open; opening or closing them must not itself interrupt playback. Opening a **full modal dialog pauses** the video for deeper inspection, without losing the current position. Hover previews remain non-pausing under 1.3. Keep existing latency-example pause-to-inspect behavior for its established selection affordance; do not generalize it to all disclosures.
 
 ## 2. Live GitHub Pages showcase
 
@@ -65,6 +70,9 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 - **3.4 The series should exercise the interactive medium.**  
   Status: owner-approved 2026-10-13.  
   Treat the series partly as a technical demonstration: use interaction creatively where it improves historical understanding. The core two-to-three-minute narrative must still work for someone who never opens a detail panel.
+
+- **3.5** [question] **Editorial perspective across Christian traditions.**  
+  Unresolved 2026-10-13: should the seven-episode series adopt (A) an accessible, historically descriptive narrator with denominational differences explained where relevant; (B) an explicitly Catholic perspective, clearly identified, with other traditions' interpretations explained; or (C) a comparative presentation that systematically contrasts Catholic, Eastern Orthodox, Oriental Orthodox and other relevant Christian receptions? This changes scripting and historical review for all seven episodes; do not infer a confessional standpoint from illustrative Latin-text interaction ideas.
 
 ## Evidence and related work
 
