@@ -113,6 +113,14 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **3.13** [question] **How deeply can viewers inspect historical source texts?**  
   Unresolved 2026-10-13: should selecting a referenced council text open (A) a short citation and summary card, (B) an annotated excerpt with original-language text, selected-language translation and attribution, or (C) a navigable in-app source reader that can inspect longer documents and passages? This determines the minimum scholarly depth and UI surface for the source interactions envisioned by 3.3; do not turn illustrative source links into a separate document platform without owner direction.
+  Answered by Decision 3.14; retained for historical traceability.
+
+- **3.14 Inspect annotated historical source excerpts within the video.**  
+  Status: owner-approved 2026-10-13. **Answers 3.13 (option B).**  
+  When a viewer activates a cited historical document in a Seven Councils episode, show a **relevant, bounded annotated passage** alongside its **original-language text where available**, a **translation in the viewer's selected English, German or Spanish language** (3.12), and clear **source attribution and historical explanation**. Identify the author/document, location within the source where known, translation provenance, and the relationship of the passage to the council's actual decisions or historical reception. Where only a translation or later witness survives, label it accurately instead of presenting it as an extant original. Original-language text remains visibly distinct from translations; disputed readings or later commentary must not be misrepresented as council acts. Viewers can close the inspection and return to their position in the video, consistent with the disclosure playback rules (1.6). **A full navigable in-app document reader is not part of this decision**; a link to the larger source is appropriate when available.
+
+- **3.15** [question] **How should historical scenes be illustrated?**  
+  Unresolved 2026-10-13: should the Seven Councils series (A) rely chiefly on surviving artworks, manuscripts, photographs of sites and maps; (B) also use clearly identified stylized illustrations or reconstructed scenes where documentary images are unavailable; or (C) use cinematic dramatized reenactments as a central visual mode? Whatever is selected, invented depictions must not be presented as documentary footage or contemporary evidence. This affects episode visual identity, asset production and the viewer's ability to distinguish history from illustration.
 
 ## Evidence and related work
 
