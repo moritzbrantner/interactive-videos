@@ -105,6 +105,14 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **3.11** [question] **Localization of interactive historical context.**  
   Unresolved 2026-10-13: with selectable English, German and Spanish subtitles (3.10), should (A) only subtitles change language, while the series UI and source/person/map explanations remain English; (B) subtitles and player/series navigation labels be translated, but contextual historical explanations remain English; or (C) subtitles, series/navigation controls and interactive contextual explanations also be localized? Original historical-language quotations would remain identifiable as original text in all cases. This changes the usefulness of the interactive experience for German- and Spanish-speaking viewers; do not infer this scope from the subtitle decision alone.
+  Answered by Decision 3.12; retained for historical traceability.
+
+- **3.12 The selected language covers the full interactive series experience.**  
+  Status: owner-approved 2026-10-13. **Answers 3.11 (option C).**  
+  In the Seven Councils experience, selecting **English, German or Spanish** determines not only subtitles (3.10) but also the language of **series navigation, relevant player controls, contextual explanations of people and places, map descriptions, and historical source commentary**. Viewers should not have to read English-only explanatory panels after selecting German or Spanish. Keep the historical source's original-language quotations intact and explicitly labeled as originals; present their associated viewer-facing translations and explanations in the selected language, clearly distinguishing an original from a translation. Missing translations must not silently masquerade as translated content. This does **not** add German or Spanish narration (3.10), change the Catholic editorial perspective (3.6), or require unrelated non-series projects to adopt this language scope. Switching language should not lose the viewer's current playback position.
+
+- **3.13** [question] **How deeply can viewers inspect historical source texts?**  
+  Unresolved 2026-10-13: should selecting a referenced council text open (A) a short citation and summary card, (B) an annotated excerpt with original-language text, selected-language translation and attribution, or (C) a navigable in-app source reader that can inspect longer documents and passages? This determines the minimum scholarly depth and UI surface for the source interactions envisioned by 3.3; do not turn illustrative source links into a separate document platform without owner direction.
 
 ## Evidence and related work
 
