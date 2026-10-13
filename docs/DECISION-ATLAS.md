@@ -36,6 +36,9 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
   Status: owner-approved 2026-10-13. **Answers 1.5 (option C).**  
   Small, non-modal popovers and accordion sections permit the video to **continue playing** while they are open; opening or closing them must not itself interrupt playback. Opening a **full modal dialog pauses** the video for deeper inspection, without losing the current position. Hover previews remain non-pausing under 1.3. Keep existing latency-example pause-to-inspect behavior for its established selection affordance; do not generalize it to all disclosures.
 
+- **1.7** [question] **May viewer choices change the video timeline?**  
+  Unresolved 2026-10-13: should interactivity (A) remain contextual disclosures on a fixed linear narrative; (B) additionally allow chapter jumps or seeking to linked segments, without conditional branches; or (C) support genuine branching paths whose subsequent content depends on viewer choices? All options must preserve an understandable uninterrupted watch-through per 1.1. Do not infer branching from the existing hotspot demos or council-source panels.
+
 ## 2. Live GitHub Pages showcase
 
 - **2.1 Pages must demonstrate a range of real interactions.**  
@@ -73,6 +76,11 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 
 - **3.5** [question] **Editorial perspective across Christian traditions.**  
   Unresolved 2026-10-13: should the seven-episode series adopt (A) an accessible, historically descriptive narrator with denominational differences explained where relevant; (B) an explicitly Catholic perspective, clearly identified, with other traditions' interpretations explained; or (C) a comparative presentation that systematically contrasts Catholic, Eastern Orthodox, Oriental Orthodox and other relevant Christian receptions? This changes scripting and historical review for all seven episodes; do not infer a confessional standpoint from illustrative Latin-text interaction ideas.
+  Answered by Decision 3.6; retained for historical traceability.
+
+- **3.6 Explicitly Catholic editorial perspective.**  
+  Status: owner-approved 2026-10-13. **Answers 3.5 (option B).**  
+  Narrate all seven council episodes from an explicitly **Catholic perspective**, making the standpoint clear to the viewer rather than implying a tradition-neutral or universally shared interpretation. Explain relevant Catholic doctrine and the councils' significance for Catholic Christianity while **fairly and accurately representing how other Christian traditions understand or receive the councils**. Distinguish contemporary council acts, later historical developments, and explicitly confessional interpretations; do not describe disputed Catholic understandings as consensus among all Christians. The two-to-three-minute narrative remains coherent without interactions; deeper source details and contrasting receptions may be explored in optional interactive context.
 
 ## Evidence and related work
 
