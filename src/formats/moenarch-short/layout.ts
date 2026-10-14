@@ -84,8 +84,9 @@ function glyphClass(glyph: string): GlyphClass | null {
     if (/[a-z]/.test(glyph)) return 'lower';
     return 'upper';
   }
-  // Latin-1 and Latin Extended letters (accented forms) are bounded like capitals.
-  if (code >= 0xc0 && code <= 0x24f) return 'upper';
+  // Extended Latin includes wide accented capitals, distinct from the ASCII capital bound.
+  if (code >= 0xc0 && code <= 0x24f) return 'latin';
+  if (code === 0x2e3a || code === 0x2e3b) return 'longDash';
   if (
     (code >= 0x1100 && code <= 0x115f) ||
     (code >= 0x2e80 && code <= 0xa4cf) ||

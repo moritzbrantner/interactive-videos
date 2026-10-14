@@ -115,6 +115,18 @@ sans for eyebrows and subtitles, and one accent for rules and the signature mark
 - **Specimen**: `?project=moenarch-specimen` (`src/spec/fixtures/moenarch-specimen.videospec.json`)
   shows every transition, the intro, outro and subtitles.
 
+### Packaged typography
+
+The format loads bundled Source Serif 4 (600 and italic 400) and variable Source Sans 3
+(400/560) before exposing text in either the Player or the headless renderer. Font failures stop
+rendering instead of silently substituting an OS font. The original density and sizes remain
+unchanged; width bounds are calibrated to the packaged faces. Font sources, checksums and OFL
+licenses are in [`public/fonts/moenarch-short/`](public/fonts/moenarch-short/README.md).
+
+`?project=moenarch-typography` opens the real typography specimen: at-capacity headlines, wide
+capitals, italic text and English/German/Spanish accents. Browser and headless acceptance check
+actual glyph provenance and text boxes, including a cold font load.
+
 ### Scene archetypes
 
 The pack draws a small editorial vocabulary, so most house-style shorts are assembled from
