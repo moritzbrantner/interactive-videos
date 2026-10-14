@@ -147,11 +147,11 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
 ## 4. Reusable video formats
 
 - **4.1 Use bundled, freely licensed fonts for consistent video typography.**  
-  Status: owner-approved 2026-10-14. **Answers 4.2 (bundled fonts).** Implementation: [issue #56](https://github.com/moritzbrantner/interactive-videos/issues/56).  
+  Status: owner-approved 2026-10-14. **Answers 4.2 (bundled fonts).** Implementation: [issue #56](https://github.com/moritzbrantner/interactive-videos/issues/56).
   The `moenarch-short` format should use **freely available, redistributable typefaces obtained online and packaged with the project**, rather than depending on fonts installed on the viewer's or renderer's operating system. Load the exact packaged fonts in the browser and headless/Remotion renderer before measuring or rendering text; playback and rendering must not require a live external font service. The format retains its restrained editorial serif/sans presentation, but **the exact freely licensed font families are delegated to implementation**, subject to font-license compliance, needed character coverage, consistent visual output and accurate fitted-width bounds. Text planned to fit must actually fit on supported renderers; avoid lowering the format's intended text density solely to tolerate arbitrary system-font fallbacks.
 
-- **4.2** [question] **How should the format guarantee consistent font widths across renderers?**  
-  Historical question from [issue #56](https://github.com/moritzbrantner/interactive-videos/issues/56), answered 2026-10-14: should the format (A) bundle freely licensed display-serif and sans fonts, loaded before browser/headless rendering, or (B) retain system-font fallbacks and lower text densities to fit their worst-case widths? If bundling, should the owner select a particular display serif, such as Source Serif 4 or EB Garamond, or delegate the family choice?  
+- **4.2** [question] **How should the format guarantee consistent font widths across renderers?**
+  Historical question from [issue #56](https://github.com/moritzbrantner/interactive-videos/issues/56), answered in the [owner comment of 2026-10-14](https://github.com/moritzbrantner/interactive-videos/issues/56#issuecomment-6166132880): should the format (A) bundle freely licensed display-serif and sans fonts, loaded before browser/headless rendering, or (B) retain system-font fallbacks and lower text densities to fit their worst-case widths? If bundling, should the owner select a particular display serif, such as Source Serif 4 or EB Garamond, or delegate the family choice?
   Answered by Decision 4.1: bundle redistributable fonts and delegate exact families to implementation. This historical Question is appended as 4.2 to preserve the permanent ID of the already recorded Decision 4.1.
 
 ## Evidence and related work
