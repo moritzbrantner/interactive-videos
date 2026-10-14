@@ -38,9 +38,9 @@ const tokens = {
 
   typography: {
     // Sans for eyebrows, subtitles and the signature label.
-    fontFamily: "'Source Sans 3', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    fontFamily: "'Source Sans 3'",
     // Serif for headlines.
-    displayFamily: "'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif",
+    displayFamily: "'Source Serif 4'",
     // Pixel sizes on the 1080-wide frame: small steps for text, one large jump to the headline.
     scale: { signature: 26, eyebrow: 34, subtitle: 46, display: 96 },
     weight: { regular: 400, medium: 560, display: 600 },
@@ -50,6 +50,12 @@ const tokens = {
     density: { maxCharsPerLine: 14, maxLines: 3 },
     subtitleMaxCharsPerLine: 32,
   },
+
+  fonts: [
+    { family: 'display', path: 'fonts/moenarch-short/SourceSerif4-Semibold.woff2', weight: '600', style: 'normal' },
+    { family: 'display', path: 'fonts/moenarch-short/SourceSerif4-Italic.woff2', weight: '400', style: 'italic' },
+    { family: 'sans', path: 'fonts/moenarch-short/SourceSans3-Variable.woff2', weight: '200 900', style: 'normal' },
+  ],
 
   palette: {
     background: '#15171b',
@@ -127,25 +133,28 @@ const tokens = {
     entrance: { durationInFrames: 12, staggerInFrames: 4 },
     gaps: { block: 28, section: 56, item: 24, marker: 24 },
     rule: { width: 96, thickness: 6 },
-    // Font-independent width bound for planned lines (issue #38). Lines render unwrapped, so a
+    // Width bound calibrated to the packaged fonts (issues #38 and #56). Lines render unwrapped, so a
     // line that passes its characters-per-line limit could still be wider than the content
     // frame. Each glyph counts with a conservative advance in em for its class, plus the style's
     // letter spacing; upper case styles measure the upper-cased text. The bounds sit at or above
-    // the widest member of each class in the pack's font stacks at the pack's weights:
-    // `upperNarrow` is B E F J K L P S T X Y Z, `upper` any other capital, Latin letter with a
-    // diacritic or ASCII symbol, `lowerWide` m and w, `wide` M W @ % &. `fullwidth` covers CJK,
+    // the widest member of each class in the packaged fonts at the pack's weights:
+    // `upperNarrow` is B E F J K L P S T X Y Z, `upper` any other ASCII capital/symbol,
+    // `latin` extended Latin (including accented W), `lowerWide` m and w, `wide` M W @ % &.
+    // `longDash` covers two/three-em dashes. `fullwidth` covers CJK,
     // kana, Hangul and fullwidth forms; `unknown` any other glyph (emoji, other scripts).
     glyphAdvance: {
       space: 0.35,
-      narrow: 0.4,
+      narrow: 0.56,
       lower: 0.62,
       digit: 0.66,
       upperNarrow: 0.72,
       upper: 0.86,
+      latin: 1.0,
       lowerWide: 0.95,
       wide: 1.12,
       fullwidth: 1.0,
-      unknown: 1.25,
+      longDash: 2.35,
+      unknown: 1.3,
     },
     // Text styles. `font` names a typography family, `weight` a typography weight and `color` a
     // palette entry; sizes are pixels on the 1080-wide frame.

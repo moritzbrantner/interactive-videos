@@ -5,6 +5,7 @@ import { Subtitles } from '@/components/remotion/subtitles';
 import type { SubtitleTrack } from '@/lib/remotion/subtitle-formats';
 import { useBudgetCounter } from '@/render-budget';
 
+import { useMoenarchFonts } from './fonts';
 import { moenarchFrameState, type MoenarchPlan, type MoenarchPlanScene } from './plan';
 import { MOENARCH_SCENES } from './scenes';
 import type { MoenarchEasingName, MoenarchShortTokens, MoenarchTransitionName } from './tokens';
@@ -284,6 +285,7 @@ export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTok
 
   function MoenarchShortVideo() {
     useBudgetCounter('MoenarchShortVideo');
+    const fontsReady = useMoenarchFonts();
     const frame = useCurrentFrame();
     const reducedMotion = usePrefersReducedMotion();
     const state = useMemo(() => moenarchFrameState(plan, frame, { reducedMotion }), [frame, reducedMotion]);
@@ -292,6 +294,9 @@ export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTok
       state.subtitle === null
         ? null
         : (plan.scenes.flatMap((scene) => scene.cues).find((cue) => frame >= cue.from && frame < cue.from + cue.durationInFrames) ?? null);
+    if (!fontsReady) {
+      return null;
+    }
     return (
       <AbsoluteFill
         data-moenarch-root=""
