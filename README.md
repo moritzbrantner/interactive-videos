@@ -1,5 +1,7 @@
 # interactive-videos
 
+Product intent and unresolved decisions: [Decision Atlas](docs/DECISION-ATLAS.md). Agent instructions: [AGENTS.md](AGENTS.md).
+
 Interactive explainer videos built on Remotion. Viewers can watch straight through, or click a
 chart element or an underlined subtitle word to pause the video and inspect the data behind it.
 
