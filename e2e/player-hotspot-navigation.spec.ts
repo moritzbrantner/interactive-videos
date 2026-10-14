@@ -241,6 +241,65 @@ test('Space preserves native toolbar buttons and the Developer mode checkbox', a
   await expectPlaying(page, true);
 });
 
+// Independent review-regression fixture: real native disclosure and standards-based
+// Space-owning controls traverse the actual Player boundary without replacing playback.
+test('Space opens a native summary without toggling the actual Player', async ({ page }) => {
+  await openAtInspectableFrame(page);
+  await controls(page).getByRole('button', { name: 'Play video', exact: true }).click();
+  await page.locator('[data-composition-id]').evaluate((frame) => {
+    const details = document.createElement('details');
+    details.setAttribute('data-shortcut-details', '');
+    const summary = document.createElement('summary');
+    summary.textContent = 'Shortcut acceptance native disclosure';
+    details.append(summary, document.createTextNode('Native details content'));
+    frame.append(details);
+  });
+  await page.getByText('Shortcut acceptance native disclosure', { exact: true }).focus();
+  await page.keyboard.press('Space');
+  await expect(page.locator('[data-shortcut-details]')).toHaveAttribute('open', '');
+  await expectPlaying(page, true);
+  await page.keyboard.press('Space');
+  await expect(page.locator('[data-shortcut-details]')).not.toHaveAttribute('open');
+  await expectPlaying(page, true);
+});
+
+for (const role of ['menuitemcheckbox', 'menuitemradio', 'option'] as const) {
+  for (const descendant of [false, true]) {
+    test(`Space activates ${role}${descendant ? ' descendant' : ''} without toggling the actual Player`, async ({ page }) => {
+      await openAtInspectableFrame(page);
+      await controls(page).getByRole('button', { name: 'Play video', exact: true }).click();
+      await page.locator('[data-composition-id]').evaluate((frame, { role, descendant }) => {
+        const owner = document.createElement('div');
+        owner.setAttribute('role', role === 'option' ? 'listbox' : 'menu');
+        owner.setAttribute('aria-label', 'Shortcut acceptance control group');
+        const control = document.createElement('div');
+        control.setAttribute('role', role);
+        control.setAttribute('aria-label', 'Shortcut acceptance role control');
+        control.tabIndex = 0;
+        const state = role === 'option' ? 'aria-selected' : 'aria-checked';
+        control.setAttribute(state, 'false');
+        const icon = document.createElement('span');
+        icon.textContent = 'Control icon';
+        if (descendant) icon.tabIndex = 0;
+        control.append(icon);
+        control.addEventListener('keydown', (event) => {
+          if (event.code !== 'Space' || event.repeat || event.defaultPrevented) return;
+          event.preventDefault();
+          control.setAttribute(state, 'true');
+        });
+        owner.append(control);
+        frame.append(owner);
+      }, { role, descendant });
+      const control = page.getByRole(role, { name: 'Shortcut acceptance role control', exact: true });
+      if (descendant) await control.getByText('Control icon').focus();
+      else await control.focus();
+      await page.keyboard.press('Space');
+      await expect(control).toHaveAttribute(role === 'option' ? 'aria-selected' : 'aria-checked', 'true');
+      await expectPlaying(page, true);
+    });
+  }
+}
+
 test('Space types normally in editable descendants without toggling the actual Player', async ({ page }) => {
   await openAtInspectableFrame(page);
   await controls(page).getByRole('button', { name: 'Play video', exact: true }).click();
