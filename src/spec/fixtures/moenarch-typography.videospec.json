@@ -1,0 +1,83 @@
+{
+  "specVersion": 1,
+  "project": {
+    "id": "moenarch-typography",
+    "title": "Moenarch typography specimen"
+  },
+  "format": {
+    "id": "moenarch-short",
+    "version": 1
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "assets": [],
+  "scenes": [
+    {
+      "kind": "title",
+      "id": "capacity",
+      "durationInFrames": 120,
+      "payload": {
+        "eyebrow": "Typography specimen",
+        "heading": "xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxxxx"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "wide-capitals",
+      "durationInFrames": 120,
+      "payload": {
+        "eyebrow": "Wide capitals",
+        "heading": "HHHHHHHHHH"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "wide-words",
+      "durationInFrames": 120,
+      "payload": {
+        "eyebrow": "Wide words",
+        "text": "WWWW WWWWWWWW HHHH HHHH"
+      }
+    },
+    {
+      "kind": "quote",
+      "id": "italic-languages",
+      "durationInFrames": 120,
+      "payload": {
+        "text": "Größe, café, pingüino.",
+        "attribution": "Ä Ö Ü ß Á É Í Ó Ú Ñ"
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "languages",
+      "durationInFrames": 120,
+      "payload": {
+        "heading": "Français Español",
+        "items": [
+          {
+            "label": "Größe",
+            "detail": "Äpfel, Öl, über."
+          },
+          {
+            "label": "España",
+            "detail": "Café, niño, acción."
+          }
+        ]
+      }
+    },
+    {
+      "kind": "dataPoint",
+      "id": "numbers",
+      "durationInFrames": 120,
+      "payload": {
+        "value": "1234",
+        "label": "Latin accents",
+        "context": "café, ä, ñ"
+      }
+    }
+  ]
+}
