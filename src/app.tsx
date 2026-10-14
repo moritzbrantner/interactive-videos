@@ -12,9 +12,10 @@ const PROJECT_PARAM = 'project';
 // Native controls and hotspot primitives own their Space behavior, including descendant icons.
 function ownsKeyboardAction(target: EventTarget): boolean {
   return target instanceof Element && target.closest(
-    'button, input, textarea, select, a[href], [contenteditable]:not([contenteditable="false"]), '
+    'button, input, textarea, select, summary, a[href], [contenteditable]:not([contenteditable="false"]), '
     + '[role="button"], [role="checkbox"], [role="radio"], [role="switch"], [role="slider"], '
-    + '[role="textbox"], [role="combobox"], [role="spinbutton"], [role="menuitem"], [role="tab"]',
+    + '[role="textbox"], [role="combobox"], [role="spinbutton"], [role="menuitem"], '
+    + '[role="menuitemcheckbox"], [role="menuitemradio"], [role="option"], [role="tab"]',
   ) !== null;
 }
 
