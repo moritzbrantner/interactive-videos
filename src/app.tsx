@@ -9,6 +9,15 @@ import { exposePlayerForBudgetTests } from '@/render-budget';
 
 const PROJECT_PARAM = 'project';
 
+// Native controls and hotspot primitives own their Space behavior, including descendant icons.
+function ownsKeyboardAction(target: EventTarget): boolean {
+  return target instanceof Element && target.closest(
+    'button, input, textarea, select, a[href], [contenteditable]:not([contenteditable="false"]), '
+    + '[role="button"], [role="checkbox"], [role="radio"], [role="switch"], [role="slider"], '
+    + '[role="textbox"], [role="combobox"], [role="spinbutton"], [role="menuitem"], [role="tab"]',
+  ) !== null;
+}
+
 function projectIdFromLocation(fallback: string) {
   return new URLSearchParams(window.location.search).get(PROJECT_PARAM) ?? fallback;
 }
@@ -161,6 +170,28 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
         <div
           ref={frame}
           className="player-frame"
+          role="region"
+          aria-label="Video player"
+          tabIndex={0}
+          onPointerDown={(event) => {
+            if (!ownsKeyboardAction(event.target)) {
+              event.currentTarget.focus({ preventScroll: true });
+            }
+          }}
+          onKeyDown={(event) => {
+            if (
+              (event.code !== 'Space' && event.key !== ' ')
+              || event.defaultPrevented
+              || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey
+              || ownsKeyboardAction(event.target)
+            ) {
+              return;
+            }
+            event.preventDefault();
+            if (!event.repeat) {
+              togglePlayback();
+            }
+          }}
           data-composition-id={composition.id}
           data-width={width}
           data-height={height}
@@ -188,12 +219,13 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
             fps={fps}
             controls
             clickToPlay={false}
+            spaceKeyToPlayOrPause={false}
             style={{ width: '100%', height: '100%' }}
           />
         </div>
         {debugMode ? <HotspotDebug frame={frame} player={player} /> : null}
         <p className="keyboard-help">
-          Tab / Shift+Tab: navigate visible clickable elements · Enter / Space: inspect
+          Space in the video: play / pause · Tab / Shift+Tab: navigate clickable elements · Enter / Space on an item: inspect
         </p>
       </div>
       {renderInsight ? (

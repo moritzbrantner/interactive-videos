@@ -25,6 +25,9 @@ bun run dev
 
 ## Player navigation and developer mode
 
+- Click the video background or Tab to the **Video player** region, then press **Space** to
+  pause/resume without scrolling or moving keyboard focus. Holding Space toggles once; modified
+  Space and native controls/editable fields retain their own behavior.
 - The player has an explicit **Play/Pause** button outside Remotion's transport controls.
   The normal seek bar remains available.
 - Select **Focus first clickable** to pause and focus the first *currently available* hotspot.
