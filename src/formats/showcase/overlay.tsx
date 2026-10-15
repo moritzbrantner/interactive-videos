@@ -1,4 +1,11 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from 'react';
 
 import type { PlayerOverlayProps } from '@/catalog/catalog';
 
@@ -195,11 +202,30 @@ export function createShowcaseOverlay(disclosures: readonly TimedDisclosure[]) {
   return function ShowcaseOverlay({ player }: PlayerOverlayProps) {
     const frame = usePlayerFrame(player);
     const pause = () => player.current?.pause();
+    const container = useRef<HTMLDivElement>(null);
+    const lastFocused = useRef<HTMLElement | null>(null);
+    const visible = disclosures.filter((disclosure) => frame >= disclosure.from && frame < disclosure.to);
+    const visibleKey = visible.map((disclosure) => `${disclosure.kind}:${disclosure.sceneId}`).join('|');
+    // When playback ends a scene whose control holds keyboard focus, hand focus to the player
+    // region instead of letting it fall back to the document body.
+    useLayoutEffect(() => {
+      const focused = lastFocused.current;
+      if (focused && !focused.isConnected) {
+        lastFocused.current = null;
+        if (document.activeElement === document.body || document.activeElement === null) {
+          container.current?.closest<HTMLElement>('[data-composition-id]')?.focus({ preventScroll: true });
+        }
+      }
+    }, [visibleKey]);
     return (
-      <div className="showcase-overlay">
-        {disclosures
-          .filter((disclosure) => frame >= disclosure.from && frame < disclosure.to)
-          .map((disclosure) => {
+      <div
+        ref={container}
+        className="showcase-overlay"
+        onFocusCapture={(event) => {
+          lastFocused.current = event.target as HTMLElement;
+        }}
+      >
+        {visible.map((disclosure) => {
             const key = `${disclosure.kind}:${disclosure.sceneId}`;
             switch (disclosure.kind) {
               case 'preview':
