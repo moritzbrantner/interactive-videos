@@ -86,7 +86,7 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
   const [debugMode, setDebugMode] = useState(
     () => new URLSearchParams(window.location.search).get('debug') === 'hotspots',
   );
-  const { renderInsight } = composition;
+  const { renderInsight, Overlay } = composition;
 
   const onActivate = useCallback((next: HotspotActivation) => {
     player.current?.pause();
@@ -223,6 +223,7 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
             spaceKeyToPlayOrPause={false}
             style={{ width: '100%', height: '100%' }}
           />
+          {Overlay ? <Overlay player={player} /> : null}
         </div>
         {debugMode ? <HotspotDebug frame={frame} player={player} /> : null}
         <p className="keyboard-help">

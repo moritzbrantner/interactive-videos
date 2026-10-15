@@ -1,4 +1,6 @@
-import type { ComponentType, ReactNode } from 'react';
+import type { ComponentType, ReactNode, RefObject } from 'react';
+
+import type { PlayerRef } from '@remotion/player';
 
 import type { HotspotActivation } from '@/components/remotion/hotspot';
 import { assertVideoSpec, resolveTimeline, type VideoSpec } from '@/spec/video-spec';
@@ -14,6 +16,17 @@ export type FormatRendering = {
   component: ComponentType<CompositionProps>;
   /** Present when the composition has hotspots; renders the panel for an activation. */
   renderInsight?: (activation: HotspotActivation) => ReactNode;
+  /**
+   * Browser-only disclosures layered over the Player (hover previews, popovers, dialogs).
+   * They live at the Player boundary, never inside the composition, so headless frames stay
+   * deterministic and renderable without UI state.
+   */
+  Overlay?: ComponentType<PlayerOverlayProps>;
+};
+
+/** What a Player overlay receives: the live Player handle for frame and playback state. */
+export type PlayerOverlayProps = {
+  player: RefObject<PlayerRef | null>;
 };
 
 /**

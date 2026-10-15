@@ -23,6 +23,8 @@ describe('project catalog', () => {
       // #14: narration, cue and subtitle timing.
       { id: 'moenarch-narration', title: 'Moenarch narration timing' },
       { id: 'moenarch-typography', title: 'Moenarch typography specimen' },
+      // #60: the interactive disclosure showcase.
+      { id: 'interactive-showcase', title: 'Interactive showcase' },
     ]);
     expect(catalog.defaultId).toBe('latency-explainer');
   });

@@ -1,0 +1,73 @@
+{
+  "specVersion": 1,
+  "project": {
+    "id": "interactive-showcase",
+    "title": "Interactive showcase"
+  },
+  "format": {
+    "id": "showcase",
+    "version": 1
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "assets": [],
+  "scenes": [
+    {
+      "kind": "title",
+      "id": "intro",
+      "durationInFrames": 120,
+      "payload": {
+        "eyebrow": "Interactive showcase",
+        "heading": "Four facts about the Moon"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "distance",
+      "durationInFrames": 210,
+      "payload": {
+        "eyebrow": "Distance",
+        "heading": "About 384,400 km from Earth"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "phases",
+      "durationInFrames": 210,
+      "payload": {
+        "eyebrow": "Phases",
+        "heading": "Its phases repeat every 29.5 days"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "tides",
+      "durationInFrames": 210,
+      "payload": {
+        "eyebrow": "Tides",
+        "heading": "Its gravity raises ocean tides"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "landing",
+      "durationInFrames": 210,
+      "payload": {
+        "eyebrow": "Exploration",
+        "heading": "Apollo 11 landed there in 1969"
+      }
+    },
+    {
+      "kind": "title",
+      "id": "outro",
+      "durationInFrames": 150,
+      "payload": {
+        "eyebrow": "Explore",
+        "heading": "Hover, open and expand the details as it plays"
+      }
+    }
+  ]
+}

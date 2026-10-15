@@ -343,3 +343,78 @@ h1 {
     border-left: 0;
   }
 }
+
+/* Interactive showcase: browser-only disclosures over the Player (never in rendered frames). */
+.showcase-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Anchored from the top so opening a disclosure grows downward and never moves its trigger
+   out from under the pointer. */
+.showcase-anchor {
+  position: absolute;
+  left: 6%;
+  top: 58%;
+  display: grid;
+  gap: 8px;
+  max-width: 60%;
+  pointer-events: auto;
+}
+
+.showcase-trigger {
+  justify-self: start;
+  border: 1px solid #60a5fa;
+  border-radius: 999px;
+  padding: 6px 14px;
+  background: rgb(11 13 18 / 85%);
+  color: #f4f4f5;
+  font: inherit;
+  cursor: pointer;
+}
+
+.showcase-hotspot[data-previewing='true'] {
+  background: #1d4ed8;
+  box-shadow: 0 0 0 4px rgb(96 165 250 / 45%);
+}
+
+.showcase-trigger:focus-visible,
+.showcase-dialog button:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 3px;
+}
+
+.showcase-preview,
+.showcase-popover,
+.showcase-accordion-panel {
+  display: grid;
+  gap: 4px;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: rgb(15 23 42 / 94%);
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.showcase-popover[hidden],
+.showcase-accordion-panel[hidden] {
+  display: none;
+}
+
+.showcase-popover p,
+.showcase-accordion-panel p {
+  margin: 0;
+}
+
+.showcase-dialog {
+  max-width: min(520px, 90vw);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #f4f4f5;
+}
+
+.showcase-dialog::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
