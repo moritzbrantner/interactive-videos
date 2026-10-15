@@ -21,7 +21,8 @@ export const catalog = createCatalog(
     { spec: catalogTitleCard, format: titleCardFormat },
     { spec: moenarchSpecimen, format: moenarchShort() },
     { spec: moenarchSceneGallery, format: moenarchShort() },
-    { spec: moenarchNarration, format: moenarchShort() },
+    // #68: chapter jumps and a related-segment jump on one fixed timeline.
+    { spec: moenarchNarration, format: moenarchShort(), chapters: true },
     { spec: moenarchTypography, format: moenarchShort() },
     // #60: the interactive disclosure showcase.
     { spec: interactiveShowcase, format: showcaseFormat(MOON_SHOWCASE_DISCLOSURES) },
