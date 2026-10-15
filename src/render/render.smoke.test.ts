@@ -136,6 +136,19 @@ describe('bun run video:render (smoke)', () => {
     expect(JSON.stringify(comparable(second.json))).toBe(JSON.stringify(comparable(first.json)));
   });
 
+  it('renders the interactive showcase headlessly without its browser-only overlay (#60)', () => {
+    // Frames 900-905 fall in the scene whose Player overlay offers the modal dialog; the render
+    // must not need any overlay, hover or dialog state to produce them.
+    const out = join(tmp, 'showcase.mp4');
+    const run = render(['--project', 'interactive-showcase', '--frames', '900-905', '--out', out]);
+    expect(run.status, run.context).toBe(0);
+    const result = assertRenderResult(run.json);
+    expect(result.format).toEqual({ id: 'showcase', version: 1 });
+    expect(result.frames).toEqual({ from: 900, to: 905, count: 6 });
+    const track = videoTrack(out);
+    expect({ width: track.width, height: track.height, samples: track.samples }).toEqual({ width: 1080, height: 1920, samples: 6 });
+  });
+
   it('used the installed Playwright Chromium rather than downloading a Remotion browser', () => {
     if (!browserDownloadedBefore) expect(existsSync(REMOTION_BROWSER_DIR)).toBe(false);
   });

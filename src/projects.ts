@@ -1,8 +1,11 @@
 import { createCatalog } from '@/catalog/catalog';
 import { moenarchShort } from '@/formats/moenarch-short';
+import { showcaseFormat } from '@/formats/showcase';
+import { MOON_SHOWCASE_DISCLOSURES } from '@/formats/showcase/moon';
 import { titleCardFormat } from '@/formats/title-card';
 import latencyExplainer from '@/spec/fixtures/latency-explainer.videospec.json';
 import catalogTitleCard from '@/spec/fixtures/catalog-title-card.videospec.json';
+import interactiveShowcase from '@/spec/fixtures/interactive-showcase.videospec.json';
 import moenarchNarration from '@/spec/fixtures/moenarch-narration.videospec.json';
 import moenarchSceneGallery from '@/spec/fixtures/moenarch-scene-gallery.videospec.json';
 import moenarchSpecimen from '@/spec/fixtures/moenarch-specimen.videospec.json';
@@ -20,6 +23,8 @@ export const catalog = createCatalog(
     { spec: moenarchSceneGallery, format: moenarchShort() },
     { spec: moenarchNarration, format: moenarchShort() },
     { spec: moenarchTypography, format: moenarchShort() },
+    // #60: the interactive disclosure showcase.
+    { spec: interactiveShowcase, format: showcaseFormat(MOON_SHOWCASE_DISCLOSURES) },
   ],
   // `/` without a project keeps opening the latency explainer.
   LATENCY_PROJECT_ID,
