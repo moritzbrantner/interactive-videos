@@ -859,6 +859,27 @@ const TOKEN = /^[a-z][a-z0-9._-]*$/;
 const MEDIA_TYPE = /^[a-z0-9][a-z0-9!#$&^_.+-]*\/[a-z0-9][a-z0-9!#$&^_.+-]*$/;
 const SHA256 = /^[0-9a-f]{64}$/;
 
+/** Plain JSON data only: finite numbers, strings, booleans, null, arrays and plain objects. */
+function isJsonValue(value: unknown, path: string, r: Reader): boolean {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return true;
+  if (typeof value === 'number') {
+    if (Number.isFinite(value)) return true;
+    r.error(path, 'expected a finite JSON number');
+    return false;
+  }
+  if (Array.isArray(value)) return value.every((item, index) => isJsonValue(item, `${path}[${index}]`, r));
+  if (typeof value === 'object') {
+    const prototype = Object.getPrototypeOf(value);
+    if (prototype !== Object.prototype && prototype !== null) {
+      r.error(path, 'expected plain JSON data');
+      return false;
+    }
+    return Object.entries(value as Record<string, unknown>).every(([key, item]) => isJsonValue(item, `${path}.${key}`, r));
+  }
+  r.error(path, `expected JSON data, got ${describe(value)}`);
+  return false;
+}
+
 /** Reads an AssetRef v1 by its shared contract; no bytes are read. */
 function readContentAssetRef(r: Reader, value: unknown, path: string): ContentAssetRef {
   const ref = r.object(value, path, ['schemaVersion', 'kind', 'mediaType', 'sha256', 'byteLength', 'metadata']);
@@ -883,7 +904,7 @@ function readContentAssetRef(r: Reader, value: unknown, path: string): ContentAs
     const raw = ref.metadata;
     if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
       r.error(`${path}.metadata`, `expected a JSON object, got ${describe(raw)}`);
-    } else {
+    } else if (isJsonValue(raw, `${path}.metadata`, r)) {
       metadata = raw as Record<string, unknown>;
     }
   }

@@ -224,7 +224,7 @@ describe('moenarch scene layout', () => {
       if (scene.kind === 'mediaReveal') {
         expect(layout.media, scene.id).toEqual({
           assetId: 'gallery-media',
-          staticPath: 'assets/sha256/911676716eeb55fe80291105c9b9db31a4888aa557ec9cffd517d6a4fe959220',
+          staticPath: 'assets/sha256/911676716eeb55fe80291105c9b9db31a4888aa557ec9cffd517d6a4fe959220.png',
           alt: (scene.payload as Dict).alt,
         });
       } else {

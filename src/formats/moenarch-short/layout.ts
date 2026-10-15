@@ -156,7 +156,7 @@ const PLAYABLE_AUDIO_TYPES = ['audio/wav', 'audio/x-wav', 'audio/wave', 'audio/m
  */
 export function staticPath(slot: AssetRef): string | null {
   const playable = slot.kind === 'image' ? PLAYABLE_IMAGE_TYPES : slot.kind === 'audio' ? PLAYABLE_AUDIO_TYPES : [];
-  return playable.includes(slot.asset.mediaType) ? assetPath(slot.asset.sha256) : null;
+  return playable.includes(slot.asset.mediaType) ? assetPath(slot.asset.sha256, slot.asset.mediaType) : null;
 }
 
 /**

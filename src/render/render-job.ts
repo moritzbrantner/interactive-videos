@@ -218,7 +218,7 @@ export function resolveRenderJob(args: RenderArgs, environment: RenderEnvironmen
         `Asset "${slot.id}" does not match its AssetRef: the stored object has ${bytes.length} bytes with sha256 ${sha256(bytes)}, the spec declares ${byteLength} bytes with sha256 ${digest}.`,
       );
     }
-    assets.push({ id: slot.id, kind: slot.kind, src: assetPath(digest), sha256: digest, byteLength, mediaType });
+    assets.push({ id: slot.id, kind: slot.kind, src: assetPath(digest, mediaType), sha256: digest, byteLength, mediaType });
   }
 
   const outPath = args.out === undefined
