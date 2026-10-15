@@ -12,8 +12,9 @@
 // - Statement emphasis: `[data-moenarch-emphasis]` inside the statement's text block holds the
 //   payload `emphasis`.
 // - List items are inside an `ol` when the payload is `ordered`, otherwise inside a `ul`.
-// - Media reveal: one `img[data-moenarch-media]` with the payload `alt`, its src path ending in
-//   the layout's `staticPath`, loaded, with `object-fit` from `tokens.media.fit`.
+// - Media reveal: one `img[data-moenarch-media]` with the payload `alt`, its src path containing
+//   the image slot's AssetRef sha256 (#16, content-addressed), loaded, with `object-fit` from
+//   `tokens.media.fit`.
 // - At the sampled frames (an entrance frame, a narration frame, a settled frame) every text block
 //   on screen is inside the token safe area, its text stays inside its own box (no horizontal
 //   scroll overflow, every text fragment within the box), and it does not overlap the subtitle or the signature mark. At the settled frame
@@ -34,7 +35,7 @@ const spec = assertVideoSpec(
 );
 
 type Block = { role: string; text: string; lines: string[]; maxCharsPerLine: number; maxLines: number };
-type Layout = { kind: string; blocks: Block[]; media: { assetId: string; staticPath: string; alt: string } | null };
+type Layout = { kind: string; blocks: Block[]; media: { assetId: string; alt: string } | null };
 type PlanScene = { id: string; kind: string; from: number; durationInFrames: number; layout: Layout };
 type FrameWindow = { from: number; durationInFrames: number };
 const plan = planMoenarchShort(spec) as unknown as {
@@ -276,7 +277,8 @@ test('every archetype draws its planned text and media, settled and fully visibl
       expect(dom!.media, name).toHaveLength(1);
       const [media] = dom!.media;
       expect(media.alt, name).toBe(layout.media.alt);
-      expect(media.path.endsWith(`/${layout.media.staticPath}`), `${name} src ${media.path}`).toBe(true);
+      const slot = (spec.assets as unknown as { id: string; asset: { sha256: string } }[]).find((candidate) => candidate.id === layout.media!.assetId)!;
+      expect(media.path.includes(slot.asset.sha256), `${name} src ${media.path}`).toBe(true);
       expect(media.complete && media.naturalWidth > 0, `${name} image loaded`).toBe(true);
       expect(media.objectFit, name).toBe(tokens.media.fit);
       expect(media.box.right - media.box.left, name).toBeGreaterThan(0);

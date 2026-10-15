@@ -13,8 +13,9 @@
 //     "composition": { "id", "width", "height", "fps", "durationInFrames" },
 //     "frames":      { "from", "to", "count" },              // inclusive range actually rendered
 //     "scenes":      [{ "id", "kind", "from", "durationInFrames" }],   // resolveTimeline(spec).scenes
-//     "assets":      [{ "id", "kind", "uri" } | { "id", "kind", "uri", "publicPath", "sha256", "bytes" }],
-//                    // spec assets in normalized order; static:<path> assets carry the public/ file identity
+//     "assets":      [{ "id", "kind", "src", "sha256", "byteLength", "mediaType" }],
+//                    // #16: spec asset slots in normalized order, resolved before bundling to immutable
+//                    // content-addressed inputs (src contains the sha256; no static: URI anywhere)
 //     "output":      { "path", "sha256", "bytes" }          // absolute path of the written file
 //   }
 // Failure: exit code != 0, the message on stderr, and one JSON line on stdout:
@@ -36,6 +37,7 @@ export const RENDER_ERROR_REASONS = [
   'unrenderable',
   'profile-mismatch',
   'missing-asset',
+  'asset-mismatch',
   'frames-out-of-range',
   'render-failed',
 ] as const;
@@ -95,14 +97,15 @@ export function assertRenderResult(value: unknown) {
 
   expect(Array.isArray(result.assets)).toBe(true);
   for (const asset of result.assets) {
-    if (String(asset.uri).startsWith('static:')) {
-      expect(keys(asset)).toEqual(['bytes', 'id', 'kind', 'publicPath', 'sha256', 'uri']);
-      expect(`static:${asset.publicPath}`).toBe(asset.uri);
-      expect(asset.sha256).toMatch(SHA256);
-      expect(isInt(asset.bytes)).toBe(true);
-    } else {
-      expect(keys(asset)).toEqual(['id', 'kind', 'uri']);
-    }
+    expect(keys(asset)).toEqual(['byteLength', 'id', 'kind', 'mediaType', 'sha256', 'src']);
+    expect(asset.id).toBeTypeOf('string');
+    expect(asset.kind).toBeTypeOf('string');
+    expect(asset.sha256).toMatch(SHA256);
+    expect(isInt(asset.byteLength) && asset.byteLength >= 0).toBe(true);
+    expect(asset.mediaType).toMatch(/^[a-z0-9!#$&^_.+-]+\/[a-z0-9!#$&^_.+-]+$/);
+    expect(asset.src).toBeTypeOf('string');
+    expect(asset.src).toContain(asset.sha256);
+    expect(String(asset.src).startsWith('static:')).toBe(false);
   }
 
   expect(keys(result.output)).toEqual(['bytes', 'path', 'sha256']);
