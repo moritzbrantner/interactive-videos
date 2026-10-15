@@ -1,3 +1,4 @@
+import { assetPath } from '@/assets/asset-url';
 // moenarch-short scene layout: which text blocks a scene draws and how each one wraps. Plain
 // TypeScript with no React or Remotion. The plan calls it once per scene, so frame code only draws
 // the planned lines.
@@ -146,16 +147,16 @@ function emphasisRuns(lines: string[], phrase: string): MoenarchTextRun[][] | nu
   });
 }
 
-const STATIC_URI = /^static:(.+)$/;
+const PLAYABLE_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/svg+xml'];
+const PLAYABLE_AUDIO_TYPES = ['audio/wav', 'audio/x-wav', 'audio/wave', 'audio/mpeg', 'audio/ogg'];
 
-/** The `public/` path of a `static:` uri, or null for any other uri or an unsafe path. */
-export function staticPath(uri: string): string | null {
-  const path = STATIC_URI.exec(uri)?.[1];
-  // Percent escapes are refused outright: the browser would decode `%2e%2e` or `%2f` while
-  // resolving the image URL, so an encoded segment could leave `public/`.
-  if (!path || /[\\?#%]/.test(path) || path.startsWith('/')) return null;
-  const segments = path.split('/');
-  return segments.every((segment) => segment && segment !== '.' && segment !== '..') ? path : null;
+/**
+ * The served, content-addressed path of an image or audio slot this format can show or play,
+ * or null when the browser cannot use its media type.
+ */
+export function staticPath(slot: AssetRef): string | null {
+  const playable = slot.kind === 'image' ? PLAYABLE_IMAGE_TYPES : slot.kind === 'audio' ? PLAYABLE_AUDIO_TYPES : [];
+  return playable.includes(slot.asset.mediaType) ? assetPath(slot.asset.sha256) : null;
 }
 
 /**
@@ -219,8 +220,8 @@ export function layoutMoenarchScene(
       const { image, alt, caption } = scene.payload;
       const asset = assets.find((candidate) => candidate.id === image);
       if (!asset || asset.kind !== 'image') fail(`"${image}" is not an image asset`);
-      const path = staticPath(asset!.uri);
-      if (path === null) fail(`image "${image}" has uri "${asset!.uri}"; ${tokens.id} serves only static:<path> images from public/`);
+      const path = staticPath(asset!);
+      if (path === null) fail(`image "${image}" has media type "${asset!.asset.mediaType}", which ${tokens.id} cannot show`);
       media = { assetId: image, staticPath: path!, alt };
       optional('caption', caption, archetypes.mediaReveal.caption);
       break;

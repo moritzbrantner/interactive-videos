@@ -4,16 +4,18 @@ import { createCatalog } from '@/catalog/catalog';
 import { moenarchShort } from '@/formats/moenarch-short';
 import galleryFixture from '@/spec/fixtures/moenarch-scene-gallery.videospec.json';
 
-// Regression for the Codex review on PR #37: percent-encoded segments must not escape `public/`.
-describe('moenarch-short static media paths', () => {
-  it('refuses percent-encoded paths', () => {
-    for (const uri of ['static:%2e%2e/secret.png', 'static:fixtures%2f..%2fsecret.png', 'static:a%20b.png']) {
-      const spec = structuredClone(galleryFixture) as { assets: { uri: string }[] };
-      spec.assets[0]!.uri = uri;
+// Regression for the Codex review on PR #37, translated to VideoSpec v2 (#16): v2 slots carry no
+// URIs, so no path can escape `public/`; the served path is derived from the digest alone. An
+// image whose media type the format cannot show stays unrenderable.
+describe('moenarch-short content-addressed media paths', () => {
+  it('refuses image slots whose media type the format cannot show', () => {
+    for (const mediaType of ['image/x-unknown', 'image/tiff']) {
+      const spec = structuredClone(galleryFixture) as { assets: { asset: { mediaType: string } }[] };
+      spec.assets[0]!.asset.mediaType = mediaType;
       const result = createCatalog([{ spec, format: moenarchShort() }], 'moenarch-scene-gallery').resolve(
         'moenarch-scene-gallery',
       );
-      expect(result, uri).toMatchObject({ ok: false, reason: 'unrenderable' });
+      expect(result, mediaType).toMatchObject({ ok: false, reason: 'unrenderable' });
     }
   });
 });

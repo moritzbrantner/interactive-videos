@@ -1,4 +1,5 @@
-// VideoSpec v1: a complete video's semantic intent as a small, validated data document.
+// VideoSpec v2: a complete video's semantic intent as a small, validated data document. v2 replaces
+// path-based asset URIs with logical slots backed by content-addressed AssetRefs (ADR 0001).
 //
 // The spec says what a video shows and says: project identity, the format pack that renders it,
 // the output profile, ordered scenes with narration, asset references and interaction metadata,
@@ -8,7 +9,7 @@
 // v1 fails closed: unknown fields, unknown scene kinds and unsupported versions are errors, not
 // ignored. This module is plain TypeScript with no React or Remotion dependency.
 
-export const VIDEO_SPEC_VERSION = 1;
+export const VIDEO_SPEC_VERSION = 2;
 
 export type VideoSpec = {
   specVersion: typeof VIDEO_SPEC_VERSION;
@@ -24,7 +25,29 @@ export type VideoSpec = {
 export const ASSET_KINDS = ['dataset', 'image', 'audio', 'video'] as const;
 export type AssetKind = (typeof ASSET_KINDS)[number];
 
-export type AssetRef = { id: string; kind: AssetKind; uri: string };
+/**
+ * The shared asset-tooling `AssetRef` v1 (as mirrored by remotion-primitives' media contracts):
+ * a content identity, never a location or an acquisition request.
+ */
+export type ContentAssetRef = {
+  schemaVersion: 1;
+  kind: string;
+  mediaType: string;
+  sha256: string;
+  byteLength: number;
+  metadata: Record<string, unknown>;
+};
+
+/** A logical asset slot that scenes refer to, backed by one content-addressed asset. */
+export type AssetRef = { id: string; kind: AssetKind; asset: ContentAssetRef };
+
+/** Media types a slot kind accepts; `dataset` accepts anything that is not image/audio/video. */
+const MEDIA_FAMILIES = ['image', 'audio', 'video'] as const;
+export function mediaTypeFitsKind(kind: AssetKind, mediaType: string): boolean {
+  const family = mediaType.split('/')[0];
+  if (kind === 'dataset') return !(MEDIA_FAMILIES as readonly string[]).includes(family);
+  return family === kind;
+}
 
 /**
  * Times are milliseconds on the narration clock: from the first sample of the narration audio
@@ -236,9 +259,33 @@ export function normalizeVideoSpec(spec: VideoSpec): VideoSpec {
     output: { width: spec.output.width, height: spec.output.height, fps: spec.output.fps },
     assets: [...spec.assets]
       .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
-      .map((asset) => ({ id: asset.id, kind: asset.kind, uri: asset.uri })),
+      .map((slot) => ({
+        id: slot.id,
+        kind: slot.kind,
+        asset: {
+          schemaVersion: slot.asset.schemaVersion,
+          kind: slot.asset.kind,
+          mediaType: slot.asset.mediaType,
+          sha256: slot.asset.sha256,
+          byteLength: slot.asset.byteLength,
+          metadata: canonicalJson(slot.asset.metadata) as Record<string, unknown>,
+        },
+      })),
     scenes: spec.scenes.map(normalizeScene),
   };
+}
+
+/** A deep copy of JSON data with object keys sorted, so equal metadata serializes identically. */
+function canonicalJson(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalJson);
+  if (typeof value === 'object' && value !== null) {
+    return Object.fromEntries(
+      Object.keys(value as Record<string, unknown>)
+        .sort()
+        .map((key) => [key, canonicalJson((value as Record<string, unknown>)[key])]),
+    );
+  }
+  return value;
 }
 
 function normalizeScene(scene: Scene): Scene {
@@ -603,7 +650,7 @@ function readSpec(r: Reader, input: unknown): VideoSpec | null {
         '$.specVersion',
         version === undefined
           ? 'missing required field'
-          : `unsupported specVersion ${show(version)}; this build reads ${VIDEO_SPEC_VERSION}`,
+          : `unsupported specVersion ${show(version)}; this build reads only ${VIDEO_SPEC_VERSION}`,
       );
       return null;
     }
@@ -617,12 +664,16 @@ function readSpec(r: Reader, input: unknown): VideoSpec | null {
 
   const assets = (r.array(root.assets, '$.assets') ?? []).map((value, index) => {
     const path = `$.assets[${index}]`;
-    const asset = r.object(value, path, ['id', 'kind', 'uri']);
-    return {
-      id: r.id(asset?.id, `${path}.id`),
-      kind: r.oneOf(asset?.kind, `${path}.kind`, ASSET_KINDS, 'asset kind'),
-      uri: r.string(asset?.uri, `${path}.uri`),
-    };
+    const slot = r.object(value, path, ['id', 'kind', 'asset']);
+    const kind = r.oneOf(slot?.kind, `${path}.kind`, ASSET_KINDS, 'asset kind');
+    const asset = readContentAssetRef(r, slot?.asset, `${path}.asset`);
+    if (slot && slot.kind !== undefined && slot.asset !== undefined && asset.mediaType && !mediaTypeFitsKind(kind, asset.mediaType)) {
+      r.error(`${path}.asset.mediaType`, `media type "${asset.mediaType}" does not fit a ${kind} slot`);
+    }
+    if (asset.kind && asset.kind !== kind && (ASSET_KINDS as readonly string[]).includes(asset.kind)) {
+      r.error(`${path}.asset.kind`, `a ${asset.kind} asset cannot fill a ${kind} slot`);
+    }
+    return { id: r.id(slot?.id, `${path}.id`), kind, asset };
   });
   r.unique(assets.map((asset) => asset.id), (index) => `$.assets[${index}].id`, 'asset');
 
@@ -802,6 +853,41 @@ function readScene(
       };
     }
   }
+}
+
+const TOKEN = /^[a-z][a-z0-9._-]*$/;
+const MEDIA_TYPE = /^[a-z0-9][a-z0-9!#$&^_.+-]*\/[a-z0-9][a-z0-9!#$&^_.+-]*$/;
+const SHA256 = /^[0-9a-f]{64}$/;
+
+/** Reads an AssetRef v1 by its shared contract; no bytes are read. */
+function readContentAssetRef(r: Reader, value: unknown, path: string): ContentAssetRef {
+  const ref = r.object(value, path, ['schemaVersion', 'kind', 'mediaType', 'sha256', 'byteLength', 'metadata']);
+  if (ref && ref.schemaVersion !== undefined && ref.schemaVersion !== 1) {
+    r.error(`${path}.schemaVersion`, `unsupported AssetRef schemaVersion ${show(ref.schemaVersion)}; expected 1`);
+  }
+  const text = (field: string, pattern: RegExp, what: string) => {
+    const raw = ref?.[field];
+    if (raw === undefined) return '';
+    if (typeof raw !== 'string' || !pattern.test(raw)) {
+      r.error(`${path}.${field}`, `expected ${what}, got ${show(raw)}`);
+      return '';
+    }
+    return raw;
+  };
+  const kind = text('kind', TOKEN, 'a lowercase kind token');
+  const mediaType = text('mediaType', MEDIA_TYPE, 'a lowercase type/subtype media type');
+  const sha256 = text('sha256', SHA256, 'a lowercase 64-hex sha256 digest');
+  const byteLength = r.integer(ref?.byteLength, `${path}.byteLength`, { min: 0 });
+  let metadata: Record<string, unknown> = {};
+  if (ref && ref.metadata !== undefined) {
+    const raw = ref.metadata;
+    if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
+      r.error(`${path}.metadata`, `expected a JSON object, got ${describe(raw)}`);
+    } else {
+      metadata = raw as Record<string, unknown>;
+    }
+  }
+  return { schemaVersion: 1, kind, mediaType, sha256, byteLength, metadata };
 }
 
 /** Reports a reference to a missing asset or to an asset of another kind. */

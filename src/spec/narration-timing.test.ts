@@ -182,7 +182,7 @@ describe('VideoSpec v1 narration timing fields', () => {
       '$.scenes[0].narration.audio.asset: no asset with id "narration.missing"',
     ]);
     const image = fixture();
-    image.assets.push({ id: 'poster', kind: 'image', uri: 'static:poster.png' });
+    image.assets.push({ id: 'poster', kind: 'image', asset: { schemaVersion: 1, kind: 'image', mediaType: 'image/png', sha256: 'c'.repeat(64), byteLength: 1, metadata: {} } });
     image.scenes[0].narration.audio.asset = 'poster';
     expect(diagnosticsOf(image)).toEqual(['$.scenes[0].narration.audio.asset: asset "poster" is an image asset, not an audio']);
     expect(diagnosticsOf(edited(0, (n) => (n.audio.durationMs = 0)))).toEqual(

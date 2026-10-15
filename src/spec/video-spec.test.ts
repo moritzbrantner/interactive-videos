@@ -49,11 +49,11 @@ describe('VideoSpec v1', () => {
   it('normalizes identical specs to identical project data regardless of key or asset order', () => {
     const shuffled = reversedKeys(fixture()) as Record<string, any>;
     shuffled.assets = [
-      { uri: 'file:poster.png', kind: 'image', id: 'poster' },
+      { asset: { metadata: {}, byteLength: 1, sha256: 'c'.repeat(64), mediaType: 'image/png', kind: 'image', schemaVersion: 1 }, kind: 'image', id: 'poster' },
       ...shuffled.assets,
     ];
     const withPoster = fixture();
-    withPoster.assets.push({ id: 'poster', kind: 'image', uri: 'file:poster.png' });
+    withPoster.assets.push({ id: 'poster', kind: 'image', asset: { schemaVersion: 1, kind: 'image', mediaType: 'image/png', sha256: 'c'.repeat(64), byteLength: 1, metadata: {} } });
 
     const a = parseVideoSpec(shuffled);
     const b = parseVideoSpec(withPoster);
@@ -83,18 +83,19 @@ describe('VideoSpec v1', () => {
       },
     ]);
 
+    // #16: this build reads only VideoSpec 2; another version gets only the version diagnostic.
     const future = fixture();
-    future.specVersion = 2;
+    future.specVersion = 3;
     expect(diagnosticsOf(future)).toEqual([
-      { path: '$.specVersion', message: 'unsupported specVersion 2; this build reads 1' },
+      { path: '$.specVersion', message: 'unsupported specVersion 3; this build reads only 2' },
     ]);
 
-    // Another version's fields are not checked against v1.
-    expect(diagnosticsOf({ specVersion: 2, timeline: [] })).toEqual([
-      { path: '$.specVersion', message: 'unsupported specVersion 2; this build reads 1' },
+    // Another version's fields are not checked against v2.
+    expect(diagnosticsOf({ specVersion: 3, timeline: [] })).toEqual([
+      { path: '$.specVersion', message: 'unsupported specVersion 3; this build reads only 2' },
     ]);
-    expect(diagnosticsOf({ specVersion: 2n })).toEqual([
-      { path: '$.specVersion', message: 'unsupported specVersion 2n; this build reads 1' },
+    expect(diagnosticsOf({ specVersion: 3n })).toEqual([
+      { path: '$.specVersion', message: 'unsupported specVersion 3n; this build reads only 2' },
     ]);
     expect(diagnosticsOf({ project: {} })).toEqual([
       { path: '$.specVersion', message: 'missing required field' },
@@ -138,8 +139,10 @@ describe('VideoSpec v1', () => {
       { path: '$.scenes[0].narration.cues[3].endMs', message: 'ends after the scene (12000 ms)' },
     ]);
 
+    // #16: a consistent image slot (slot kind, AssetRef kind and media type agree), referenced as a dataset.
     const wrongKind = fixture();
     wrongKind.assets[0].kind = 'image';
+    wrongKind.assets[0].asset = { ...wrongKind.assets[0].asset, kind: 'image', mediaType: 'image/png' };
     expect(diagnosticsOf(wrongKind)).toEqual([
       {
         path: '$.scenes[0].payload.dataset',
@@ -384,7 +387,7 @@ Click any bar to inspect its requests.`);
     expect(variant((spec) => (spec.scenes[0].payload.metric = 'p99'))).toThrow(/metric p99/);
     expect(variant((spec) => (spec.scenes[0].payload.bins = 24))).toThrow(/bins 24/);
     expect(variant((spec) => delete spec.scenes[0].payload.highlight)).toThrow(/incident window/);
-    expect(variant((spec) => (spec.assets[0].uri = 'file:other.json'))).toThrow(/dataset must be/);
+    expect(variant((spec) => (spec.assets[0].asset.metadata = { recipe: { generator: 'other' } }))).toThrow(/dataset must be/);
     expect(variant((spec) => (spec.scenes[0].payload.inspectable = false))()).toMatchObject({
       payload: { inspectable: false },
     });
@@ -399,9 +402,9 @@ Click any bar to inspect its requests.`);
       from: INCIDENT_WINDOW[0],
       to: INCIDENT_WINDOW[1],
     });
-    expect(spec.assets[0].uri).toBe(
-      `generator:latency-requests?seed=20260928&count=${REQUEST_COUNT}`,
-    );
+    expect(spec.assets[0].asset.metadata).toEqual({
+      recipe: { count: REQUEST_COUNT, generator: 'latency-requests', seed: 20260928 },
+    });
     expect(latencyScene.interaction?.terms.map((term) => term.id)).toEqual([
       'term:binned',
       'term:p95',

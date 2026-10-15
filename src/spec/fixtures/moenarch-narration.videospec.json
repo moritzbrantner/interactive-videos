@@ -1,5 +1,5 @@
 {
-  "specVersion": 1,
+  "specVersion": 2,
   "project": {
     "id": "moenarch-narration",
     "title": "Moenarch narration timing"
@@ -17,12 +17,38 @@
     {
       "id": "narration.hook",
       "kind": "audio",
-      "uri": "static:fixtures/narration/hook.wav"
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "7fcbe09842d61da37fbc92be7a47dabc0408b44a2342341ecf655174791d0ed9",
+        "byteLength": 19644,
+        "metadata": {
+          "source": {
+            "durationMs": 2450,
+            "generator": "narration-fixture-tone",
+            "toneHz": 220
+          }
+        }
+      }
     },
     {
       "id": "narration.point",
       "kind": "audio",
-      "uri": "static:fixtures/narration/point.wav"
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "8d15a8a53ba7c4a2573d61231936212d9f1275a4f85986b95f5d9a632624d171",
+        "byteLength": 24044,
+        "metadata": {
+          "source": {
+            "durationMs": 3000,
+            "generator": "narration-fixture-tone",
+            "toneHz": 330
+          }
+        }
+      }
     }
   ],
   "scenes": [

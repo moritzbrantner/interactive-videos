@@ -140,7 +140,7 @@ lives in `scenes/`:
 | --- | --- | --- |
 | hook/title | `title` | eyebrow, serif headline, accent rule |
 | statement/emphasis | `statement` | one sentence, its `emphasis` phrase in the accent |
-| illustration/media reveal | `mediaReveal` | a `static:` image full frame under the scrim, optional caption |
+| illustration/media reveal | `mediaReveal` | a content-addressed image slot full frame under the scrim, optional caption |
 | comparison | `comparison` | exactly two sides, each a label over its detail |
 | quote/callout | `quote` | the quote in serif italic, optional attribution |
 | diagram/data point | `dataPoint` | one large figure, what it counts, optional context |
@@ -161,8 +161,8 @@ lives in `scenes/`:
   error names the scene. The densities are sized so the fullest scene of each archetype stays inside
   the content frame: the safe area inset by `tokens.scenes.inset`, clear of the signature mark and a
   two-line subtitle.
-- **Media**: an `image` asset with a `static:<path>` uri is served from `public/<path>`; any other
-  uri is unrenderable in this format.
+- **Media**: an `image` slot (VideoSpec v2 AssetRef) is served from its content-addressed path
+  `assets/sha256/<digest>`; an image media type the format cannot show is unrenderable.
 - **Motion**: blocks fade in one after another through the installed `Fade` primitive, from the
   first frame their scene is on screen; the pack's token transitions move whole scenes. Scenes read
   no frame, clock or randomness themselves, so a frame renders the same from any previous frame,
@@ -232,8 +232,8 @@ is involved.
   outside every cue, marks out of order or on the frame of the previous mark, and holds outside
   the audio, out of order or inside a cue.
 - **moenarch-short** plans on the schedule: the pacing range applies to the derived length,
-  `tokens.pacing.maxLeadInMs`/`maxLeadOutMs` bound the silences, and audio must be a
-  `static:<path>` asset served from `public/<path>`. `moenarchFrameState` adds `mark`, the scene's
+  `tokens.pacing.maxLeadInMs`/`maxLeadOutMs` bound the silences, and audio must be an
+  `audio` slot in a playable media type, served from `assets/sha256/<digest>`. `moenarchFrameState` adds `mark`, the scene's
   latest mark at or before the frame. The composition draws the subtitle through the installed
   `Subtitles` primitive (`[data-moenarch-subtitle]`), marks as `[data-moenarch-mark="<id>"]`, and
   plays each audio segment with Remotion's `Audio` and `trimBefore`.
@@ -262,7 +262,10 @@ renders a catalog project to a video file without the Player, for example
   `out/<project>.<profile>.mp4` (ignored by git). The file is rendered under a temporary name and
   moved into place, so a failed render leaves no output file.
 - **How**: `src/render/render-job.ts` resolves the project, format, profile, size, fps, length,
-  frame range, scene schedule and `static:` assets before anything is bundled.
+  frame range, scene schedule and content-addressed assets before anything is bundled: every slot is
+  read from the git-ignored store `.asset-store/sha256/<digest>` (filled deterministically from the
+  checked-in sources by `importSourceAssets`) and checked against its AssetRef digest and length
+  (`missing-asset` / `asset-mismatch`). See `docs/specs/videospec-v2-assets.md` and ADR 0001.
   `src/render/cli.ts` then bundles `src/render/root.tsx` with `@remotion/bundler` (with the
   `source-pins.ts` aliases) and renders it with `@remotion/renderer` (`selectComposition` +
   `renderMedia`, concurrency 1) in Playwright's installed Chromium (`browserExecutable`), so
