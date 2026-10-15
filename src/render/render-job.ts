@@ -9,6 +9,9 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { isAbsolute, join, resolve } from 'node:path';
 
+import { assetObjectPath } from '@/assets/asset-store';
+import { assetPath } from '@/assets/asset-url';
+
 import type { Catalog } from '@/catalog/catalog';
 import { parseVideoSpecJson, resolveTimeline, serializeVideoSpec, type AssetKind, type ResolvedScene, type VideoSpec } from '@/spec/video-spec';
 
@@ -26,6 +29,7 @@ export type RenderErrorReason =
   | 'unrenderable'
   | 'profile-mismatch'
   | 'missing-asset'
+  | 'asset-mismatch'
   | 'frames-out-of-range'
   | 'render-failed';
 
@@ -104,13 +108,12 @@ export type RenderEnvironment = {
   catalog: Catalog;
   /** Relative spec paths and --out resolve against this directory. */
   cwd: string;
-  /** Where `static:<path>` assets are served from. */
-  publicDir: string;
+  /** The content-addressed asset store slots resolve against (`<store>/sha256/<digest>`). */
+  assetStore: string;
 };
 
-export type RenderAsset =
-  | { id: string; kind: AssetKind; uri: string }
-  | { id: string; kind: AssetKind; uri: string; publicPath: string; sha256: string; bytes: number };
+/** A slot resolved before bundling to an immutable, content-addressed runtime input. */
+export type RenderAsset = { id: string; kind: AssetKind; src: string; sha256: string; byteLength: number; mediaType: string };
 
 /** Everything a render needs, resolved and checked before bundling. */
 export type RenderJob = {
@@ -137,15 +140,6 @@ const isSpecPath = (selector: string) => /\.json$/i.test(selector) || /[\\/]/.te
 
 /** Composition ids Remotion accepts (its validateCompositionId rule). */
 const COMPOSITION_ID = /^([a-zA-Z0-9-一-鿿])+$/;
-
-const STATIC_URI = /^static:(.+)$/;
-
-/** The `public/` path of a `static:` uri, or null for an unsafe path. */
-function staticPublicPath(uri: string): string | null {
-  const path = STATIC_URI.exec(uri)?.[1];
-  if (!path || /[\\?#%]/.test(path) || path.startsWith('/')) return null;
-  return path.split('/').every((segment) => segment && segment !== '.' && segment !== '..') ? path : null;
-}
 
 /** Selects the project: an id directly, a spec path through the catalog spec it must equal. */
 function selectProject(selector: string, environment: RenderEnvironment): { ok: true; spec: VideoSpec } | { ok: false; error: RenderError } {
@@ -211,19 +205,20 @@ export function resolveRenderJob(args: RenderArgs, environment: RenderEnvironmen
   }
 
   const assets: RenderAsset[] = [];
-  for (const asset of spec.assets) {
-    if (!asset.uri.startsWith('static:')) {
-      assets.push({ id: asset.id, kind: asset.kind, uri: asset.uri });
-      continue;
-    }
-    const publicPath = staticPublicPath(asset.uri);
-    if (publicPath === null) return fail('missing-asset', `Asset "${asset.id}" has an unsafe uri "${asset.uri}".`);
-    const file = join(environment.publicDir, publicPath);
+  for (const slot of spec.assets) {
+    const { sha256: digest, byteLength, mediaType } = slot.asset;
+    const file = assetObjectPath(environment.assetStore, digest);
     if (!existsSync(file) || !statSync(file).isFile()) {
-      return fail('missing-asset', `Asset "${asset.id}" (${asset.uri}) is missing: no file ${publicPath} in ${environment.publicDir}.`);
+      return fail('missing-asset', `Asset "${slot.id}" (sha256 ${digest}) is missing: no object in ${environment.assetStore}.`);
     }
     const bytes = readFileSync(file);
-    assets.push({ id: asset.id, kind: asset.kind, uri: asset.uri, publicPath, sha256: sha256(bytes), bytes: bytes.length });
+    if (bytes.length !== byteLength || sha256(bytes) !== digest) {
+      return fail(
+        'asset-mismatch',
+        `Asset "${slot.id}" does not match its AssetRef: the stored object has ${bytes.length} bytes with sha256 ${sha256(bytes)}, the spec declares ${byteLength} bytes with sha256 ${digest}.`,
+      );
+    }
+    assets.push({ id: slot.id, kind: slot.kind, src: assetPath(digest, mediaType), sha256: digest, byteLength, mediaType });
   }
 
   const outPath = args.out === undefined

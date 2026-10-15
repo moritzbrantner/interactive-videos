@@ -1,5 +1,5 @@
 {
-  "specVersion": 1,
+  "specVersion": 2,
   "project": {
     "id": "latency-explainer",
     "title": "Latency explainer"
@@ -17,7 +17,20 @@
     {
       "id": "latency-requests",
       "kind": "dataset",
-      "uri": "generator:latency-requests?seed=20260928&count=200000"
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "dataset",
+        "mediaType": "application/json",
+        "sha256": "bc4e598364f1b9ca5c1e022ee5a90bd655c2ac9f885544fbf241dcb090373108",
+        "byteLength": 63,
+        "metadata": {
+          "recipe": {
+            "count": 200000,
+            "generator": "latency-requests",
+            "seed": 20260928
+          }
+        }
+      }
     }
   ],
   "scenes": [

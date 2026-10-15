@@ -17,8 +17,8 @@
 //   Text that needs more than `maxLines` lines, a word longer than a line, or more list items than
 //   the format allows makes the scene unrenderable: `layoutMoenarchScene` and `planMoenarchShort`
 //   throw naming the scene id, and the catalog reports `unrenderable`.
-// - Media: an `image` asset whose uri is `static:<path>` is served from `public/<path>`
-//   (`staticPath` = `<path>`); any other uri scheme is unrenderable in this format.
+// - Media: an `image` slot is served from its content-addressed path `assets/sha256/<digest>`
+//   (`staticPath`); an image media type this format cannot show is unrenderable (#16).
 // - `planMoenarchShort(spec)` accepts every archetype kind (and still refuses `binnedChart`); each
 //   plan scene carries `kind` and `layout`, equal to `layoutMoenarchScene(scene, tokens, spec.assets)`.
 //   Layout is computed there, once, never in per-frame code.
@@ -120,9 +120,11 @@ describe('moenarch scene gallery fixture', () => {
     );
   });
 
-  it('commits the media fixture image its static uri points at', () => {
+  it('commits the media fixture image its slot identifies', () => {
     const spec = gallery();
-    expect(spec.assets).toEqual([{ id: 'gallery-media', kind: 'image', uri: 'static:fixtures/scene-gallery/media-reveal.png' }]);
+    expect(spec.assets.map(({ id, kind, asset }) => ({ id, kind, mediaType: asset.mediaType, sha256: asset.sha256, byteLength: asset.byteLength }))).toEqual([
+      { id: 'gallery-media', kind: 'image', mediaType: 'image/png', sha256: '911676716eeb55fe80291105c9b9db31a4888aa557ec9cffd517d6a4fe959220', byteLength: 1482 },
+    ]);
     expect(existsSync(join(ROOT, 'public', 'fixtures', 'scene-gallery', 'media-reveal.png'))).toBe(true);
   });
 
@@ -222,7 +224,7 @@ describe('moenarch scene layout', () => {
       if (scene.kind === 'mediaReveal') {
         expect(layout.media, scene.id).toEqual({
           assetId: 'gallery-media',
-          staticPath: 'fixtures/scene-gallery/media-reveal.png',
+          staticPath: 'assets/sha256/911676716eeb55fe80291105c9b9db31a4888aa557ec9cffd517d6a4fe959220.png',
           alt: (scene.payload as Dict).alt,
         });
       } else {
@@ -323,19 +325,19 @@ describe('moenarch scene fit rule: wrap within token limits, otherwise unrendera
     expect(!result.ok && result.message).toContain('list-long');
   });
 
-  it('refuses media whose uri this format cannot serve', () => {
-    for (const uri of ['https://example.com/a.png', 'file:media-reveal.png', 'generator:image?seed=1', 'static:']) {
+  it('refuses media whose media type this format cannot show', () => {
+    for (const mediaType of ['image/x-unknown', 'image/tiff']) {
       const spec = clone(galleryFixture) as Dict;
-      spec.assets[0].uri = uri;
+      spec.assets[0].asset.mediaType = mediaType;
       const result = createCatalog([{ spec, format: moenarchShort() }], GALLERY_ID).resolve(GALLERY_ID);
-      expect(result, uri).toMatchObject({ ok: false, reason: 'unrenderable' });
+      expect(result, mediaType).toMatchObject({ ok: false, reason: 'unrenderable' });
     }
   });
 
   it('still renders the #12 specimen and still refuses chart scenes', () => {
     expect(() => planMoenarchShort(assertVideoSpec(specimenFixture))).not.toThrow();
     const withChart = clone(galleryFixture) as Dict;
-    withChart.assets.push({ id: 'data', kind: 'dataset', uri: 'generator:latency-requests?seed=1&count=10' });
+    withChart.assets.push({ id: 'data', kind: 'dataset', asset: { schemaVersion: 1, kind: 'dataset', mediaType: 'application/json', sha256: 'd'.repeat(64), byteLength: 10, metadata: {} } });
     withChart.scenes.push({
       kind: 'binnedChart',
       id: 'chart',

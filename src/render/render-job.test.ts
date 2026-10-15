@@ -3,20 +3,21 @@
 // `bun run video:render --project <id-or-spec-path> [--out <path>] [--frames <a>-<b>] [--profile <id>]`
 //
 // - parseRenderArgs(argv) turns the command-line arguments (after the script name) into a request.
-// - resolveRenderJob(args, { catalog, cwd, publicDir }) resolves project, format, output profile,
-//   dimensions, fps, duration, frame range, scene schedule and static assets BEFORE anything is
-//   bundled or rendered, and fails closed with a reason and a diagnostic message.
+// - resolveRenderJob(args, { catalog, cwd, assetStore }) resolves project, format, output profile,
+//   dimensions, fps, duration, frame range, scene schedule and asset slots BEFORE anything is
+//   bundled or rendered, and fails closed with a reason and a diagnostic message. (#16: asset
+//   slots resolve through the content-addressed store; see asset-resolution.test.ts.)
 // - createRenderResult(job, output) builds the machine-readable result (render-result.test-support.ts).
 //
 // Projects come only from the catalog (the one composition authority shared with the Player). A
 // spec path selects the catalog project whose registered spec it is; a file that is not a registered
 // spec is refused rather than rendered through a second path.
 import { createHash } from 'node:crypto';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { createCatalog } from '@/catalog/catalog';
 import { moenarchShort } from '@/formats/moenarch-short';
@@ -24,20 +25,35 @@ import { titleCardFormat } from '@/formats/title-card';
 import { catalog } from '@/projects';
 import { createRenderResult, parseRenderArgs, resolveRenderJob } from '@/render/render-job';
 import catalogTitleCard from '@/spec/fixtures/catalog-title-card.videospec.json';
-import moenarchNarration from '@/spec/fixtures/moenarch-narration.videospec.json';
-import moenarchSceneGallery from '@/spec/fixtures/moenarch-scene-gallery.videospec.json';
-import { assertVideoSpec, normalizeVideoSpec, resolveTimeline, serializeVideoSpec } from '@/spec/video-spec';
+import { assertVideoSpec, resolveTimeline, serializeVideoSpec } from '@/spec/video-spec';
 
 import { assertRenderResult, RENDER_ERROR_REASONS } from './render-result.test-support';
 
 const ROOT = join(import.meta.dirname, '..', '..');
 const PUBLIC_DIR = join(ROOT, 'public');
 const TITLE_CARD_PATH = 'src/spec/fixtures/catalog-title-card.videospec.json';
-const env = { catalog, cwd: ROOT, publicDir: PUBLIC_DIR };
+// #16: assets resolve from a content-addressed store, filled here from the checked-in sources.
+// `publicDir` stays for the pre-#16 baseline, where it was the asset source.
+const ASSET_STORE = mkdtempSync(join(tmpdir(), 'iv-render-job-store-'));
+const env = { catalog, cwd: ROOT, publicDir: PUBLIC_DIR, assetStore: ASSET_STORE };
 const FAKE_OUTPUT = { path: '/renders/fake.mp4', sha256: 'a'.repeat(64), bytes: 1234 };
 
 const tmp = mkdtempSync(join(tmpdir(), 'iv-render-job-'));
 afterAll(() => rmSync(tmp, { recursive: true, force: true }));
+afterAll(() => rmSync(ASSET_STORE, { recursive: true, force: true }));
+beforeAll(async () => {
+  // The store module is new in #16; before it exists the baseline resolves assets from publicDir.
+  const specifier = '@/assets/asset-store';
+  let store: { importSourceAssets: (root: string) => unknown } | undefined;
+  try {
+    store = await import(/* @vite-ignore */ specifier);
+  } catch (error) {
+    // Only a missing module means the baseline; any other failure is real.
+    if (!/Cannot find|ERR_MODULE_NOT_FOUND|Failed to (load|resolve)/.test(String(error))) throw error;
+    store = undefined;
+  }
+  if (store) await store.importSourceAssets(ASSET_STORE);
+});
 afterEach(() => vi.useRealTimers());
 
 const sha256 = (bytes: string | Buffer) => createHash('sha256').update(bytes).digest('hex');
@@ -185,7 +201,7 @@ describe('resolveRenderJob: project selection through the catalog', () => {
 
   it('accepts a registered spec file regardless of key order or formatting (normalized identity)', () => {
     const spec = assertVideoSpec(catalogTitleCard);
-    const reordered = { scenes: spec.scenes, assets: spec.assets, output: spec.output, format: spec.format, project: spec.project, specVersion: 1 };
+    const reordered = { scenes: spec.scenes, assets: spec.assets, output: spec.output, format: spec.format, project: spec.project, specVersion: spec.specVersion };
     const path = writeTemp('reordered.videospec.json', JSON.stringify(reordered));
     const result = createRenderResult(job(['--project', path]), FAKE_OUTPUT);
     expect(result.project.id).toBe('catalog-title-card');
@@ -236,28 +252,8 @@ describe('resolveRenderJob: output profile, frames and assets', () => {
     expect(job(['--project', 'catalog-title-card', '--frames', '95']).outPath).toBeTypeOf('string');
   });
 
-  it('identifies static assets by their public/ file bytes, in normalized asset order', () => {
-    const spec = normalizeVideoSpec(assertVideoSpec(moenarchNarration));
-    const result = assertRenderResult(createRenderResult(job(['--project', 'moenarch-narration']), FAKE_OUTPUT));
-    expect(result.assets).toEqual(
-      spec.assets.map((asset) => {
-        const publicPath = asset.uri.replace(/^static:/, '');
-        const bytes = readFileSync(join(PUBLIC_DIR, publicPath));
-        return { id: asset.id, kind: asset.kind, uri: asset.uri, publicPath, sha256: sha256(bytes), bytes: bytes.length };
-      }),
-    );
-    expect(result.assets.length).toBeGreaterThan(0);
-  });
-
-  it('fails with missing-asset, naming the asset and its file, before rendering', () => {
-    const emptyPublic = join(tmp, 'empty-public');
-    mkdirSync(emptyPublic, { recursive: true });
-    const error = failure(['--project', 'moenarch-scene-gallery'], { ...env, publicDir: emptyPublic });
-    expect(error.reason).toBe('missing-asset');
-    const image = moenarchSceneGallery.assets.find((asset) => asset.uri.startsWith('static:'))!;
-    expect(error.message).toContain(image.id);
-    expect(error.message).toContain(image.uri.replace(/^static:/, ''));
-  });
+  // The v1 `static:`/publicDir asset tests are superseded by #16's asset-resolution.test.ts
+  // (resolved inputs, missing-asset, asset-mismatch, reuse).
 });
 
 describe('determinism', () => {

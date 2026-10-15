@@ -20,7 +20,7 @@ export type MoenarchPlanScene = {
   cues: ScheduledCue[];
   /** Semantic cues in absolute frames, in order. */
   marks: ScheduledMark[];
-  /** Narration audio segments, played from `public/<staticPath>`; empty for a silent scene. */
+  /** Narration audio segments, played from the content-addressed `staticPath`; empty for a silent scene. */
   audio: MoenarchAudioSegment[];
 };
 
@@ -103,9 +103,9 @@ export function planMoenarchShort(spec: VideoSpec, tokens: MoenarchShortTokens =
     let audioPath: string | null = null;
     if (scheduled.audio) {
       const asset = spec.assets.find((candidate) => candidate.id === scheduled.audio!.asset)!;
-      audioPath = staticPath(asset.uri);
+      audioPath = staticPath(asset);
       if (audioPath === null) {
-        problems.push(`${scene.id}: audio "${asset.id}" has uri "${asset.uri}"; ${tokens.id} serves only static:<path> audio from public/`);
+        problems.push(`${scene.id}: audio "${asset.id}" has media type "${asset.asset.mediaType}", which ${tokens.id} cannot play`);
       }
     }
     let layout: MoenarchSceneLayout | null = null;

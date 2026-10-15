@@ -158,8 +158,10 @@ describe('VideoSpec v1 editorial scene kinds', () => {
     missing.scenes[0].payload.image = 'no-such-image';
     expect(diagnosticsOf(missing)).toEqual(['$.scenes[0].payload.image: no asset with id "no-such-image"']);
 
+    // #16: a consistent dataset slot (slot kind, AssetRef kind and media type agree), referenced as an image.
     const notImage = withOnly('mediaReveal');
     notImage.assets[0].kind = 'dataset';
+    notImage.assets[0].asset = { ...notImage.assets[0].asset, kind: 'dataset', mediaType: 'application/json' };
     expect(diagnosticsOf(notImage)).toEqual([
       '$.scenes[0].payload.image: asset "gallery-media" is a dataset asset, not an image',
     ]);

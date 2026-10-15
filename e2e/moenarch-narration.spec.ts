@@ -9,8 +9,9 @@
 // - `[data-moenarch-mark="<id>"]` is present exactly while `moenarchFrameState(...).mark` is that
 //   id: from the semantic cue's scheduled frame until the scene's next mark or the scene's end.
 // - Narration audio plays through Remotion's `Audio`: inside the Player, while a frame is inside a
-//   scheduled audio segment, exactly one <audio> element has the asset's `static:` path as its
-//   src, and with the Player paused its currentTime is
+//   scheduled audio segment, exactly one <audio> element plays the asset: its src is a same-origin
+//   URL containing the slot's content identity (AssetRef sha256, #16), and with the Player paused
+//   its currentTime is
 //   (frame - segment.from + segment.trimBeforeInFrames) / fps. Outside every segment (lead-in,
 //   hold, lead-out, silent scenes) no <audio> element in the Player has a narration src.
 // - A frame renders the same DOM whether reached by stepping through every frame in order or by
@@ -38,9 +39,14 @@ function subject() {
   return cached;
 }
 
+/** #16: a narration audio slot is identified by its AssetRef sha256, which its URL contains. */
+const audioDigests = () =>
+  (subject().spec.assets as unknown as { id: string; kind: string; asset: { sha256: string } }[])
+    .filter((slot) => slot.kind === 'audio')
+    .map((slot) => slot.asset.sha256);
 const assetPath = (assetId: string) => {
-  const asset = subject().spec.assets.find((candidate) => candidate.id === assetId)!;
-  return `/${asset.uri.replace(/^static:/, '')}`;
+  const slot = (subject().spec.assets as unknown as { id: string; asset: { sha256: string } }[]).find((candidate) => candidate.id === assetId)!;
+  return slot.asset.sha256;
 };
 
 /** What a frame must show, from the schedule alone. */
@@ -115,14 +121,14 @@ async function frameDom(page: Page) {
   });
 }
 
-/** <audio> elements in the Player whose src is a narration file, as path and current time. */
+/** <audio> elements in the Player whose src is a narration asset, as its sha256 (`path`) and current time. */
 async function narrationAudio(page: Page) {
-  return page.locator(`[data-composition-id="${PROJECT_ID}"]`).evaluate((player) =>
+  return page.locator(`[data-composition-id="${PROJECT_ID}"]`).evaluate((player, digests) =>
     [...player.querySelectorAll('audio')]
       .map((audio) => ({ src: audio.currentSrc || audio.src, seconds: audio.currentTime }))
-      .filter((audio) => /^https?:/.test(audio.src) && new URL(audio.src).pathname.startsWith('/fixtures/narration/'))
-      .map((audio) => ({ path: new URL(audio.src).pathname, seconds: audio.seconds })),
-  );
+      .filter((audio) => /^https?:/.test(audio.src) && digests.some((digest) => new URL(audio.src).pathname.includes(digest)))
+      .map((audio) => ({ path: digests.find((digest) => new URL(audio.src).pathname.includes(digest))!, seconds: audio.seconds })),
+  audioDigests());
 }
 
 /** Same serialization as the #12 determinism test: elements, attributes, sorted inline styles, text. */

@@ -1,5 +1,5 @@
 {
-  "specVersion": 1,
+  "specVersion": 2,
   "project": {
     "id": "moenarch-scene-gallery",
     "title": "Moenarch scene gallery"
@@ -17,7 +17,18 @@
     {
       "id": "gallery-media",
       "kind": "image",
-      "uri": "static:fixtures/scene-gallery/media-reveal.png"
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "image",
+        "mediaType": "image/png",
+        "sha256": "911676716eeb55fe80291105c9b9db31a4888aa557ec9cffd517d6a4fe959220",
+        "byteLength": 1482,
+        "metadata": {
+          "source": {
+            "importedFrom": "public/fixtures/scene-gallery/media-reveal.png"
+          }
+        }
+      }
     }
   ],
   "scenes": [

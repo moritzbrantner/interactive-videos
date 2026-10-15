@@ -1,6 +1,7 @@
 import { BIN_COUNT, INCIDENT_WINDOW, REQUEST_COUNT } from '@/data/latency';
 import fixture from '@/spec/fixtures/latency-explainer.videospec.json';
 import { barRevealEnd } from '@/video/reveal';
+import { LATENCY_DATASET_MEDIA_TYPE, LATENCY_DATASET_RECIPE, latencyDatasetBytes } from '@/video/latency-dataset';
 import { assertVideoSpec, resolveTimeline, type BinnedChartScene, type VideoSpec } from '@/spec/video-spec';
 
 // The latency explainer's content (output profile, narration, glossary, chart intent) comes from
@@ -8,7 +9,7 @@ import { assertVideoSpec, resolveTimeline, type BinnedChartScene, type VideoSpec
 export const LATENCY_FORMAT = { id: 'interactive-chart-explainer', version: 1 } as const;
 /** The subtitle primitive keeps a cue on screen this long after its end. */
 export const SUBTITLE_LINGER_MS = 80;
-export const LATENCY_DATASET_URI = `generator:latency-requests?seed=20260928&count=${REQUEST_COUNT}`;
+
 
 /**
  * The scene this format renders, or the reasons the spec asks for something it cannot render.
@@ -58,7 +59,15 @@ export function latencyFormatScene(spec: VideoSpec): BinnedChartScene {
     problems.push('highlight must be the dataset incident window');
   }
   const dataset = spec.assets.find((asset) => asset.id === payload.dataset);
-  if (dataset?.uri !== LATENCY_DATASET_URI) problems.push(`dataset must be ${LATENCY_DATASET_URI}`);
+  const expected = latencyDatasetBytes();
+  if (
+    dataset?.asset.mediaType !== LATENCY_DATASET_MEDIA_TYPE
+    || dataset.asset.byteLength !== expected.length
+    || JSON.stringify(dataset.asset.metadata.recipe) !== JSON.stringify(LATENCY_DATASET_RECIPE)
+    || LATENCY_DATASET_RECIPE.count !== REQUEST_COUNT
+  ) {
+    problems.push(`dataset must be the latency-requests recipe ${JSON.stringify(LATENCY_DATASET_RECIPE)}`);
+  }
   if (problems.length) throw new Error(`the latency video cannot render this spec: ${problems.join('; ')}`);
   return scene;
 }

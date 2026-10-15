@@ -8,8 +8,8 @@
 // - Lead-in and lead-out are bounded by the format: `tokens.pacing.maxLeadInMs` and
 //   `tokens.pacing.maxLeadOutMs` (integers). A longer one makes the spec unrenderable with
 //   "<scene id>: lead-in <n> ms exceeds the maximum <max> ms" (lead-out likewise).
-// - Narration audio must be an `audio` asset with a `static:<path>` uri, served from public/<path>
-//   like images; any other uri is unrenderable ("... serves only static:<path> audio ...").
+// - Narration audio must be an `audio` slot the format can play, served from its content-addressed
+//   path like images; another audio media type is unrenderable ("... cannot play") (#16).
 // - `moenarchFrameState(plan, frame, opts)` additionally returns `mark: string | null`: the id of
 //   the current scene's latest semantic cue (mark) at or before the frame, null before its first
 //   mark. `subtitle` is the text of the current scene's scheduled cue window containing the frame.
@@ -19,6 +19,7 @@
 // - `src/projects.ts` registers `src/spec/fixtures/moenarch-narration.videospec.json` with
 //   `moenarchShort()` (project id `moenarch-narration`), after the scene gallery.
 // - Formats that do not play narration audio refuse specs that have it (title-card here).
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -68,16 +69,19 @@ describe('narration fixture media', () => {
       }),
     );
     expect(declared.size).toBe(2);
-    for (const asset of spec.assets) {
-      expect(asset.kind).toBe('audio');
-      const path = asset.uri.replace(/^static:/, '');
-      const file = NARRATION_FIXTURE_FILES.find((candidate) => candidate.path === path);
-      expect(file, asset.uri).toBeDefined();
-      const absolute = join(ROOT, 'public', path);
+    for (const slot of spec.assets) {
+      expect(slot.kind).toBe('audio');
+      // The slot's AssetRef identifies the bytes of one committed, reproducible fixture file.
+      const file = NARRATION_FIXTURE_FILES.find(
+        (candidate) => createHash('sha256').update(narrationWav(candidate.durationMs, candidate.toneHz)).digest('hex') === slot.asset.sha256,
+      );
+      expect(file, slot.id).toBeDefined();
+      const absolute = join(ROOT, 'public', file!.path);
       expect(existsSync(absolute), absolute).toBe(true);
       const bytes = new Uint8Array(readFileSync(absolute));
-      expect(Buffer.from(bytes).equals(Buffer.from(narrationWav(file!.durationMs, file!.toneHz))), path).toBe(true);
-      expect(wavDurationMs(bytes)).toBe(declared.get(asset.id));
+      expect(Buffer.from(bytes).equals(Buffer.from(narrationWav(file!.durationMs, file!.toneHz))), file!.path).toBe(true);
+      expect(bytes.length).toBe(slot.asset.byteLength);
+      expect(wavDurationMs(bytes)).toBe(declared.get(slot.id));
     }
   });
 });
@@ -190,12 +194,12 @@ describe('moenarch-short narration timing', () => {
     );
   });
 
-  it('serves narration audio only from static paths', () => {
+  it('plays narration audio only in media types the format can play', () => {
     const variant = fixture();
-    variant.assets[0].uri = 'https://example.com/hook.wav';
+    variant.assets[0].asset.mediaType = 'audio/x-unknown';
     const result = createCatalog([{ spec: variant, format: moenarchShort() }], PROJECT_ID).resolve(PROJECT_ID);
     expect(result).toMatchObject({ ok: false, reason: 'unrenderable' });
-    expect(!result.ok && result.message).toContain('serves only static:<path> audio');
+    expect(!result.ok && result.message).toContain('cannot play');
   });
 
   it('is refused by a format that cannot play narration audio', () => {

@@ -5,13 +5,15 @@
 // installed Chromium. stdout carries exactly one line, the JSON result (schema v1); logs and
 // progress go to stderr. A failure exits non-zero and leaves no output file behind.
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, renameSync, rmSync } from 'node:fs';
+import { copyFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { basename, dirname, join } from 'node:path';
 
 import { chromium } from '@playwright/test';
 import { bundle, webpack } from '@remotion/bundler';
 import { renderMedia, selectComposition } from '@remotion/renderer';
 
+import { assetObjectPath, DEFAULT_ASSET_STORE, importSourceAssets } from '@/assets/asset-store';
 import { catalog } from '@/projects';
 
 import { appAlias, sourcePinAliases } from '../../source-pins.ts';
@@ -61,11 +63,19 @@ async function render(job: RenderJob) {
     `.${basename(job.outPath)}.partial-${process.pid}.${job.profile.container}`,
   );
   let bundleDir: string | undefined;
+  // The bundle's public directory: the checked-in public files plus exactly the job's resolved,
+  // content-addressed objects at their served paths.
+  const stagedPublic = mkdtempSync(join(tmpdir(), 'iv-render-public-'));
   try {
+    cpSync(PUBLIC_DIR, stagedPublic, { recursive: true });
+    for (const asset of job.assets) {
+      mkdirSync(dirname(join(stagedPublic, asset.src)), { recursive: true });
+      copyFileSync(assetObjectPath(DEFAULT_ASSET_STORE, asset.sha256), join(stagedPublic, asset.src));
+    }
     log(`video:render: bundling ${ENTRY_POINT}`);
     const serveUrl = await bundle({
       entryPoint: ENTRY_POINT,
-      publicDir: PUBLIC_DIR,
+      publicDir: stagedPublic,
       onProgress: () => undefined,
       onDirectoryCreated: (dir) => {
         bundleDir = dir;
@@ -118,6 +128,7 @@ async function render(job: RenderJob) {
     return { path: job.outPath, ...digest };
   } finally {
     rmSync(partial, { force: true });
+    rmSync(stagedPublic, { recursive: true, force: true });
     if (bundleDir) rmSync(bundleDir, { recursive: true, force: true });
   }
 }
@@ -138,10 +149,12 @@ async function main() {
   if (!parsed.ok) return failWith(parsed.error);
   let resolved: ReturnType<typeof resolveRenderJob>;
   try {
+    // A clean checkout fills the store deterministically, without network access.
+    importSourceAssets(DEFAULT_ASSET_STORE);
     resolved = resolveRenderJob(parsed.args, {
       catalog,
       cwd: process.cwd(),
-      publicDir: PUBLIC_DIR,
+      assetStore: DEFAULT_ASSET_STORE,
     });
   } catch (error) {
     // I/O failures while reading a spec or asset (unreadable, removed mid-check) are failures too.
