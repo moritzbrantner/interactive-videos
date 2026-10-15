@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } fr
 import type { Catalog, ResolvedComposition } from '@/catalog/catalog';
 import type { HotspotActivation } from '@/components/remotion/hotspot';
 import { catalog as defaultCatalog } from '@/projects';
+import { ChapterNav } from '@/player/chapter-nav';
 import { focusFirstHotspot, HotspotDebug } from '@/player/hotspot-debug';
 import { exposePlayerForBudgetTests } from '@/render-budget';
 
@@ -225,6 +226,7 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
           />
           {Overlay ? <Overlay player={player} /> : null}
         </div>
+        {composition.chapters ? <ChapterNav chapters={composition.chapters} player={player} /> : null}
         {debugMode ? <HotspotDebug frame={frame} player={player} /> : null}
         <p className="keyboard-help">
           Space in the video: play / pause · Tab / Shift+Tab: navigate clickable elements · Enter / Space on an item: inspect

@@ -39,8 +39,23 @@ export type FormatPack = {
   compose: (spec: VideoSpec) => FormatRendering;
 };
 
-/** A catalog entry: project content (an unvalidated spec) and the format pack that renders it. */
-export type ProjectSource = { spec: unknown; format: FormatPack };
+/**
+ * A catalog entry: project content (an unvalidated spec) and the format pack that renders it.
+ * `chapters` opts a multi-scene project into Player chapter navigation (Atlas 1.8).
+ */
+export type ProjectSource = { spec: unknown; format: FormatPack; chapters?: boolean };
+
+/**
+ * One navigable chapter: a scene of the validated timeline. `relatedId` names another chapter
+ * the viewer can jump to from this one. Browser-only; never part of rendered frames.
+ */
+export type Chapter = {
+  id: string;
+  title: string;
+  from: number;
+  durationInFrames: number;
+  relatedId?: string;
+};
 
 /** A spec resolved into everything the Player needs. */
 export type ResolvedComposition = FormatRendering & {
@@ -50,6 +65,8 @@ export type ResolvedComposition = FormatRendering & {
   height: number;
   fps: number;
   durationInFrames: number;
+  /** Present only for projects with meaningful chapters. */
+  chapters?: readonly Chapter[];
 };
 
 export type ResolveError =
@@ -76,11 +93,11 @@ export type Catalog = {
  * first use and cached, so a project's component identity is stable across renders.
  */
 export function createCatalog(sources: readonly ProjectSource[], defaultId: string): Catalog {
-  const entries = new Map<string, { spec: VideoSpec; format: FormatPack }>();
+  const entries = new Map<string, { spec: VideoSpec; format: FormatPack; chapters: boolean }>();
   for (const source of sources) {
     const spec = assertVideoSpec(source.spec);
     if (entries.has(spec.project.id)) throw new Error(`duplicate project id "${spec.project.id}"`);
-    entries.set(spec.project.id, { spec, format: source.format });
+    entries.set(spec.project.id, { spec, format: source.format, chapters: source.chapters ?? false });
   }
   if (!entries.has(defaultId)) throw new Error(`default project "${defaultId}" is not in the catalog`);
 
@@ -91,7 +108,7 @@ export function createCatalog(sources: readonly ProjectSource[], defaultId: stri
     const entry = entries.get(id);
     // Unknown ids are not cached: the URL can hold anything.
     if (!entry) return { ok: false, reason: 'unknown-project', id, message: `No project with id "${id}".` };
-    const result = resolveEntry(id, entry.spec, entry.format);
+    const result = resolveEntry(id, entry.spec, entry.format, entry.chapters);
     cache.set(id, result);
     return result;
   };
@@ -104,7 +121,33 @@ export function createCatalog(sources: readonly ProjectSource[], defaultId: stri
   };
 }
 
-function resolveEntry(id: string, spec: VideoSpec, format: FormatPack): ResolveResult {
+/** The scene's own headline, used as its chapter title; undefined when it has none. */
+function sceneHeadline(scene: VideoSpec['scenes'][number]): string | undefined {
+  const payload = scene.payload as { heading?: unknown; text?: unknown };
+  const headline = typeof payload.heading === 'string' ? payload.heading : payload.text;
+  return typeof headline === 'string' && headline.trim() !== '' ? headline : undefined;
+}
+
+/**
+ * Chapters derived from the validated timeline, one per scene, titled by the scene headline.
+ * The opening relates to the conclusion. A project without at least two titled scenes has no
+ * meaningful chapters.
+ */
+export function chaptersFor(spec: VideoSpec): Chapter[] | undefined {
+  const timeline = resolveTimeline(spec);
+  const titles = spec.scenes.map(sceneHeadline);
+  if (timeline.scenes.length < 2 || titles.some((title) => title === undefined)) return undefined;
+  const conclusion = [...timeline.scenes].reverse().find((scene) => scene.kind === 'conclusion');
+  return timeline.scenes.map((scene, index) => ({
+    id: scene.id,
+    title: titles[index] as string,
+    from: scene.from,
+    durationInFrames: scene.durationInFrames,
+    ...(index === 0 && conclusion && conclusion.id !== scene.id ? { relatedId: conclusion.id } : {}),
+  }));
+}
+
+function resolveEntry(id: string, spec: VideoSpec, format: FormatPack, chapters: boolean): ResolveResult {
   if (spec.format.id !== format.id || spec.format.version !== format.version) {
     return {
       ok: false,
@@ -130,6 +173,7 @@ function resolveEntry(id: string, spec: VideoSpec, format: FormatPack): ResolveR
       height: spec.output.height,
       fps: spec.output.fps,
       durationInFrames: resolveTimeline(spec).durationInFrames,
+      ...(chapters ? { chapters: chaptersFor(spec) } : {}),
     },
   };
 }
