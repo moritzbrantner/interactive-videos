@@ -614,7 +614,7 @@
       "parameters": {
         "modelId": "hexgrad/Kokoro-82M",
         "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
-        "prompt": "The council also settled Easter: all churches should keep it on the same day.",
+        "prompt": "The council also ruled on Easter: all churches should keep it on the same day.",
         "seed": "325",
         "sampleRate": 24000,
         "channels": 1,
@@ -1166,7 +1166,7 @@
       "parameters": {
         "modelId": "hexgrad/Kokoro-82M",
         "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
-        "prompt": "Most Protestants also confess the Creed, holding it to be faithful to Scripture.",
+        "prompt": "Most Protestants also accept the Creed's teaching, holding it to be faithful to Scripture.",
         "seed": "325",
         "sampleRate": 24000,
         "channels": 1,
@@ -1212,7 +1212,7 @@
       "parameters": {
         "modelId": "hexgrad/Kokoro-82M",
         "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
-        "prompt": "Nicaea answered one question for the Church. Is the Son truly God?",
+        "prompt": "Nicaea answered a central question for the Church. Is the Son truly God?",
         "seed": "325",
         "sampleRate": 24000,
         "channels": 1,

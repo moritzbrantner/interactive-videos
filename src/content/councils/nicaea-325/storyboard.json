@@ -205,7 +205,7 @@
         "emphasis": "One common day"
       },
       "say": [
-        "The council also settled Easter:",
+        "The council also ruled on Easter:",
         "all churches should keep it on the same day."
       ]
     },
@@ -390,11 +390,11 @@
       "kind": "statement",
       "payload": {
         "eyebrow": "Most Protestants",
-        "text": "Confess the Creed as faithful to Scripture.",
+        "text": "Accept its teaching as faithful to Scripture.",
         "emphasis": "faithful to Scripture"
       },
       "say": [
-        "Most Protestants also confess the Creed,",
+        "Most Protestants also accept the Creed's teaching,",
         "holding it to be faithful to Scripture."
       ]
     },
@@ -408,7 +408,7 @@
         "emphasis": "truly God"
       },
       "say": [
-        "Nicaea answered one question for the Church.",
+        "Nicaea answered a central question for the Church.",
         "Is the Son truly God?"
       ]
     },
