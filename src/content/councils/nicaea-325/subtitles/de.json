@@ -14,9 +14,12 @@
       "name": "Claude Opus 5.5 (implementation agent, interactive-videos#84)"
     },
     "review": {
-      "status": "pending"
+      "status": "approved",
+      "reviewer": "Claude Opus 5.5 (independent translation reviewer, interactive-videos#84)",
+      "date": "2026-10-16",
+      "reference": "https://github.com/moritzbrantner/interactive-videos/pull/89#issuecomment-6216171727"
     },
-    "liturgicalText": "Creed phrases quoted in the wording of the German Nicene-Constantinopolitan Creed (Gotteslob Nr. 586,2 / Messbuch): \"wahrer Gott vom wahren Gott, gezeugt, nicht geschaffen, eines Wesens mit dem Vater\". homoousios is rendered \"wesensgleich\"; Nicaea is spelled Nizäa (adjective nizänisch) and the Creed \"(Glaubens)bekenntnis\" throughout."
+    "liturgicalText": "Creed phrases quoted in the wording of the German Nicene-Constantinopolitan Creed (Großes Glaubensbekenntnis, Messbuch): \"wahrer Gott vom wahren Gott, gezeugt, nicht geschaffen, eines Wesens mit dem Vater\". homoousios is rendered \"wesensgleich\"; Nicaea is spelled Nizäa (adjective nizänisch) and the Creed \"(Glaubens)bekenntnis\" throughout."
   },
   "cues": [
     {
@@ -142,7 +145,7 @@
     {
       "scene": "exile",
       "index": 0,
-      "text": "Arius und zwei Bischöfe, die nicht unterschrieben,"
+      "text": "Arius und zwei Bischöfe, die die Unterschrift verweigerten,"
     },
     {
       "scene": "exile",
@@ -257,12 +260,12 @@
     {
       "scene": "protestants",
       "index": 0,
-      "text": "Auch die meisten Protestanten bejahen das Bekenntnis"
+      "text": "Auch die meisten Protestanten bejahen, was das Bekenntnis lehrt,"
     },
     {
       "scene": "protestants",
       "index": 1,
-      "text": "und halten seine Lehre für schriftgemäß."
+      "text": "und halten es für schriftgemäß."
     },
     {
       "scene": "question",

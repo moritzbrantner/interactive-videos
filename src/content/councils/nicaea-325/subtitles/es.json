@@ -14,7 +14,10 @@
       "name": "Claude Opus 5.5 (implementation agent, interactive-videos#84)"
     },
     "review": {
-      "status": "pending"
+      "status": "approved",
+      "reviewer": "Claude Opus 5.5 (independent translation reviewer, interactive-videos#84)",
+      "date": "2026-10-16",
+      "reference": "https://github.com/moritzbrantner/interactive-videos/pull/89#issuecomment-6216171727"
     },
     "liturgicalText": "Creed phrases quoted in the wording of the Spanish Roman Missal (Misal Romano, Credo niceno-constantinopolitano): \"Dios verdadero de Dios verdadero, engendrado, no creado, de la misma naturaleza del Padre\". homoousios is rendered \"consustancial\" (Catecismo de la Iglesia Católica §242 uses \"consubstancial\"; this track uses one form throughout); the Creed is \"Credo\" throughout."
   },
@@ -97,7 +100,7 @@
     {
       "scene": "pope",
       "index": 1,
-      "text": "así que dos sacerdotes romanos ocuparon su lugar."
+      "text": "así que lo representaron dos sacerdotes romanos."
     },
     {
       "scene": "rejected",
