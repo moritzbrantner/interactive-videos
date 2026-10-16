@@ -147,12 +147,17 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
   };
 
   const hasSubtitleTracks = Boolean(composition.subtitles?.length);
+  // The selected track's text (#84: translations carry theirs); only inputProps change on a switch,
+  // so the Player keeps its frame and playback state.
+  const subtitleTrack = composition.subtitles?.find((track) => track.language === subtitleLanguage);
   const inputProps = useMemo(
     () => ({
       ...(renderInsight ? { onActivate, selectedId: activation?.id } : {}),
-      ...(hasSubtitleTracks ? { subtitles: subtitleLanguage === null ? null : { language: subtitleLanguage } } : {}),
+      ...(hasSubtitleTracks
+        ? { subtitles: subtitleTrack ? { language: subtitleTrack.language, ...(subtitleTrack.text ? { text: subtitleTrack.text } : {}) } : null }
+        : {}),
     }),
-    [renderInsight, onActivate, activation?.id, hasSubtitleTracks, subtitleLanguage],
+    [renderInsight, onActivate, activation?.id, hasSubtitleTracks, subtitleTrack],
   );
 
   const { width, height, fps, durationInFrames } = composition;

@@ -3,6 +3,7 @@ import type { ComponentType, ReactNode, RefObject } from 'react';
 import type { PlayerRef } from '@remotion/player';
 
 import type { HotspotActivation } from '@/components/remotion/hotspot';
+import { translationTextByCue, validateSubtitleTranslation } from '@/spec/subtitle-translation';
 import { assertVideoSpec, resolveTimeline, type VideoSpec } from '@/spec/video-spec';
 
 /** Props every catalog composition accepts; formats without hotspots ignore them. */
@@ -12,12 +13,27 @@ export type CompositionProps = {
   /**
    * The subtitle track the Player selected (#82): `null` hides subtitles, a language shows the
    * cues tagged with it. Omitted (headless renders) keeps the format's default, burned-in track.
+   * `text` (#84) is a validated translation's cue text keyed `${sceneId}#${cueIndex}`, shown over
+   * the English cue windows; without it the spec's own (English) cue text is shown.
    */
-  subtitles?: { language: string } | null;
+  subtitles?: { language: string; text?: SubtitleCueText } | null;
 };
 
-/** A selectable subtitle track of a project: the narration cues in one language (Atlas 3.10). */
-export type SubtitleTrackOption = { language: string; label: string };
+/** Translated cue text keyed `${sceneId}#${cueIndex}` (#84). */
+export type SubtitleCueText = Readonly<Record<string, string>>;
+
+/**
+ * A selectable subtitle track of a project: the narration cues in one language (Atlas 3.10).
+ * `text` is present for a validated translation (#84); without it the track is the spec's cues.
+ */
+export type SubtitleTrackOption = { language: string; label: string; text?: SubtitleCueText };
+
+/**
+ * A registered subtitle track. Without `translation` it is the spec's own (English) cues; with
+ * one, the parsed `interactive-videos/council-subtitles` file, validated against the spec when the
+ * catalog is built. An invalid translation is never offered (Atlas 3.12).
+ */
+export type SubtitleTrackSource = { language: string; label: string; translation?: unknown };
 
 /** What a format pack makes of one spec: the component and optional interaction UI. */
 export type FormatRendering = {
@@ -57,9 +73,10 @@ export type ProjectSource = {
   chapters?: boolean;
   /**
    * Subtitle tracks the Player offers in its "Subtitles" select, first one selected (#82). The
-   * format must honour `CompositionProps.subtitles`; the spec's narration cues are the track.
+   * format must honour `CompositionProps.subtitles`; the spec's narration cues are the English
+   * track, and other languages carry a `translation` (#84).
    */
-  subtitles?: readonly SubtitleTrackOption[];
+  subtitles?: readonly SubtitleTrackSource[];
   /** Short notes shown next to the Player, e.g. the synthetic-narration disclosure (Atlas 3.22). */
   notes?: readonly string[];
 };
@@ -120,11 +137,12 @@ export function createCatalog(sources: readonly ProjectSource[], defaultId: stri
   for (const source of sources) {
     const spec = assertVideoSpec(source.spec);
     if (entries.has(spec.project.id)) throw new Error(`duplicate project id "${spec.project.id}"`);
+    const subtitles = source.subtitles?.length ? subtitleTracks(spec, source.subtitles) : [];
     entries.set(spec.project.id, {
       spec,
       format: source.format,
       chapters: source.chapters ?? false,
-      ...(source.subtitles?.length ? { subtitles: source.subtitles.map((track) => ({ ...track })) } : {}),
+      ...(subtitles.length ? { subtitles } : {}),
       ...(source.notes?.length ? { notes: [...source.notes] } : {}),
     });
   }
@@ -148,6 +166,28 @@ export function createCatalog(sources: readonly ProjectSource[], defaultId: stri
     resolve,
     spec: (id) => entries.get(id)?.spec,
   };
+}
+
+/** The spec's own narration cues are English (Atlas 3.10); every other track needs a translation. */
+const SPEC_CUE_LANGUAGE = 'en';
+
+/**
+ * The tracks to offer: the spec's own English cues as registered, and each translation that
+ * validates against the spec in the language it is registered under. Anything else is left out, so
+ * a missing or broken translation never appears as a valid track.
+ */
+function subtitleTracks(spec: VideoSpec, sources: readonly SubtitleTrackSource[]): SubtitleTrackOption[] {
+  const tracks: SubtitleTrackOption[] = [];
+  for (const source of sources) {
+    if (source.translation === undefined) {
+      if (source.language === SPEC_CUE_LANGUAGE) tracks.push({ language: source.language, label: source.label });
+      continue;
+    }
+    const result = validateSubtitleTranslation(spec, source.translation);
+    if (!result.ok || result.translation.language !== source.language) continue;
+    tracks.push({ language: source.language, label: source.label, text: Object.fromEntries(translationTextByCue(result.translation)) });
+  }
+  return tracks;
 }
 
 /** The scene's own headline, used as its chapter title; undefined when it has none. */

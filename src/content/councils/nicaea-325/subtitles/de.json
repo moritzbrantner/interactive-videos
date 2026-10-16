@@ -1,0 +1,291 @@
+{
+  "schema": "interactive-videos/council-subtitles",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "language": "de",
+  "label": "Deutsch",
+  "provenance": {
+    "translatedFrom": {
+      "language": "en",
+      "cuesSha256": "64ed7e9dac442a9073c1da052f967b3a751e7a43a517790ecd1a073ddbe6a521"
+    },
+    "translator": {
+      "kind": "agent",
+      "name": "Claude Opus 5.5 (implementation agent, interactive-videos#84)"
+    },
+    "review": {
+      "status": "approved",
+      "reviewer": "Claude Opus 5.5 (independent translation reviewer, interactive-videos#84)",
+      "date": "2026-10-16",
+      "reference": "https://github.com/moritzbrantner/interactive-videos/pull/89#issuecomment-6216171727"
+    },
+    "liturgicalText": "Creed phrases quoted in the wording of the German Nicene-Constantinopolitan Creed (Großes Glaubensbekenntnis, Messbuch): \"wahrer Gott vom wahren Gott, gezeugt, nicht geschaffen, eines Wesens mit dem Vater\". homoousios is rendered \"wesensgleich\"; Nicaea is spelled Nizäa (adjective nizänisch) and the Creed \"(Glaubens)bekenntnis\" throughout."
+  },
+  "cues": [
+    {
+      "scene": "opening",
+      "index": 0,
+      "text": "Das Erste Konzil von Nizäa, im Jahr 325."
+    },
+    {
+      "scene": "perspective",
+      "index": 0,
+      "text": "Diese Folge wird aus katholischer Sicht erzählt."
+    },
+    {
+      "scene": "arius",
+      "index": 0,
+      "text": "In Alexandria lehrte ein Priester namens Arius,"
+    },
+    {
+      "scene": "arius",
+      "index": 1,
+      "text": "der Sohn Gottes sei geschaffen worden."
+    },
+    {
+      "scene": "arius-slogan",
+      "index": 0,
+      "text": "Es gab eine Zeit, so argumentierte er,"
+    },
+    {
+      "scene": "arius-slogan",
+      "index": 1,
+      "text": "in der der Sohn nicht war."
+    },
+    {
+      "scene": "alexander",
+      "index": 0,
+      "text": "Sein Bischof Alexander verurteilte diese Lehre,"
+    },
+    {
+      "scene": "alexander",
+      "index": 1,
+      "text": "und der Streit breitete sich im Osten aus."
+    },
+    {
+      "scene": "constantine",
+      "index": 0,
+      "text": "Kaiser Konstantin, nun Alleinherrscher des Reiches,"
+    },
+    {
+      "scene": "constantine",
+      "index": 1,
+      "text": "wollte eine geeinte Kirche."
+    },
+    {
+      "scene": "summons",
+      "index": 0,
+      "text": "Im Jahr 325 berief er Bischöfe nach Nizäa,"
+    },
+    {
+      "scene": "summons",
+      "index": 1,
+      "text": "in der heutigen Türkei."
+    },
+    {
+      "scene": "bishops",
+      "index": 0,
+      "text": "Mehr als zweihundertfünfzig kamen,"
+    },
+    {
+      "scene": "bishops",
+      "index": 1,
+      "text": "die meisten aus dem griechischsprachigen Osten."
+    },
+    {
+      "scene": "pope",
+      "index": 0,
+      "text": "Papst Silvester war zu alt, um zu reisen,"
+    },
+    {
+      "scene": "pope",
+      "index": 1,
+      "text": "daher vertraten ihn zwei römische Priester."
+    },
+    {
+      "scene": "rejected",
+      "index": 0,
+      "text": "Die Bischöfe verwarfen die Lehre des Arius"
+    },
+    {
+      "scene": "rejected",
+      "index": 1,
+      "text": "und legten den Glauben in einem Bekenntnis dar."
+    },
+    {
+      "scene": "creed",
+      "index": 0,
+      "text": "Es bekennt den Sohn als wahren Gott vom wahren Gott,"
+    },
+    {
+      "scene": "creed",
+      "index": 1,
+      "text": "gezeugt, nicht geschaffen."
+    },
+    {
+      "scene": "homoousios",
+      "index": 0,
+      "text": "Und es nennt ihn homoousios mit dem Vater:"
+    },
+    {
+      "scene": "homoousios",
+      "index": 1,
+      "text": "von derselben Substanz, also wesensgleich."
+    },
+    {
+      "scene": "why-the-word",
+      "index": 0,
+      "text": "Wie Athanasius erklärte,"
+    },
+    {
+      "scene": "why-the-word",
+      "index": 1,
+      "text": "ließen biblische Wendungen allein eine arianische Deutung zu."
+    },
+    {
+      "scene": "exile",
+      "index": 0,
+      "text": "Arius und zwei Bischöfe, die die Unterschrift verweigerten,"
+    },
+    {
+      "scene": "exile",
+      "index": 1,
+      "text": "wurden in die Verbannung geschickt."
+    },
+    {
+      "scene": "easter",
+      "index": 0,
+      "text": "Das Konzil entschied auch über Ostern:"
+    },
+    {
+      "scene": "easter",
+      "index": 1,
+      "text": "Alle Kirchen sollten es am selben Tag feiern."
+    },
+    {
+      "scene": "canons",
+      "index": 0,
+      "text": "Und es erließ zwanzig Kanones zur kirchlichen Ordnung,"
+    },
+    {
+      "scene": "canons",
+      "index": 1,
+      "text": "etwa darüber, wie Bischöfe geweiht werden."
+    },
+    {
+      "scene": "not-the-bible",
+      "index": 0,
+      "text": "Einige populäre Behauptungen sind nicht historisch."
+    },
+    {
+      "scene": "not-the-bible",
+      "index": 1,
+      "text": "Nizäa legte nicht die Bücher der Bibel fest."
+    },
+    {
+      "scene": "legend",
+      "index": 0,
+      "text": "Und die Geschichte, wie der heilige Nikolaus Arius ohrfeigt,"
+    },
+    {
+      "scene": "legend",
+      "index": 1,
+      "text": "ist eine Legende, die Jahrhunderte später entstand."
+    },
+    {
+      "scene": "dispute",
+      "index": 0,
+      "text": "Nizäa beendete den Streit nicht."
+    },
+    {
+      "scene": "dispute",
+      "index": 1,
+      "text": "Arianische Ansichten fanden jahrzehntelang mächtige Förderer."
+    },
+    {
+      "scene": "athanasius",
+      "index": 0,
+      "text": "Athanasius von Alexandria verteidigte Nizäa"
+    },
+    {
+      "scene": "athanasius",
+      "index": 1,
+      "text": "und wurde fünfmal verbannt."
+    },
+    {
+      "scene": "constantinople",
+      "index": 0,
+      "text": "Das Konzil von Konstantinopel im Jahr 381"
+    },
+    {
+      "scene": "constantinople",
+      "index": 1,
+      "text": "bekräftigte diesen Glauben."
+    },
+    {
+      "scene": "creed-today",
+      "index": 0,
+      "text": "Sein erweitertes Bekenntnis wird in vielen Kirchen noch gebetet."
+    },
+    {
+      "scene": "goths",
+      "index": 0,
+      "text": "Das arianische Christentum lebte bei den Goten 200 Jahre fort."
+    },
+    {
+      "scene": "first-ecumenical",
+      "index": 0,
+      "text": "Für Katholiken ist Nizäa das erste ökumenische Konzil."
+    },
+    {
+      "scene": "catholic",
+      "index": 0,
+      "text": "Seine Lehre über den Sohn ist verbindliches Dogma."
+    },
+    {
+      "scene": "mass",
+      "index": 0,
+      "text": "Katholiken sprechen dieses Bekenntnis in der Sonntagsmesse."
+    },
+    {
+      "scene": "orthodox",
+      "index": 0,
+      "text": "Die orthodoxen Kirchen teilen diesen nizänischen Glauben"
+    },
+    {
+      "scene": "orthodox",
+      "index": 1,
+      "text": "und ehren das Konzil als ökumenisch."
+    },
+    {
+      "scene": "protestants",
+      "index": 0,
+      "text": "Auch die meisten Protestanten bejahen, was das Bekenntnis lehrt,"
+    },
+    {
+      "scene": "protestants",
+      "index": 1,
+      "text": "und halten es für schriftgemäß."
+    },
+    {
+      "scene": "question",
+      "index": 0,
+      "text": "Nizäa beantwortete eine zentrale Frage der Kirche:"
+    },
+    {
+      "scene": "question",
+      "index": 1,
+      "text": "Ist der Sohn wahrhaft Gott?"
+    },
+    {
+      "scene": "conclusion",
+      "index": 0,
+      "text": "Seine Antwort, eines Wesens mit dem Vater,"
+    },
+    {
+      "scene": "conclusion",
+      "index": 1,
+      "text": "prägt bis heute den christlichen Gottesdienst."
+    }
+  ]
+}

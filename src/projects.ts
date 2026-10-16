@@ -13,6 +13,8 @@ import moenarchSceneGallery from '@/spec/fixtures/moenarch-scene-gallery.videosp
 import moenarchSpecimen from '@/spec/fixtures/moenarch-specimen.videospec.json';
 import moenarchTypography from '@/spec/fixtures/moenarch-typography.videospec.json';
 import nicaeaScript from '@/content/councils/nicaea-325/script.json';
+import nicaeaSubtitlesDe from '@/content/councils/nicaea-325/subtitles/de.json';
+import nicaeaSubtitlesEs from '@/content/councils/nicaea-325/subtitles/es.json';
 import { latencyFormat } from '@/video/latency-format';
 
 // Project content lives in the specs; each entry names the format pack that renders it.
@@ -33,11 +35,16 @@ export const catalog = createCatalog(
     // moenarch-materialized-audio.asset-requests.json), plus one local slot.
     { spec: moenarchMaterializedAudio, format: moenarchShort() },
     // #82: Seven Councils pilot, Nicaea I. Committed Kokoro narration (sidecar
-    // council-nicaea-325.asset-requests.json, ADR 0002), selectable English subtitles.
+    // council-nicaea-325.asset-requests.json, ADR 0002), selectable English subtitles, and
+    // German and Spanish translations on the English cue timing (#84).
     {
       spec: councilNicaea325,
       format: moenarchShort(),
-      subtitles: [{ language: 'en', label: 'English' }],
+      subtitles: [
+        { language: 'en', label: 'English' },
+        { language: 'de', label: 'Deutsch', translation: nicaeaSubtitlesDe },
+        { language: 'es', label: 'Español', translation: nicaeaSubtitlesEs },
+      ],
       notes: [nicaeaScript.disclosure.syntheticNarration],
     },
   ],
