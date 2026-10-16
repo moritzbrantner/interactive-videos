@@ -6,6 +6,7 @@ import { titleCardFormat } from '@/formats/title-card';
 import latencyExplainer from '@/spec/fixtures/latency-explainer.videospec.json';
 import catalogTitleCard from '@/spec/fixtures/catalog-title-card.videospec.json';
 import interactiveShowcase from '@/spec/fixtures/interactive-showcase.videospec.json';
+import moenarchMaterializedAudio from '@/spec/fixtures/moenarch-materialized-audio.videospec.json';
 import moenarchNarration from '@/spec/fixtures/moenarch-narration.videospec.json';
 import moenarchSceneGallery from '@/spec/fixtures/moenarch-scene-gallery.videospec.json';
 import moenarchSpecimen from '@/spec/fixtures/moenarch-specimen.videospec.json';
@@ -26,6 +27,9 @@ export const catalog = createCatalog(
     { spec: moenarchTypography, format: moenarchShort() },
     // #60: the interactive disclosure showcase.
     { spec: interactiveShowcase, format: showcaseFormat(MOON_SHOWCASE_DISCLOSURES) },
+    // #17: audio materialized through asset-tooling operations (sidecar
+    // moenarch-materialized-audio.asset-requests.json), plus one local slot.
+    { spec: moenarchMaterializedAudio, format: moenarchShort() },
   ],
   // `/` without a project keeps opening the latency explainer.
   LATENCY_PROJECT_ID,

@@ -1,8 +1,9 @@
 // `bun run video:render --project <id-or-spec-path> [--out <path>] [--frames <a>-<b>] [--profile <id>]`
 //
-// Resolves the job (render-job.ts) before anything is bundled, bundles the render root
+// Materializes the selected project's asset slots through asset-tooling (src/assets/materialize.ts,
+// #17), resolves the job (render-job.ts) before anything is bundled, bundles the render root
 // (root.tsx) with @remotion/bundler and renders it with @remotion/renderer in Playwright's
-// installed Chromium. stdout carries exactly one line, the JSON result (schema v1); logs and
+// installed Chromium. stdout carries exactly one line, the JSON result (schema v2); logs and
 // progress go to stderr. A failure exits non-zero and leaves no output file behind.
 import { createHash } from 'node:crypto';
 import { copyFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync } from 'node:fs';
@@ -13,7 +14,8 @@ import { chromium } from '@playwright/test';
 import { bundle, webpack } from '@remotion/bundler';
 import { renderMedia, selectComposition } from '@remotion/renderer';
 
-import { assetObjectPath, DEFAULT_ASSET_STORE, importSourceAssets } from '@/assets/asset-store';
+import { assetObjectPath, DEFAULT_ASSET_STORE } from '@/assets/asset-store';
+import { materializeProject, type MaterializeError } from '@/assets/materialize';
 import { catalog } from '@/projects';
 
 import { appAlias, sourcePinAliases } from '../../source-pins.ts';
@@ -22,6 +24,8 @@ import {
   createRenderResult,
   parseRenderArgs,
   resolveRenderJob,
+  selectedProjectId,
+  type RenderEnvironment,
   type RenderError,
   type RenderJob,
 } from './render-job';
@@ -144,18 +148,32 @@ function failWith(error: RenderError): never {
   return finish(createRenderFailure(error), 1);
 }
 
+/** A materialization failure as a render failure; a lock mismatch is an asset mismatch. */
+const materializeFailure = (error: MaterializeError): RenderError => ({
+  reason: error.reason === 'asset-lock-mismatch' ? 'asset-mismatch' : 'render-failed',
+  message: `materialize ${error.reason}${error.slot ? ` (${error.slot})` : ''}: ${error.message}`,
+});
+
 async function main() {
   const parsed = parseRenderArgs(process.argv.slice(2));
   if (!parsed.ok) return failWith(parsed.error);
   let resolved: ReturnType<typeof resolveRenderJob>;
   try {
-    // A clean checkout fills the store deterministically, without network access.
-    importSourceAssets(DEFAULT_ASSET_STORE);
-    resolved = resolveRenderJob(parsed.args, {
-      catalog,
-      cwd: process.cwd(),
-      assetStore: DEFAULT_ASSET_STORE,
-    });
+    const environment: RenderEnvironment = { catalog, cwd: process.cwd(), assetStore: DEFAULT_ASSET_STORE };
+    // Materialize only the selected project, before the job is resolved: a clean checkout fills
+    // the asset-tooling store deterministically and without network access, and unchanged
+    // operation requests are reused (asset-tooling `runAssetOperation`). A selector that names no
+    // catalog project is left to the job's resolution, which reports why.
+    const projectId = selectedProjectId(parsed.args, environment);
+    if (projectId !== undefined) {
+      const materialized = await materializeProject(projectId, { catalog, root: DEFAULT_ASSET_STORE, sourceRoot: ROOT });
+      if (!materialized.ok) return failWith(materializeFailure(materialized.error));
+      for (const slot of materialized.slots) {
+        log(`video:render: ${slot.id} ${slot.status}${slot.operation ? ` ${slot.operation.id}@${slot.operation.version}` : ''} sha256 ${slot.asset.sha256}`);
+      }
+      environment.materialized = materialized.slots;
+    }
+    resolved = resolveRenderJob(parsed.args, environment);
   } catch (error) {
     // I/O failures while reading a spec or asset (unreadable, removed mid-check) are failures too.
     return failWith({

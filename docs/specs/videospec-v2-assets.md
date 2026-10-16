@@ -57,9 +57,13 @@ current bytes:
 
 ### 1.3 Content-addressed store (`src/assets/asset-store.ts`)
 
-- The store is a git-ignored directory, by default `.asset-store/` at the repository root
-  (`DEFAULT_ASSET_STORE`, absolute). An object lives at `<store>/sha256/<sha256>`
-  (`assetObjectPath(store, sha256)`), keyed by digest only: no project, slot or file name.
+- **#17 update (Open question 5):** the store is asset-tooling's object store. The `store`
+  argument is an asset-tooling root, by default the repository root (`DEFAULT_ASSET_STORE`,
+  absolute), and its `.asset-tooling/` directory is git-ignored. An object lives at
+  `<root>/.asset-tooling/objects/v1/sha256/<first two hex>/<sha256>` (`assetObjectPath(store,
+  sha256)`, asset-tooling's `assetObjectPortablePath`), keyed by digest only: no project, slot or
+  file name. asset-tooling reads the objects IV writes and the other way round; there is no
+  second `.asset-store/`. (Before #17: `.asset-store/sha256/<sha256>`.)
   `assetObjectPath` refuses anything that is not a lowercase 64-hex digest.
 - `importAssetBytes(store, bytes)` → `{ sha256, byteLength }` writes the object once; importing
   the same bytes again leaves exactly one identical object.
@@ -94,6 +98,46 @@ Each function may be sync or async; tests `await` them.
   contains the bytes of every catalog asset slot.
 - `bun run video:render` renders frames of the scene gallery (image) and the narration project
   (audio) headlessly, reporting resolved assets.
+
+### 1.6 Asset requests and materialization (#17)
+
+- A project may keep a sidecar request manifest next to its spec,
+  `src/spec/fixtures/<project id>.asset-requests.json`:
+
+  ```jsonc
+  { "schema": "interactive-videos/asset-requests", "schemaVersion": 1, "project": "<id>",
+    "slots": {
+      "<slot id>": { "operation": { "id", "version" }, "parameters": { … }, "inputs": { "<port>": "<slot id>" } }
+                 | { "local": "<repository-relative file>" } } }
+  ```
+
+  A manifest declares every spec slot exactly once; operation inputs name other slots of the same
+  project. A project without a manifest is all local: its bytes come from the network-free source
+  import. VideoSpec v2 and ADR 0001 are unchanged: requests never enter the spec, and the slot's
+  AssetRef stays the lock. The materialized object must have exactly that identity (for an
+  operation slot the whole AssetRef, including asset-tooling's canonical metadata), otherwise
+  materialization fails with `asset-lock-mismatch` naming the slot.
+- `materializeProject(projectId, { catalog, root, sourceRoot })` in `src/assets/materialize.ts`
+  (outside `src/render/`) materializes only the selected project. Operation slots run through
+  asset-tooling's `runAssetOperation`: an unchanged build identity (operation version,
+  implementation identity including asset-tooling's source fingerprint, parameters, input
+  AssetRefs) is a verified `hit` without execution; any change is a `miss` that re-executes; a
+  corrupt cache entry or a missing or tampered output fails closed. IV keeps no cache or index of
+  its own. Only the deterministic in-process operations are registered (`audio.oscillator@1`,
+  `audio.adsr@1`); no subprocess, network, model or generation backend is reachable.
+- Each slot reports `{ status: hit | miss | local, operation, cacheKey }`. Failures are results,
+  never rejections: `invalid-requests`, `unknown-operation`, `asset-lock-mismatch`,
+  `materialize-failed`, each with the slot (or null) and a message.
+- The render CLI materializes the selected project before `resolveRenderJob` and reports the
+  record as per-slot `provenance` in the render result, schema version 2 (`null` when a job is
+  resolved without a record). Format packs still receive only `{ id, kind, src, sha256,
+  byteLength, mediaType }`.
+- The Vite build (and the dev server) materializes every catalog project into the repository's
+  store and emits or serves only the image, audio and video slots the specs reference, at
+  `assets/sha256/<sha256>.<ext>`.
+- Fixture: `moenarch-materialized-audio`: `narration.tone` (`audio.oscillator@1`),
+  `narration.shaped` (`audio.adsr@1` of the tone) and `narration.local`
+  (`public/fixtures/narration/hook.wav`).
 
 ## 2. Obligation → evidence
 
@@ -177,11 +221,10 @@ bun run verify   # merge gate: full applicable suite
    and the render CLI must not depend on a developer's pre-filled store), and the Pages build
    publishes the referenced objects. Where the checked-in source files live (`public/fixtures/`
    today) and the exact script wiring are implementation choices.
-3. **Render result schema version.** The result's `assets` entries change shape; whether
-   `schemaVersion` stays `1` or becomes `2` is not specified. The tests do not pin it beyond the
-   existing title-card expectation (`1`); bumping it requires re-verification of that line.
+3. **Render result schema version.** *Resolved by #17:* the result is schema version `2`; each
+   `assets[]` entry gains `provenance` (§1.6).
 4. **Video and 3D/mesh slots.** No current scene consumes video or mesh inputs, so there is no
    observable behaviour to test beyond the media-type rules; a mesh slot kind is not added here.
-5. **Relation to asset-tooling's store** (`.asset-tooling/objects/v1/sha256/<2>/<sha256>`). This
-   contract follows the approved #16 proposal (`.asset-store/sha256/<sha256>`); converging the two
-   layouts belongs to #17.
+5. **Relation to asset-tooling's store** (`.asset-tooling/objects/v1/sha256/<2>/<sha256>`).
+   *Resolved by #17 (owner-approved preflight, 2026-10-16):* IV converges on asset-tooling's
+   object store under the repository root and removes `.asset-store/`; there is one store (§1.3).

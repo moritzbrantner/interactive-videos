@@ -246,11 +246,13 @@ describe('VideoSpec v2: kind and media-type compatibility (no bytes read)', () =
 });
 
 describe('VideoSpec v2: migrated fixtures', () => {
-  it('has the seven current fixtures', () => {
+  // #17 adds the asset-tooling materialization fixture (expectation updated by the #17 acceptance context).
+  it('has the seven migrated fixtures plus the #17 materialization fixture', () => {
     expect(FIXTURES).toEqual([
       'catalog-title-card.videospec.json',
       'interactive-showcase.videospec.json',
       'latency-explainer.videospec.json',
+      'moenarch-materialized-audio.videospec.json',
       'moenarch-narration.videospec.json',
       'moenarch-scene-gallery.videospec.json',
       'moenarch-specimen.videospec.json',

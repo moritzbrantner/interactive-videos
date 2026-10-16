@@ -242,6 +242,9 @@ is involved.
 - **Fixture**: `?project=moenarch-narration`
   (`src/spec/fixtures/moenarch-narration.videospec.json`, audio in `public/fixtures/narration/`)
   covers lead-in/out, a hold, words, marks and an explicit scene.
+- **Materialized audio fixture** (#17): `?project=moenarch-materialized-audio` plays two slots that
+  the build generates through asset-tooling (`audio.oscillator@1`, then `audio.adsr@1` of it) and
+  one local file, as declared in `src/spec/fixtures/moenarch-materialized-audio.asset-requests.json`.
 
 ## Headless render
 
@@ -263,9 +266,14 @@ renders a catalog project to a video file without the Player, for example
   moved into place, so a failed render leaves no output file.
 - **How**: `src/render/render-job.ts` resolves the project, format, profile, size, fps, length,
   frame range, scene schedule and content-addressed assets before anything is bundled: every slot is
-  read from the git-ignored store `.asset-store/sha256/<digest>` (filled deterministically from the
-  checked-in sources by `importSourceAssets`) and checked against its AssetRef digest and length
-  (`missing-asset` / `asset-mismatch`). See `docs/specs/videospec-v2-assets.md` and ADR 0001.
+  read from asset-tooling's git-ignored object store
+  `.asset-tooling/objects/v1/sha256/<2>/<digest>` under the repository root and checked against its
+  AssetRef digest and length (`missing-asset` / `asset-mismatch`). Before that, the CLI materializes
+  the selected project (`src/assets/materialize.ts`, #17): slots with a sidecar request
+  (`src/spec/fixtures/<id>.asset-requests.json`) run through asset-tooling's `runAssetOperation`,
+  which reuses an unchanged request as a verified `hit`; all other slots are imported from the
+  checked-in sources. The Vite build does the same for every catalog project and emits the media
+  slots at `assets/sha256/<digest>.<ext>`. See `docs/specs/videospec-v2-assets.md` and ADR 0001.
   `src/render/cli.ts` then bundles `src/render/root.tsx` with `@remotion/bundler` (with the
   `source-pins.ts` aliases) and renders it with `@remotion/renderer` (`selectComposition` +
   `renderMedia`, concurrency 1) in Playwright's installed Chromium (`browserExecutable`), so
@@ -276,11 +284,11 @@ renders a catalog project to a video file without the Player, for example
 - `bun run test:render` (part of `bun run verify`) runs the smoke in
   `src/render/render.smoke.test.ts`: 12 frames of `catalog-title-card`, twice, byte-identical.
 
-stdout carries exactly one line, the JSON result; logs and progress go to stderr. Schema v1:
+stdout carries exactly one line, the JSON result; logs and progress go to stderr. Schema v2:
 
 ```jsonc
 {
-  "schema": "interactive-videos/render-result", "schemaVersion": 1, "ok": true,
+  "schema": "interactive-videos/render-result", "schemaVersion": 2, "ok": true,
   "request": { "project": "<selector as given>", "profile": "social-portrait", "frames": "0-11" | null },
   "project": { "id", "title", "specSha256" },          // sha256 of serializeVideoSpec(spec)
   "format": { "id", "version" },
@@ -288,16 +296,19 @@ stdout carries exactly one line, the JSON result; logs and progress go to stderr
   "composition": { "id", "width", "height", "fps", "durationInFrames" },
   "frames": { "from", "to", "count" },                  // inclusive range rendered
   "scenes": [{ "id", "kind", "from", "durationInFrames" }],
-  "assets": [{ "id", "kind", "uri" } | { "id", "kind", "uri", "publicPath", "sha256", "bytes" }],
+  "assets": [{ "id", "kind", "src", "sha256", "byteLength", "mediaType",
+               "provenance": { "status": "hit" | "miss" | "local", "operation": { "id", "version" } | null,
+                               "cacheKey": "<sha256>" | null } }],   // spec slot order
   "output": { "path", "sha256", "bytes" }               // absolute path of the written file
 }
 ```
 
 A failure exits non-zero, prints the message on stderr and writes
-`{ "schema", "schemaVersion": 1, "ok": false, "error": { "reason", "message" } }`. Reasons:
+`{ "schema", "schemaVersion": 2, "ok": false, "error": { "reason", "message" } }`. Reasons:
 `invalid-arguments`, `unknown-profile`, `unknown-project`, `spec-not-found`, `invalid-spec`,
 `spec-mismatch`, `format-mismatch`, `unrenderable`, `profile-mismatch`, `missing-asset`,
-`frames-out-of-range` and `render-failed`. Neither object contains timestamps or other
+`asset-mismatch` (also a materialized output that differs from its lock), `frames-out-of-range`
+and `render-failed` (also any other materialization failure). Neither object contains timestamps or other
 time-dependent values, so the same inputs give the same result and the same bytes.
 
 ## Rules

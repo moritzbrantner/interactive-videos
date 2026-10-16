@@ -4,4 +4,6 @@ dist/
 test-results/
 playwright-report/
 out/
+.asset-tooling/
+# Legacy store from before #17; kept ignored so old checkouts stay clean.
 .asset-store/
