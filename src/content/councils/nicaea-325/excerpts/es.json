@@ -1,0 +1,94 @@
+{
+  "schema": "interactive-videos/council-excerpts",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "language": "es",
+  "provenance": {
+    "translatedFrom": {
+      "language": "en",
+      "excerptsSha256": "fe342453b3495b12b3655c0e2b28ef25257057af8f67f9952d67ae1dd53d3e0f"
+    },
+    "translator": {
+      "kind": "agent",
+      "name": "Claude Opus 5.5 (implementation agent, interactive-videos#86)"
+    },
+    "review": {
+      "status": "pending"
+    }
+  },
+  "excerpts": [
+    {
+      "id": "nicene-creed",
+      "title": "El Credo de Nicea (325)",
+      "explanation": "Los obispos reunidos en Nicea adoptaron esta confesión de fe en junio de 325 para excluir la enseñanza de Arrio. Es un acto del propio concilio, junto con los cánones y la carta sinodal. En su carta a su Iglesia, Eusebio de Cesarea cuenta que la fe que él había presentado solo fue aceptada con la palabra homoousios añadida, y explica por qué pudo aceptar las expresiones «de la sustancia del Padre», «engendrado, no creado» y «consustancial». Estas expresiones excluyen entender al Hijo como la primera y más alta criatura, y el anatema final condena las propias consignas de Arrio. Arrio y dos obispos que no lo aceptaron fueron desterrados. No es palabra por palabra el Credo que se reza hoy en la misa: ese texto más largo se asocia al Concilio de Constantinopla (381), que amplió el artículo sobre el Espíritu Santo y suprimió el anatema. Según la doctrina católica, la definición de Nicea es dogma vinculante (Catecismo §242, §465); las Iglesias ortodoxas la comparten, y la mayoría de las Iglesias protestantes la aceptan como fiel a la Escritura.",
+      "originalNote": "No se conserva ningún acta de las sesiones del concilio. El texto griego del Credo se ha transmitido por testigos: la carta de Eusebio de Cesarea a su Iglesia, Atanasio (mostrado aquí, de De decretis 37), la Historia eclesiástica de Sócrates (I.8) y las actas del Concilio de Calcedonia (451), con diferencias mínimas entre ellos. Percival tradujo la forma impresa en las colecciones conciliares, por lo que su inglés difiere ligeramente en algunos puntos.",
+      "annotations": [
+        {
+          "id": "homoousios",
+          "term": "ὁμοούσιον",
+          "note": "Homoousios, «consustancial» (en latín consubstantialis): el Hijo tiene el mismo ser divino que el Padre. Atanasio explica en De Decretis 19–20 que los obispos eligieron esta palabra no bíblica porque el partido de Arrio podía aplicar las expresiones bíblicas a las criaturas."
+        },
+        {
+          "id": "of-the-substance",
+          "term": "de la sustancia del Padre",
+          "note": "En griego ἐκ τῆς οὐσίας τοῦ πατρός: el Hijo procede del propio ser del Padre y no fue hecho de la nada por su voluntad, como las criaturas. El Credo de 381 omite esta expresión, pero conserva homoousios."
+        },
+        {
+          "id": "begotten-not-made",
+          "term": "no creado",
+          "note": "En griego γεννηθέντα οὐ ποιηθέντα: un padre engendra un hijo de su misma naturaleza, mientras que quien fabrica produce algo de otra naturaleza; así la expresión separa al Hijo de toda criatura."
+        },
+        {
+          "id": "anathema",
+          "term": "anatematiza",
+          "note": "Anatematizar es declarar que una doctrina y quienes la sostienen quedan excluidos de la comunión de la Iglesia. Las frases condenadas son consignas de Arrio y sus partidarios, como «hubo un tiempo en que no existía»."
+        },
+        {
+          "id": "catholic-church",
+          "term": "Iglesia católica y apostólica",
+          "note": "En 325, «católica» significa la Iglesia universal en su conjunto, todavía no una confesión. Católicos y ortodoxos se consideran ambos continuación de esta Iglesia."
+        }
+      ],
+      "translation": {
+        "status": "included",
+        "text": "Creemos en un solo Dios, Padre todopoderoso, creador de todas las cosas visibles e invisibles; y en un solo Señor Jesucristo, el Hijo de Dios, engendrado del Padre como unigénito, es decir, de la sustancia del Padre, Dios de Dios, Luz de Luz, Dios verdadero de Dios verdadero, engendrado, no creado, consustancial al Padre, por quien todo fue hecho, lo que está en el cielo y lo que está en la tierra; que por nosotros los hombres y por nuestra salvación descendió, se encarnó y se hizo hombre, padeció y resucitó al tercer día, subió a los cielos y vendrá a juzgar a vivos y muertos; y en el Espíritu Santo. A quienes dicen: «Hubo un tiempo en que no existía», o «Antes de ser engendrado no existía», o «Llegó a ser de la nada», o afirman que el Hijo de Dios es de otra hipóstasis o sustancia, o que es creado, mudable o alterable, a estos los anatematiza la Iglesia católica y apostólica.",
+        "translator": {
+          "kind": "agent",
+          "name": "Claude Opus 5.5 (implementation agent, interactive-videos#86)"
+        },
+        "translatedFrom": "grc"
+      }
+    },
+    {
+      "id": "canon-6",
+      "title": "Canon 6: los derechos de las grandes sedes",
+      "explanation": "El canon 6 no crea poderes nuevos, sino que confirma la costumbre existente. El obispo de Alejandría conserva su autoridad sobre las Iglesias de Egipto, Libia y la Pentápolis, «ya que lo mismo es costumbre también para el obispo de Roma», y Antioquía y las demás provincias conservan sus privilegios. Probablemente lo motivó el cisma meleciano en Egipto, donde Melecio había ordenado obispos sin el consentimiento de Alejandría. La segunda parte vale para toda provincia: nadie puede ser obispo sin el consentimiento del metropolitano, y la mayoría prevalece sobre dos o tres opositores. La tradición católica lee la mención de Roma como reconocimiento de una antigua autoridad romana; los lectores ortodoxos y muchos protestantes ven en ella la autoridad regional de las grandes Iglesias, no una jurisdicción universal. El canon mismo no define el primado del papa.",
+      "originalNote": "El texto griego de los cánones se ha transmitido en colecciones canónicas griegas y se conoce también por antiguas versiones latinas, siríacas y coptas. No se muestra aquí porque su griego no pudo cotejarse con una edición crítica para este episodio; el texto inglés es la traducción de Percival a partir del griego.",
+      "annotations": [
+        {
+          "id": "ancient-customs",
+          "term": "ancient customs",
+          "note": "El canon se presenta como confirmación de lo que ya se practicaba, no como concesión de derechos nuevos (notas de Percival, siguiendo a Hammond)."
+        },
+        {
+          "id": "pentapolis",
+          "term": "Pentapolis",
+          "note": "Las cinco ciudades de la Cirenaica, en el este de la actual Libia, cuyas Iglesias pertenecían al ámbito de Alejandría."
+        },
+        {
+          "id": "bishop-of-rome",
+          "term": "Bishop of Rome",
+          "note": "La costumbre romana se cita como precedente de la autoridad de Alejandría. La tradición católica ve aquí un reconocimiento de la posición de Roma; el canon no define el primado del papa."
+        },
+        {
+          "id": "metropolitan",
+          "term": "Metropolitan",
+          "note": "El obispo de la capital de una provincia, que preside a sus obispos; según el canon 4, confirma su ordenación."
+        }
+      ],
+      "translation": {
+        "status": "missing"
+      }
+    }
+  ]
+}
