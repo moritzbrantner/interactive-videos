@@ -38,7 +38,7 @@ import {
 import { runAssetOperation, storeAssetObject, verifyAssetObject, type AssetOperationImplementationIdentity } from 'asset-tooling/operations/store';
 
 import type { AssetKind, ContentAssetRef, VideoSpec } from '../spec/video-spec';
-import { sha256Hex, sourceAssets } from './asset-store';
+import { findSourceAsset, loadSourceAsset, sha256Hex } from './asset-store';
 
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const FIXTURE_DIR = join(REPOSITORY_ROOT, 'src', 'spec', 'fixtures');
@@ -260,10 +260,23 @@ async function materializeLocal(projectId: string, slotId: string, lock: Content
   await storeAssetObject(environment.root, { bytes, kind: lock.kind, mediaType: lock.mediaType, metadata: lock.metadata as never });
 }
 
-/** Stores the network-free source bytes of a slot of a project without requests. */
-async function materializeSource(projectId: string, slotId: string, lock: ContentAssetRef, sources: () => Uint8Array[], root: string) {
-  const bytes = sources().find((candidate) => candidate.length === lock.byteLength && sha256Hex(candidate) === lock.sha256);
-  if (bytes) {
+/**
+ * Stores the network-free source bytes of a slot of a project without requests. Only the source
+ * declaring this slot's locked identity is read or generated, never another project's.
+ */
+async function materializeSource(projectId: string, slotId: string, lock: ContentAssetRef, root: string) {
+  const source = findSourceAsset(lock.sha256, lock.byteLength);
+  if (source) {
+    let bytes: Uint8Array;
+    try {
+      bytes = loadSourceAsset(source);
+    } catch (error) {
+      throw new Failure(
+        'materialize-failed',
+        slotId,
+        `${projectId}: the source of slot "${slotId}" (sha256 ${lock.sha256}) could not be loaded: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
     await storeAssetObject(root, { bytes, kind: lock.kind, mediaType: lock.mediaType, metadata: lock.metadata as never });
     return;
   }
@@ -319,10 +332,8 @@ export async function materializeProject(projectId: string, environment: Materia
     });
 
     if (manifest === undefined) {
-      let cached: Uint8Array[] | undefined;
-      const sources = () => (cached ??= sourceAssets());
       for (const slot of spec.assets) {
-        await materializeSource(projectId, slot.id, slot.asset, sources, root);
+        await materializeSource(projectId, slot.id, slot.asset, root);
         results.set(slot.id, local(slot));
       }
     } else {
