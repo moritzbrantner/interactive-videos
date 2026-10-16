@@ -59,9 +59,17 @@ export function assertAssetProvenance(value: unknown, location: string) {
   if (value === null) return;
   const provenance = value as Record<string, any>;
   expect(keys(provenance), location).toEqual(['cacheKey', 'operation', 'status']);
-  expect(['hit', 'miss', 'local'], location).toContain(provenance.status);
+  expect(['hit', 'miss', 'local', 'committed'], location).toContain(provenance.status);
   if (provenance.status === 'local') {
     expect(provenance.operation, location).toBeNull();
+    expect(provenance.cacheKey, location).toBeNull();
+  } else if (provenance.status === 'committed') {
+    // #82 (independent acceptance): committed bytes verified against the lock; the operation that
+    // generated them is provenance only, never executed, so there is no cache key.
+    expect(provenance.operation, location).not.toBeNull();
+    expect(keys(provenance.operation), location).toEqual(['id', 'version']);
+    expect(provenance.operation.id, location).toMatch(/^[a-z0-9]+(?:[.-][a-z0-9]+)*$/);
+    expect(provenance.operation.version, location).toBeTypeOf('string');
     expect(provenance.cacheKey, location).toBeNull();
   } else {
     expect(keys(provenance.operation), location).toEqual(['id', 'version']);
