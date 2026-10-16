@@ -152,6 +152,14 @@ This is the canonical product-intent map for `interactive-videos`: **what viewer
   Status: owner-approved 2026-10-15. **Answers 3.21 (option B).**  
   For the Nicaea I pilot and the initial seven-episode series, generate the **English spoken narration locally** using a suitable **open, redistributable and correctly licensed text-to-speech voice/model**, rather than requiring the owner to record every episode or relying on a cloud narration service or API key. Use the existing shared `asset-tooling` generation/artifact boundary for reusable narration assets, without creating a second video-specific model/runtime/cache system. Keep the chosen model/voice, license, input script and produced audio identifiable and reproducibly buildable where the provider permits; a precise voice/model is an implementation selection subject to real playback quality, intelligibility of historical and theological terms and asset-license review, **not** an owner-approved model yet. Make synthetic narration identifiable as such; human replacement for an individual episode may be considered later without changing the default initial pipeline. Narration must be real, comprehensible spoken audio in the published Nicaea I video, with accurate timing and complete aligned English, German and Spanish subtitle tracks under 3.10/3.12. Do not claim production, voice-quality acceptance or published episodes have already been achieved by this Decision.
 
+- **3.23** [question] **Is a TTS model with Apache-2.0 weights but partly synthetic, closed-provider training data "correctly licensed" for the published series?**  
+  Raised on 2026-10-16 during the concrete speech-adapter preflight for [asset-tooling#30](https://github.com/moritzbrantner/asset-tooling/issues/30). The best local candidate is Kokoro-82M (`hexgrad/Kokoro-82M`). Its weights and code are Apache-2.0, but its model card says the training data includes synthetic audio from closed commercial TTS providers. Options: (A) accept it; (B) require models whose training data is itself openly licensed; (C) use human-recorded narration instead.  
+  Answered by Decision 3.24; retained for historical traceability.
+
+- **3.24 Kokoro-82M is acceptable for the initial Seven Councils narration.**  
+  Status: owner-approved 2026-10-16. **Answers 3.23 (option A).**  
+  Under 3.22, the Apache-2.0 licensed Kokoro-82M model, pinned to an immutable revision, meets "correctly licensed" for the initial series narration. The upstream training-data provenance caveat must stay recorded with the narration's model/licence evidence. The specific voice remains an implementation selection by listening review; this Decision does not claim voice quality, pronunciation or a published episode.
+
 ## 4. Reusable video formats
 
 - **4.1 Use bundled, freely licensed fonts for consistent video typography.**  
