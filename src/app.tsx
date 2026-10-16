@@ -254,7 +254,8 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
             spaceKeyToPlayOrPause={false}
             style={{ width: '100%', height: '100%' }}
           />
-          {Overlay ? <Overlay player={player} /> : null}
+          {/* #85: until the series language selector (#70), context follows the Subtitles select; Off is English. */}
+          {Overlay ? <Overlay player={player} language={subtitleLanguage ?? 'en'} /> : null}
         </div>
         {composition.chapters ? <ChapterNav chapters={composition.chapters} player={player} /> : null}
         {debugMode ? <HotspotDebug frame={frame} player={player} /> : null}

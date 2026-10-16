@@ -1,0 +1,72 @@
+{
+  "schema": "interactive-videos/council-context",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "language": "en",
+  "entries": [
+    {
+      "id": "arius",
+      "kind": "person",
+      "title": "Arius",
+      "preview": "A priest of Alexandria who taught that the Son of God was created and that “there was a time when the Son was not”. The Council of Nicaea condemned this teaching in 325.",
+      "body": "Arius was a priest in Alexandria, Egypt. He taught that the Son of God was not eternal but had been brought into being from nothing by the Father: “there was a time when the Son was not”. His bishop, Alexander, gathered a synod that excommunicated him, but Arius found supporters among other bishops in the East, and the dispute spread. At Nicaea in 325 the bishops rejected his teaching: the Creed condemns those who say the Son was made from nothing or once did not exist, and Arius was exiled together with two bishops who refused to sign, Theonas of Marmarica and Secundus of Ptolemais. In Catholic teaching his doctrine is a heresy, which the Catechism summarizes as the claim that the Son “came to be from things that were not”. Arius himself presented his view as a defence of the one God, who alone is without beginning, and views associated with him kept powerful supporters for decades after the council.",
+      "sources": ["socrates-church-history", "nicaea-creed-and-canons", "catechism-of-the-catholic-church", "ayres-nicaea-and-its-legacy"],
+      "appearances": [
+        { "scene": "arius", "anchor": "Arius" },
+        { "scene": "rejected", "anchor": "Arius" },
+        { "scene": "exile", "anchor": "Arius" }
+      ]
+    },
+    {
+      "id": "alexander-of-alexandria",
+      "kind": "person",
+      "title": "Alexander of Alexandria",
+      "preview": "Bishop of Alexandria who condemned the teaching of his priest Arius and took part in the Council of Nicaea. His deacon Athanasius succeeded him in 328.",
+      "body": "Alexander was bishop of Alexandria, one of the great sees whose traditional rights the council confirmed in its sixth canon. When his priest Arius taught that the Son of God was a creature, Alexander convened a synod of bishops that excommunicated Arius and his followers, and he wrote to bishops elsewhere to warn them. Emperor Constantine first sent a letter urging Alexander and Arius to settle their quarrel; when that failed, he summoned the council at Nicaea. Alexander attended it, accompanied by his deacon Athanasius, and the bishops there rejected the teaching of Arius. After Alexander’s death Athanasius became bishop of Alexandria in his place.",
+      "sources": ["socrates-church-history", "nicaea-creed-and-canons", "catholic-encyclopedia-nicaea"],
+      "appearances": [{ "scene": "alexander", "anchor": "Bishop Alexander" }]
+    },
+    {
+      "id": "constantine",
+      "kind": "person",
+      "title": "Constantine",
+      "preview": "Roman emperor, sole ruler of the empire from 324. He summoned the bishops to Nicaea in 325 to restore unity, but was baptized only shortly before his death in 337.",
+      "body": "Constantine became sole ruler of the Roman Empire after his victory over his co-emperor Licinius in 324. He favoured the Church and wanted it united, so he first wrote to Alexander and Arius urging them to make peace. When that failed, he summoned the bishops to Nicaea in 325 and let them travel by the public post. Eusebius of Caesarea describes how he opened the council with a speech calling for unity and then followed the debates. According to Eusebius’s letter, preserved by Socrates, the emperor also backed the word homoousios, but the Creed and the canons were decisions of the bishops; Constantine enforced them, including the exile of Arius. He was baptized only near the end of his life, near Nicomedia in 337, and died a few days later.",
+      "sources": ["eusebius-life-of-constantine", "socrates-church-history"],
+      "appearances": [{ "scene": "constantine", "anchor": "Emperor Constantine" }]
+    },
+    {
+      "id": "athanasius",
+      "kind": "person",
+      "title": "Athanasius of Alexandria",
+      "preview": "A deacon at Nicaea in 325, bishop of Alexandria from 328 until his death in 373. He defended the council’s faith for decades and was driven into exile five times.",
+      "body": "Athanasius came to Nicaea as a deacon of Bishop Alexander and succeeded him as bishop of Alexandria in 328. For the next forty-five years he was a leading defender of the Nicene Creed, at a time when emperors and many bishops preferred compromise formulas or the views associated with Arius, and he was driven from his see five times. In his work De Decretis he explained why the council chose a word that is not found in Scripture: the biblical phrases alone, such as “from God”, could be read by Arius’s supporters as true of creatures too, so the bishops wrote that the Son is “of the essence” of the Father and homoousios with him. The Council of Constantinople in 381, eight years after his death, reaffirmed the faith he had defended.",
+      "sources": ["socrates-church-history", "athanasius-de-decretis", "ayres-nicaea-and-its-legacy"],
+      "appearances": [
+        { "scene": "why-the-word", "anchor": "Athanasius" },
+        { "scene": "athanasius", "anchor": "Athanasius" }
+      ]
+    },
+    {
+      "id": "nicaea",
+      "kind": "place",
+      "title": "Nicaea",
+      "preview": "A city in Bithynia, in the northwest of Asia Minor, where the first ecumenical council met in 325. Today it is the town of İznik, in Türkiye.",
+      "body": "Nicaea was a city in the Roman province of Bithynia; Eusebius of Caesarea notes that its Greek name comes from the word for victory. Constantine chose it for the council of 325 and provided the public post and horses so that bishops could travel there. Eusebius counts more than 250 bishops, most of them from the Greek-speaking East; Pope Sylvester, too old to travel, was represented by two Roman priests. The council produced the Creed, a common date for Easter and twenty canons. Catholics count it as the first ecumenical council, as do the Orthodox churches. The site is the modern town of İznik, in northwestern Türkiye.",
+      "sources": ["eusebius-life-of-constantine", "catholic-encyclopedia-nicaea", "nicaea-creed-and-canons"],
+      "appearances": [
+        { "scene": "opening", "anchor": "Nicaea" },
+        { "scene": "summons", "anchor": "Nicaea" }
+      ]
+    },
+    {
+      "id": "homoousios",
+      "kind": "term",
+      "title": "Homoousios",
+      "preview": "Greek for “of one substance”: the Creed of Nicaea says the Son is homoousios with the Father, that is, God in the same full sense as the Father, not a creature.",
+      "body": "Homoousios joins the Greek words homos, “same”, and ousia, “substance” or “being”. The Creed of Nicaea uses it to say that the Son, “begotten, not made”, shares the very being of the Father, against the teaching that he was a creature. The word does not occur in Scripture; Athanasius later explained that the bishops chose it because the biblical phrases alone could be read by Arius’s supporters as true of creatures too. In Catholic teaching the Son is consubstantial with the Father, and the Catechism quotes the Creed’s homoousios in this sense. Some bishops objected that the term was not biblical or might blur the distinction between Father and Son, and rival formulas were proposed for decades after 325, until the Council of Constantinople in 381 reaffirmed the Nicene faith.",
+      "sources": ["nicaea-creed-and-canons", "athanasius-de-decretis", "catechism-of-the-catholic-church", "ayres-nicaea-and-its-legacy"],
+      "appearances": [{ "scene": "homoousios", "anchor": "Homoousios" }]
+    }
+  ]
+}

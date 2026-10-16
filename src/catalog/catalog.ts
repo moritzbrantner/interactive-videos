@@ -51,6 +51,12 @@ export type FormatRendering = {
 /** What a Player overlay receives: the live Player handle for frame and playback state. */
 export type PlayerOverlayProps = {
   player: RefObject<PlayerRef | null>;
+  /**
+   * The viewer's language for contextual explanations (Atlas 3.12, #85): until the series
+   * language selector (#70) exists, the Player derives it from the Subtitles selection (Off is
+   * English). Overlays without localized content ignore it.
+   */
+  language?: string;
 };
 
 /**
@@ -79,6 +85,11 @@ export type ProjectSource = {
   subtitles?: readonly SubtitleTrackSource[];
   /** Short notes shown next to the Player, e.g. the synthetic-narration disclosure (Atlas 3.22). */
   notes?: readonly string[];
+  /**
+   * Project-specific browser-only overlay built from the validated spec, e.g. the contextual
+   * disclosures of a council episode (#85). The format must not have an Overlay of its own.
+   */
+  overlay?: (spec: VideoSpec) => ComponentType<PlayerOverlayProps>;
 };
 
 /**
@@ -132,7 +143,14 @@ export type Catalog = {
  * first use and cached, so a project's component identity is stable across renders.
  */
 export function createCatalog(sources: readonly ProjectSource[], defaultId: string): Catalog {
-  type Entry = { spec: VideoSpec; format: FormatPack; chapters: boolean; subtitles?: readonly SubtitleTrackOption[]; notes?: readonly string[] };
+  type Entry = {
+    spec: VideoSpec;
+    format: FormatPack;
+    chapters: boolean;
+    subtitles?: readonly SubtitleTrackOption[];
+    notes?: readonly string[];
+    overlay?: ProjectSource['overlay'];
+  };
   const entries = new Map<string, Entry>();
   for (const source of sources) {
     const spec = assertVideoSpec(source.spec);
@@ -144,6 +162,7 @@ export function createCatalog(sources: readonly ProjectSource[], defaultId: stri
       chapters: source.chapters ?? false,
       ...(subtitles.length ? { subtitles } : {}),
       ...(source.notes?.length ? { notes: [...source.notes] } : {}),
+      ...(source.overlay ? { overlay: source.overlay } : {}),
     });
   }
   if (!entries.has(defaultId)) throw new Error(`default project "${defaultId}" is not in the catalog`);
@@ -218,7 +237,14 @@ export function chaptersFor(spec: VideoSpec): Chapter[] | undefined {
 
 function resolveEntry(
   id: string,
-  { spec, format, chapters, subtitles, notes }: { spec: VideoSpec; format: FormatPack; chapters: boolean; subtitles?: readonly SubtitleTrackOption[]; notes?: readonly string[] },
+  {
+    spec,
+    format,
+    chapters,
+    subtitles,
+    notes,
+    overlay,
+  }: { spec: VideoSpec; format: FormatPack; chapters: boolean; subtitles?: readonly SubtitleTrackOption[]; notes?: readonly string[]; overlay?: ProjectSource['overlay'] },
 ): ResolveResult {
   if (spec.format.id !== format.id || spec.format.version !== format.version) {
     return {
@@ -231,6 +257,10 @@ function resolveEntry(
   let rendering: FormatRendering;
   try {
     rendering = format.compose(spec);
+    if (overlay) {
+      if (rendering.Overlay) throw new Error(`format ${format.id} already has an overlay`);
+      rendering = { ...rendering, Overlay: overlay(spec) };
+    }
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
     return { ok: false, reason: 'unrenderable', id, message: `Project "${id}" cannot be rendered: ${detail}` };

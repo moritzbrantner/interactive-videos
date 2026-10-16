@@ -1,0 +1,58 @@
+{
+  "schema": "interactive-videos/council-context",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "language": "de",
+  "provenance": {
+    "translatedFrom": {
+      "language": "en",
+      "entriesSha256": "f5ab994c77411de4b7928bcdeb75674680c3a456a760d39f431947a610f7aa58"
+    },
+    "translator": {
+      "kind": "agent",
+      "name": "Claude Opus 5.5 (implementation agent, interactive-videos#85)"
+    },
+    "review": {
+      "status": "pending"
+    },
+    "terminology": "Terminology follows the German subtitle track (#84): Nizäa (adjective nizänisch), (Glaubens)bekenntnis for the Creed, homoousios kept in Greek and glossed as wesensgleich, Konstantin, Alexandria, Konstantinopel."
+  },
+  "entries": [
+    {
+      "id": "arius",
+      "title": "Arius",
+      "preview": "Ein Priester in Alexandria, der lehrte, der Sohn Gottes sei geschaffen und „es gab eine Zeit, da der Sohn nicht war“. Das Konzil von Nizäa verwarf diese Lehre im Jahr 325.",
+      "body": "Arius war Priester in Alexandria in Ägypten. Er lehrte, der Sohn Gottes sei nicht ewig, sondern vom Vater aus dem Nichts ins Dasein gerufen worden: „Es gab eine Zeit, da der Sohn nicht war.“ Sein Bischof Alexander berief eine Synode, die ihn exkommunizierte, doch Arius fand Unterstützer unter anderen Bischöfen im Osten, und der Streit breitete sich aus. In Nizäa verwarfen die Bischöfe im Jahr 325 seine Lehre: Das Bekenntnis verurteilt alle, die sagen, der Sohn sei aus dem Nichts geworden oder habe einmal nicht existiert, und Arius wurde zusammen mit zwei Bischöfen, die die Unterschrift verweigerten, Theonas von Marmarika und Secundus von Ptolemais, verbannt. Nach katholischer Lehre ist seine Lehre eine Häresie; der Katechismus fasst sie als die Behauptung zusammen, der Sohn sei aus dem Nichtseienden geworden. Arius selbst verstand seine Auffassung als Verteidigung des einen Gottes, der allein ohne Anfang ist, und mit ihm verbundene Ansichten fanden noch Jahrzehnte nach dem Konzil mächtige Förderer."
+    },
+    {
+      "id": "alexander-of-alexandria",
+      "title": "Alexander von Alexandria",
+      "preview": "Bischof von Alexandria, der die Lehre seines Priesters Arius verurteilte und am Konzil von Nizäa teilnahm. Sein Diakon Athanasius wurde 328 sein Nachfolger.",
+      "body": "Alexander war Bischof von Alexandria, einer der großen Bischofssitze, deren überlieferte Rechte das Konzil in seinem sechsten Kanon bestätigte. Als sein Priester Arius lehrte, der Sohn Gottes sei ein Geschöpf, berief Alexander eine Synode von Bischöfen ein, die Arius und seine Anhänger exkommunizierte, und warnte in Briefen Bischöfe in anderen Regionen. Kaiser Konstantin forderte Alexander und Arius zunächst in einem Brief auf, ihren Streit beizulegen; als das scheiterte, berief er das Konzil nach Nizäa. Alexander nahm daran teil, begleitet von seinem Diakon Athanasius, und die Bischöfe verwarfen dort die Lehre des Arius. Nach Alexanders Tod wurde Athanasius an seiner Stelle Bischof von Alexandria."
+    },
+    {
+      "id": "constantine",
+      "title": "Konstantin",
+      "preview": "Römischer Kaiser, seit 324 Alleinherrscher des Reiches. Er berief die Bischöfe 325 nach Nizäa, um die Einheit wiederherzustellen, ließ sich aber erst kurz vor seinem Tod 337 taufen.",
+      "body": "Konstantin wurde nach seinem Sieg über seinen Mitkaiser Licinius im Jahr 324 Alleinherrscher des Römischen Reiches. Er förderte die Kirche und wollte sie geeint sehen; deshalb schrieb er zuerst an Alexander und Arius und forderte sie auf, Frieden zu schließen. Als das scheiterte, berief er die Bischöfe 325 nach Nizäa und ließ sie mit der staatlichen Post reisen. Eusebius von Caesarea beschreibt, wie er das Konzil mit einer Rede für die Einheit eröffnete und danach den Beratungen folgte. Nach dem Brief des Eusebius, den Sokrates überliefert, unterstützte der Kaiser auch das Wort homoousios, doch das Bekenntnis und die Kanones waren Beschlüsse der Bischöfe; Konstantin setzte sie durch, auch die Verbannung des Arius. Getauft wurde er erst gegen Ende seines Lebens, 337 bei Nikomedia, und er starb wenige Tage danach."
+    },
+    {
+      "id": "athanasius",
+      "title": "Athanasius von Alexandria",
+      "preview": "Diakon in Nizäa im Jahr 325, Bischof von Alexandria von 328 bis zu seinem Tod 373. Er verteidigte den Glauben des Konzils jahrzehntelang und wurde fünfmal in die Verbannung getrieben.",
+      "body": "Athanasius kam als Diakon des Bischofs Alexander nach Nizäa und folgte ihm 328 als Bischof von Alexandria nach. In den folgenden fünfundvierzig Jahren war er ein führender Verteidiger des nizänischen Bekenntnisses, zu einer Zeit, als Kaiser und viele Bischöfe Kompromissformeln oder die mit Arius verbundenen Ansichten bevorzugten, und er wurde fünfmal von seinem Bischofssitz vertrieben. In seiner Schrift De Decretis erklärte er, warum das Konzil ein Wort wählte, das nicht in der Schrift steht: Die biblischen Wendungen allein, etwa „aus Gott“, konnten die Anhänger des Arius auch auf Geschöpfe beziehen; deshalb schrieben die Bischöfe, der Sohn sei „aus dem Wesen“ des Vaters und homoousios mit ihm, also wesensgleich. Das Konzil von Konstantinopel bekräftigte im Jahr 381, acht Jahre nach seinem Tod, den Glauben, den er verteidigt hatte."
+    },
+    {
+      "id": "nicaea",
+      "title": "Nizäa",
+      "preview": "Eine Stadt in Bithynien im Nordwesten Kleinasiens, in der im Jahr 325 das erste ökumenische Konzil tagte. Heute ist sie die Stadt İznik in der Türkei.",
+      "body": "Nizäa war eine Stadt in der römischen Provinz Bithynien; Eusebius von Caesarea vermerkt, dass ihr griechischer Name vom Wort für Sieg kommt. Konstantin wählte sie für das Konzil von 325 und stellte die staatliche Post und Pferde bereit, damit die Bischöfe dorthin reisen konnten. Eusebius zählt mehr als zweihundertfünfzig Bischöfe, die meisten aus dem griechischsprachigen Osten; Papst Silvester war zu alt, um zu reisen, und wurde von zwei römischen Priestern vertreten. Das Konzil verabschiedete das Bekenntnis, einen gemeinsamen Ostertermin und zwanzig Kanones. Katholiken zählen es als erstes ökumenisches Konzil, ebenso die orthodoxen Kirchen. Der Ort ist die heutige Stadt İznik im Nordwesten der Türkei."
+    },
+    {
+      "id": "homoousios",
+      "title": "Homoousios",
+      "preview": "Griechisch für „wesensgleich“: Das Bekenntnis von Nizäa nennt den Sohn homoousios mit dem Vater, also Gott im selben vollen Sinn wie der Vater und kein Geschöpf.",
+      "body": "Homoousios verbindet die griechischen Wörter homos, „derselbe“, und ousia, „Wesen“ oder „Substanz“. Das Bekenntnis von Nizäa sagt damit, dass der Sohn, „gezeugt, nicht geschaffen“, das Wesen des Vaters selbst teilt, gegen die Lehre, er sei ein Geschöpf. Das Wort kommt in der Schrift nicht vor; Athanasius erklärte später, die Bischöfe hätten es gewählt, weil die Anhänger des Arius die biblischen Wendungen allein auch auf Geschöpfe beziehen konnten. Nach katholischer Lehre ist der Sohn dem Vater wesensgleich, und der Katechismus zitiert das homoousios des Bekenntnisses in diesem Sinn. Manche Bischöfe wandten ein, der Begriff sei nicht biblisch oder verwische womöglich den Unterschied zwischen Vater und Sohn, und noch jahrzehntelang nach 325 wurden konkurrierende Formeln vorgeschlagen, bis das Konzil von Konstantinopel 381 den nizänischen Glauben bekräftigte."
+    }
+  ]
+}

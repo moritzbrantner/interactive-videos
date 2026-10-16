@@ -12,9 +12,14 @@ import moenarchNarration from '@/spec/fixtures/moenarch-narration.videospec.json
 import moenarchSceneGallery from '@/spec/fixtures/moenarch-scene-gallery.videospec.json';
 import moenarchSpecimen from '@/spec/fixtures/moenarch-specimen.videospec.json';
 import moenarchTypography from '@/spec/fixtures/moenarch-typography.videospec.json';
+import nicaeaContextDe from '@/content/councils/nicaea-325/context/de.json';
+import nicaeaContextEn from '@/content/councils/nicaea-325/context/en.json';
+import nicaeaContextEs from '@/content/councils/nicaea-325/context/es.json';
 import nicaeaScript from '@/content/councils/nicaea-325/script.json';
+import nicaeaSources from '@/content/councils/nicaea-325/sources.json';
 import nicaeaSubtitlesDe from '@/content/councils/nicaea-325/subtitles/de.json';
 import nicaeaSubtitlesEs from '@/content/councils/nicaea-325/subtitles/es.json';
+import { createContextOverlay } from '@/player/context-overlay';
 import { latencyFormat } from '@/video/latency-format';
 
 // Project content lives in the specs; each entry names the format pack that renders it.
@@ -36,7 +41,8 @@ export const catalog = createCatalog(
     { spec: moenarchMaterializedAudio, format: moenarchShort() },
     // #82: Seven Councils pilot, Nicaea I. Committed Kokoro narration (sidecar
     // council-nicaea-325.asset-requests.json, ADR 0002), selectable English subtitles, and
-    // German and Spanish translations on the English cue timing (#84).
+    // German and Spanish translations on the English cue timing (#84), and browser-only context
+    // disclosures for people, places and terms in the Subtitles language (#85).
     {
       spec: councilNicaea325,
       format: moenarchShort(),
@@ -46,6 +52,8 @@ export const catalog = createCatalog(
         { language: 'es', label: 'Español', translation: nicaeaSubtitlesEs },
       ],
       notes: [nicaeaScript.disclosure.syntheticNarration],
+      overlay: (spec) =>
+        createContextOverlay({ spec, english: nicaeaContextEn, translations: [nicaeaContextDe, nicaeaContextEs], sources: nicaeaSources.sources }),
     },
   ],
   // `/` without a project keeps opening the latency explainer.

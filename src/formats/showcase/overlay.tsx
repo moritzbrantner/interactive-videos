@@ -26,7 +26,7 @@ export type ShowcaseDisclosure = {
 type TimedDisclosure = ShowcaseDisclosure & { from: number; to: number };
 
 /** Current Player frame, updated from the Player's own events (no polling). */
-function usePlayerFrame(player: PlayerOverlayProps['player']) {
+export function usePlayerFrame(player: PlayerOverlayProps['player']) {
   const [frame, setFrame] = useState(() => player.current?.getCurrentFrame() ?? 0);
   useEffect(() => {
     const current = player.current;
