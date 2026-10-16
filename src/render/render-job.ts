@@ -111,7 +111,7 @@ export function parseRenderArgs(argv: readonly string[]): ParseResult {
  */
 export type MaterializedSlotRecord = {
   id: string;
-  status: 'hit' | 'miss' | 'local';
+  status: 'hit' | 'miss' | 'local' | 'committed';
   operation: { id: string; version: string } | null;
   cacheKey: string | null;
 };

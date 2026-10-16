@@ -12,6 +12,12 @@
 // second cache or index here. Everything lands in one store, asset-tooling's
 // `<root>/.asset-tooling/objects/v1`, which the render job then resolves from.
 //
+// A slot may also be *committed* (#82, ADR 0002): bytes an operation produced in an explicit local
+// step (for example Kokoro narration through `audio.model.generate@2`), checked into the repository
+// (Git LFS) together with the request that made them. The request is provenance, never an
+// instruction: the operation is not looked up or run here, the committed file is verified against
+// the slot lock and stored, and the slot reports `status: 'committed'` with the request's operation.
+//
 // Only the deterministic, in-process operations are registered by default; no subprocess, network,
 // model or generation backend is reachable from this module (render.architecture.test.ts). The
 // render CLI and the Vite build call it before resolving or emitting assets; format packs and the
@@ -70,16 +76,19 @@ export const DEFAULT_ASSET_OPERATIONS: readonly MaterializeOperation[] = [
   },
 ];
 
-export type MaterializeStatus = 'hit' | 'miss' | 'local';
+export type MaterializeStatus = 'hit' | 'miss' | 'local' | 'committed';
 
 /** One slot as materialized: its lock-equal AssetRef and how it was obtained. */
 export type MaterializedSlot = {
   id: string;
   kind: AssetKind;
-  /** `hit`/`miss` are asset-tooling's `run.status`; `local` is a source or pre-generated slot. */
+  /**
+   * `hit`/`miss` are asset-tooling's `run.status`; `local` is a source or pre-generated slot;
+   * `committed` is a checked-in operation output verified against its lock, never executed.
+   */
   status: MaterializeStatus;
   operation: { id: string; version: string } | null;
-  /** asset-tooling's `run.cacheKey`; null for local slots. */
+  /** asset-tooling's `run.cacheKey`; null for local and committed slots. */
   cacheKey: string | null;
   asset: ContentAssetRef;
 };
@@ -108,7 +117,14 @@ type Json = Record<string, unknown>;
 
 type OperationRequest = { kind: 'operation'; operation: { id: string; version: string }; parameters: Json; inputs: Record<string, string> };
 type LocalRequest = { kind: 'local'; path: string };
-type SlotRequest = OperationRequest | LocalRequest;
+type CommittedRequest = { kind: 'committed'; path: string; operation: { id: string; version: string } };
+type SlotRequest = OperationRequest | LocalRequest | CommittedRequest;
+
+const COMMITTED_FIELDS = ['committed', 'operation', 'adapter', 'parameters', 'inputs', 'evidence'];
+const COMMITTED_REQUIRED = ['committed', 'operation', 'adapter', 'parameters'];
+
+/** The first line of a Git LFS pointer file: a checkout without `lfs: true` has these, not the bytes. */
+const LFS_POINTER = Buffer.from('version https://git-lfs.github.com/spec/v1');
 
 class Failure extends Error {
   constructor(readonly reason: MaterializeErrorReason, readonly slot: string | null, message: string) {
@@ -160,6 +176,35 @@ function parseRequests(projectId: string, spec: VideoSpec, manifest: unknown): M
     if (!Object.hasOwn(slots, id)) throw invalid(id, `spec slot "${id}" has no request; a manifest declares every slot exactly once`);
     const entry = slots[id];
     if (!isPlainObject(entry)) throw invalid(id, `the request for slot "${id}" must be an object`);
+
+    if (Object.hasOwn(entry, 'committed')) {
+      const extra = Object.keys(entry).filter((key) => !COMMITTED_FIELDS.includes(key));
+      if (extra.length > 0) throw invalid(id, `the committed request for slot "${id}" has unknown fields ${extra.join(', ')}`);
+      const missing = COMMITTED_REQUIRED.filter((key) => !Object.hasOwn(entry, key));
+      if (missing.length > 0) throw invalid(id, `the committed request for slot "${id}" needs ${missing.join(', ')} (how the bytes were made)`);
+      if (typeof entry.committed !== 'string' || entry.committed === '' || isAbsolute(entry.committed)) {
+        throw invalid(id, `the committed request for slot "${id}" must name a repository-relative file`);
+      }
+      const operation = entry.operation;
+      if (!isPlainObject(operation) || typeof operation.id !== 'string' || typeof operation.version !== 'string' || Object.keys(operation).length !== 2) {
+        throw invalid(id, `the committed request for slot "${id}" needs "operation": { "id", "version" } strings`);
+      }
+      const adapter = entry.adapter;
+      if (!isPlainObject(adapter) || typeof adapter.id !== 'string' || typeof adapter.version !== 'string' || Object.keys(adapter).length !== 2) {
+        throw invalid(id, `the committed request for slot "${id}" needs "adapter": { "id", "version" } strings`);
+      }
+      if (!isPlainObject(entry.parameters)) throw invalid(id, `the "parameters" of committed slot "${id}" must be an object`);
+      if (entry.inputs !== undefined) {
+        if (!isPlainObject(entry.inputs)) throw invalid(id, `the "inputs" of committed slot "${id}" must be an object of port → AssetRef`);
+        for (const [port, ref] of Object.entries(entry.inputs)) {
+          if (!isPlainObject(ref) || typeof ref.sha256 !== 'string') throw invalid(id, `input "${port}" of committed slot "${id}" must be an AssetRef with a sha256`);
+        }
+      }
+      if (entry.evidence !== undefined && !isPlainObject(entry.evidence)) throw invalid(id, `the "evidence" of committed slot "${id}" must be an object`);
+      requests.set(id, { kind: 'committed', path: entry.committed, operation: { id: operation.id, version: operation.version } });
+      continue;
+    }
+
     const hasOperation = Object.hasOwn(entry, 'operation');
     const hasLocal = Object.hasOwn(entry, 'local');
     if (hasOperation === hasLocal) throw invalid(id, `the request for slot "${id}" must have exactly one of "operation" and "local"`);
@@ -237,22 +282,36 @@ function lockMismatch(projectId: string, slotId: string, lock: ContentAssetRef, 
   );
 }
 
-/** Stores a local source file of a slot and checks it against the lock. */
-async function materializeLocal(projectId: string, slotId: string, lock: ContentAssetRef, path: string, environment: MaterializeEnvironment) {
+/** Stores a local (or committed) source file of a slot and checks it against the lock. */
+async function materializeLocal(
+  projectId: string,
+  slotId: string,
+  lock: ContentAssetRef,
+  path: string,
+  environment: MaterializeEnvironment,
+  what: 'local source' | 'committed file' = 'local source',
+) {
   const sourceRoot = realpathSync(environment.sourceRoot);
   const absolute = resolve(sourceRoot, path);
   const outside = (target: string) => {
     const relation = relative(sourceRoot, target);
     return relation === '' || relation.startsWith('..') || isAbsolute(relation);
   };
-  if (outside(absolute)) throw new Failure('invalid-requests', slotId, `${projectId}: the local source of slot "${slotId}" (${path}) leaves the source root`);
+  if (outside(absolute)) throw new Failure('invalid-requests', slotId, `${projectId}: the ${what} of slot "${slotId}" (${path}) leaves the source root`);
   if (!existsSync(absolute) || !statSync(absolute).isFile()) {
-    throw new Failure('materialize-failed', slotId, `${projectId}: the local source of slot "${slotId}" (${path}) is not a file`);
+    throw new Failure('materialize-failed', slotId, `${projectId}: the ${what} of slot "${slotId}" (${path}) is not a file`);
   }
   if (outside(realpathSync(absolute))) {
-    throw new Failure('invalid-requests', slotId, `${projectId}: the local source of slot "${slotId}" (${path}) resolves outside the source root`);
+    throw new Failure('invalid-requests', slotId, `${projectId}: the ${what} of slot "${slotId}" (${path}) resolves outside the source root`);
   }
   const bytes = readFileSync(absolute);
+  if (bytes.subarray(0, LFS_POINTER.length).equals(LFS_POINTER)) {
+    throw new Failure(
+      'materialize-failed',
+      slotId,
+      `${projectId}: the ${what} of slot "${slotId}" (${path}) is a Git LFS pointer, not the file; fetch it with \`git lfs pull\` (CI and Pages check out with lfs: true)`,
+    );
+  }
   const actual = { sha256: sha256Hex(bytes), byteLength: bytes.length };
   if (actual.sha256 !== lock.sha256 || actual.byteLength !== lock.byteLength) {
     throw lockMismatch(projectId, slotId, lock, actual, ` from ${path}`);
@@ -357,6 +416,12 @@ export async function materializeProject(projectId: string, environment: Materia
         if (request.kind === 'local') {
           await materializeLocal(projectId, slotId, slot.asset, request.path, environment);
           results.set(slotId, local(slot));
+          continue;
+        }
+        if (request.kind === 'committed') {
+          // Provenance only: verified against the lock and stored, the operation never runs.
+          await materializeLocal(projectId, slotId, slot.asset, request.path, environment, 'committed file');
+          results.set(slotId, { id: slotId, kind: slot.kind, status: 'committed', operation: { ...request.operation }, cacheKey: null, asset: slot.asset });
           continue;
         }
         const operation = registered.get(slotId)!;

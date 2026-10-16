@@ -27,6 +27,8 @@ describe('project catalog', () => {
       { id: 'interactive-showcase', title: 'Interactive showcase' },
       // #17: audio materialized through asset-tooling operations, plus one local slot.
       { id: 'moenarch-materialized-audio', title: 'Moenarch materialized audio' },
+      // #82: the Seven Councils pilot, Nicaea I.
+      { id: 'council-nicaea-325', title: 'The First Council of Nicaea (325)' },
     ]);
     expect(catalog.defaultId).toBe('latency-explainer');
   });

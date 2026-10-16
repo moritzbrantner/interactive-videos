@@ -1,0 +1,1387 @@
+{
+  "schema": "interactive-videos/asset-requests",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "slots": {
+    "narration.alexander": {
+      "committed": "src/content/councils/nicaea-325/narration/alexander.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "His bishop, Alexander, condemned this teaching, and the dispute spread through the East.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.arius": {
+      "committed": "src/content/councils/nicaea-325/narration/arius.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "In Alexandria, a priest named Arius taught that the Son of God was created.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.arius-slogan": {
+      "committed": "src/content/councils/nicaea-325/narration/arius-slogan.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "There was a time, he argued, when the Son did not exist.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.athanasius": {
+      "committed": "src/content/councils/nicaea-325/narration/athanasius.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Athanasius of Alexandria defended Nicaea, and was exiled five times.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.bishops": {
+      "committed": "src/content/councils/nicaea-325/narration/bishops.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "More than two hundred and fifty came, most of them from the Greek-speaking East.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.canons": {
+      "committed": "src/content/councils/nicaea-325/narration/canons.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "And it issued twenty canons on church order, such as how bishops are ordained.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.catholic": {
+      "committed": "src/content/councils/nicaea-325/narration/catholic.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Its teaching on the Son is binding dogma.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.conclusion": {
+      "committed": "src/content/councils/nicaea-325/narration/conclusion.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Its answer, one in being with the Father, still shapes Christian worship today.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.constantine": {
+      "committed": "src/content/councils/nicaea-325/narration/constantine.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "The emperor Constantine, now sole ruler of the empire, wanted a united Church.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.constantinople": {
+      "committed": "src/content/councils/nicaea-325/narration/constantinople.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "The Council of Constantinople, in 381, reaffirmed this faith.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.creed": {
+      "committed": "src/content/councils/nicaea-325/narration/creed.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "It confesses the Son as true God from true God, begotten, not made.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.creed-today": {
+      "committed": "src/content/councils/nicaea-325/narration/creed-today.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Its expanded creed is still recited in many churches today.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.dispute": {
+      "committed": "src/content/councils/nicaea-325/narration/dispute.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Nicaea did not end the dispute. Arian views found powerful backers for decades.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.easter": {
+      "committed": "src/content/councils/nicaea-325/narration/easter.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "The council also settled Easter: all churches should keep it on the same day.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.exile": {
+      "committed": "src/content/councils/nicaea-325/narration/exile.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Arius and two bishops who refused to sign were sent into exile.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.first-ecumenical": {
+      "committed": "src/content/councils/nicaea-325/narration/first-ecumenical.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "For Catholics, Nicaea is the first ecumenical council.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.goths": {
+      "committed": "src/content/councils/nicaea-325/narration/goths.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Arian Christianity lived on among the Goths for two centuries.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.homoousios": {
+      "committed": "src/content/councils/nicaea-325/narration/homoousios.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "And it calls him homoousios with the Father: of the same substance, or being.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.legend": {
+      "committed": "src/content/councils/nicaea-325/narration/legend.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "And the story of Saint Nicholas slapping Arius is a legend from centuries later.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.mass": {
+      "committed": "src/content/councils/nicaea-325/narration/mass.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Catholics profess this faith in the Creed at Sunday Mass.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.not-the-bible": {
+      "committed": "src/content/councils/nicaea-325/narration/not-the-bible.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Some popular claims are not history. Nicaea did not choose the books of the Bible.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.opening": {
+      "committed": "src/content/councils/nicaea-325/narration/opening.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "The First Council of Nicaea, in the year 325.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.orthodox": {
+      "committed": "src/content/councils/nicaea-325/narration/orthodox.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "The Orthodox churches share this Nicene faith, and honor the council as ecumenical.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.perspective": {
+      "committed": "src/content/councils/nicaea-325/narration/perspective.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "This episode is told from a Catholic perspective.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.pope": {
+      "committed": "src/content/councils/nicaea-325/narration/pope.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Pope Sylvester was too old to travel, so two Roman priests took his place.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.protestants": {
+      "committed": "src/content/councils/nicaea-325/narration/protestants.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Most Protestants also confess the Creed, holding it to be faithful to Scripture.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.question": {
+      "committed": "src/content/councils/nicaea-325/narration/question.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "Nicaea answered one question for the Church. Is the Son truly God?",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.rejected": {
+      "committed": "src/content/councils/nicaea-325/narration/rejected.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "The bishops rejected the teaching of Arius, and they set out the faith in a creed.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.summons": {
+      "committed": "src/content/councils/nicaea-325/narration/summons.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "In 325 he summoned bishops to Nicaea, in today's Turkey.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    },
+    "narration.why-the-word": {
+      "committed": "src/content/councils/nicaea-325/narration/why-the-word.wav",
+      "operation": {
+        "id": "audio.model.generate",
+        "version": "2"
+      },
+      "adapter": {
+        "id": "kokoro",
+        "version": "1"
+      },
+      "parameters": {
+        "modelId": "hexgrad/Kokoro-82M",
+        "modelRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+        "prompt": "As Athanasius explained, biblical phrases alone allowed an Arian reading.",
+        "seed": "325",
+        "sampleRate": 24000,
+        "channels": 1,
+        "adapterParameters": {
+          "voice": "af_heart",
+          "lexicon": {
+            "version": "seven-councils-nicaea-325-1",
+            "entries": {
+              "Arius": "ˈɛɹiəs",
+              "Athanasius": "ˌæθənˈAʃəs",
+              "homoousios": "hˌOmOˈusiəs",
+              "Nicaea": "nIsˈiə",
+              "Sylvester": "sɪlvˈɛstəɹ"
+            }
+          }
+        }
+      },
+      "inputs": {
+        "model": {
+          "schemaVersion": 1,
+          "kind": "model",
+          "mediaType": "application/zip",
+          "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d",
+          "byteLength": 363333339,
+          "metadata": {}
+        }
+      },
+      "evidence": {
+        "license": "Apache-2.0",
+        "trainingDataCaveat": "Kokoro-82M's model card says its training data includes synthetic audio from closed commercial TTS providers. Accepted for the initial Seven Councils narration by Decision Atlas 3.24 (asset-tooling docs/kokoro.md)."
+      }
+    }
+  }
+}

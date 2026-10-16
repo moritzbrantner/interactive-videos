@@ -1,0 +1,77 @@
+{
+  "schema": "interactive-videos/council-sources",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "sources": [
+    {
+      "id": "eusebius-life-of-constantine",
+      "kind": "primary",
+      "title": "Life of Constantine, Book III",
+      "author": "Eusebius of Caesarea",
+      "url": "https://www.newadvent.org/fathers/25023.htm",
+      "reference": "Book III, ch. 6–9 (the bishops summoned to Nicaea; more than 250 bishops; the bishop of the imperial city absent through old age, represented by his presbyters) and ch. 18–19 (Easter kept on one and the same day). Tr. E. C. Richardson, NPNF, Second Series, vol. 1."
+    },
+    {
+      "id": "nicaea-creed-and-canons",
+      "kind": "primary",
+      "title": "The First Ecumenical Council: the Creed (Ecthesis), the twenty canons and the synodal letter",
+      "author": "Council of Nicaea (325)",
+      "url": "https://www.newadvent.org/fathers/3801.htm",
+      "reference": "Tr. H. R. Percival, NPNF, Second Series, vol. 14. Creed: \"God of God, Light of Light, very God of very God, begotten, not made, being of one substance (homoousion) with the Father\"; the anathema on \"there was a time when the Son of God was not\". Canons 4 (ordaining bishops), 6 (Alexandria, Rome, Antioch), 11–14 (the lapsed). Nothing in the Creed, canons or letter concerns the list of biblical books."
+    },
+    {
+      "id": "athanasius-de-decretis",
+      "kind": "primary",
+      "title": "De Decretis (Defence of the Nicene Definition)",
+      "author": "Athanasius of Alexandria",
+      "url": "https://www.newadvent.org/fathers/2809.htm",
+      "reference": "Ch. 19–20: why the bishops wrote \"of the essence\" and \"one in essence\" (homoousios), because the Arians could read the Scriptural phrases (\"from God\", \"like\") as applying to creatures. Tr. J. H. Newman and A. Robertson, NPNF, Second Series, vol. 4."
+    },
+    {
+      "id": "socrates-church-history",
+      "kind": "primary",
+      "title": "Church History, Book I",
+      "author": "Socrates Scholasticus",
+      "url": "https://www.newadvent.org/fathers/26011.htm",
+      "reference": "Book I, ch. 5–9: Arius and Alexander, the council, the Creed and its anathema, the exile of Arius, the Easter question. Tr. A. C. Zenos, NPNF, Second Series, vol. 2."
+    },
+    {
+      "id": "ayres-nicaea-and-its-legacy",
+      "kind": "secondary",
+      "title": "Nicaea and its Legacy: An Approach to Fourth-Century Trinitarian Theology",
+      "author": "Lewis Ayres",
+      "reference": "Oxford: Oxford University Press, 2004. The continuing controversy after 325, Athanasius, the Council of Constantinople (381) and the reception of Nicaea."
+    },
+    {
+      "id": "catholic-encyclopedia-nicaea",
+      "kind": "reference",
+      "title": "The First Council of Nicaea",
+      "author": "H. Leclercq, Catholic Encyclopedia, vol. 11 (1911)",
+      "url": "https://www.newadvent.org/cathen/11044a.htm",
+      "reference": "Number of bishops (Eusebius: more than 250; Athanasius: about 300, later 318), the Roman priests Victor and Vincentius representing the pope, Arius exiled with Theonas of Marmarica and Secundus of Ptolemais, twenty canons."
+    },
+    {
+      "id": "catechism-of-the-catholic-church",
+      "kind": "magisterial",
+      "title": "Catechism of the Catholic Church",
+      "url": "https://www.vatican.va/archive/ENG0015/__P17.HTM",
+      "reference": "§242 (the first ecumenical council at Nicaea, 325, confessed the Son consubstantial with the Father) and §465 (the Creed of Nicaea confessed the Son of God begotten, not made, of the same substance, homoousios, as the Father)."
+    },
+    {
+      "id": "ehrman-nicaea-and-the-bible",
+      "kind": "secondary",
+      "title": "Did the Council of Nicaea Take Away Reincarnation and Give us the Bible?",
+      "author": "Bart D. Ehrman",
+      "url": "https://ehrmanblog.org/did-the-council-of-nicaea-take-away-reincarnation-and-give-us-the-bible/",
+      "reference": "The Bart Ehrman Blog, 8 January 2017: \"the Council of Nicaea did not debate or decide which books should belong in Scripture.\""
+    },
+    {
+      "id": "st-nicholas-center-legend",
+      "kind": "reference",
+      "title": "Bishop Nicholas Loses His Cool",
+      "author": "St. Nicholas Center",
+      "url": "https://www.stnicholascenter.org/who-is-st-nicholas/stories-legends/traditional-stories/life-of-nicholas/bishop-nicholas-loses-his-cool",
+      "reference": "Presents the slap at Nicaea as a legend (\"over 500 years old\"); Nicholas appears on the attendance list of Theodore the Lector (c. 515). The fourth- and fifth-century accounts (Eusebius, Socrates) do not tell the story."
+    }
+  ]
+}

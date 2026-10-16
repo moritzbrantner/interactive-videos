@@ -2,6 +2,7 @@ import { useMemo, useSyncExternalStore, type CSSProperties } from 'react';
 import { AbsoluteFill, Audio, Easing, interpolate, Sequence, useCurrentFrame } from 'remotion';
 
 import { Subtitles } from '@/components/remotion/subtitles';
+import type { CompositionProps } from '@/catalog/catalog';
 import type { SubtitleTrack } from '@/lib/remotion/subtitle-formats';
 import { useBudgetCounter } from '@/render-budget';
 
@@ -191,7 +192,7 @@ type OverlayProps = { tokens: MoenarchShortTokens; eases: Eases; plan: MoenarchP
  * frame shows (end-exclusive frame windows); the primitive gets that one cue over exactly its
  * window, so its own inclusive-end timing agrees with the plan.
  */
-function Subtitle({ tokens, cue, fps }: { tokens: MoenarchShortTokens; cue: MoenarchCueWindow; fps: number }) {
+function Subtitle({ tokens, cue, fps, language }: { tokens: MoenarchShortTokens; cue: MoenarchCueWindow; fps: number; language?: string }) {
   const { safeArea } = tokens.output;
   const { typography, surfaces, spacing, subtitles } = tokens;
   const surface = surfaces.subtitle;
@@ -225,7 +226,7 @@ function Subtitle({ tokens, cue, fps }: { tokens: MoenarchShortTokens; cue: Moen
         justifyContent: 'center',
       }}
     >
-      <div data-moenarch-subtitle="" style={{ maxWidth: '100%' }}>
+      <div data-moenarch-subtitle="" data-subtitle-cue="" lang={language} style={{ maxWidth: '100%' }}>
         <Subtitles
           track={track}
           lingerMs={0}
@@ -283,7 +284,7 @@ export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTok
     ]),
   );
 
-  function MoenarchShortVideo() {
+  function MoenarchShortVideo({ subtitles }: CompositionProps = {}) {
     useBudgetCounter('MoenarchShortVideo');
     const fontsReady = useMoenarchFonts();
     const frame = useCurrentFrame();
@@ -315,7 +316,8 @@ export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTok
         </div>
         {state.intro ? <Intro tokens={tokens} eases={eases} plan={plan} frame={frame} reducedMotion={reducedMotion} /> : null}
         {state.outro ? <Outro tokens={tokens} eases={eases} plan={plan} frame={frame} reducedMotion={reducedMotion} /> : null}
-        {subtitleCue ? <Subtitle tokens={tokens} cue={subtitleCue} fps={plan.fps} /> : null}
+        {/* The Player's subtitle select (#82): null hides the track; headless renders keep it. */}
+        {subtitleCue && subtitles !== null ? <Subtitle tokens={tokens} cue={subtitleCue} fps={plan.fps} language={subtitles?.language} /> : null}
         {state.mark !== null ? <div data-moenarch-mark={state.mark} hidden /> : null}
         <NarrationAudio plan={plan} />
       </AbsoluteFill>

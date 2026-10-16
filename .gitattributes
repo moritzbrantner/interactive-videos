@@ -1,0 +1,2 @@
+# Generated narration (#82, ADR 0002): committed through Git LFS, verified against the VideoSpec lock.
+src/content/councils/*/narration/*.wav filter=lfs diff=lfs merge=lfs -text

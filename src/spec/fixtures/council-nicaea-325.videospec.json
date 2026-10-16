@@ -1,0 +1,1973 @@
+{
+  "specVersion": 2,
+  "project": {
+    "id": "council-nicaea-325",
+    "title": "The First Council of Nicaea (325)"
+  },
+  "format": {
+    "id": "moenarch-short",
+    "version": 1
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "assets": [
+    {
+      "id": "narration.alexander",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "b56c877226bb2300fc5670fb0cfb50b68ccbc696aeb7e23400d448c085caa17d",
+        "byteLength": 262844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 131400
+            },
+            "frameCount": 131400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.arius",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "d5bd6291042ca1c65b1c2ac762c5b4091a8a39470f7ffe6cf39a3a77822c200f",
+        "byteLength": 250844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 125400
+            },
+            "frameCount": 125400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.arius-slogan",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "559f3913dcd328c7defade0feeffd6e8a68cf8f06420a5bb3ea56845709722bc",
+        "byteLength": 182444,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 91200
+            },
+            "frameCount": 91200,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.athanasius",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "cde9e0454b3d9cb7b59d84f0e60876ac9df31638891397e338079268d407474f",
+        "byteLength": 258044,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 129000
+            },
+            "frameCount": 129000,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.bishops",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "816e09231c4f86ee0d5716905b8260896fde25b67daffe7e7c6b3b77fb2f7de6",
+        "byteLength": 230444,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 115200
+            },
+            "frameCount": 115200,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.canons",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "e8ebfa3a459d72408d391c2af49784f35ceb51fbb9d0ff42767ecace18ca816c",
+        "byteLength": 236444,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 118200
+            },
+            "frameCount": 118200,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.catholic",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "c5cbfb0386ad81b16648199f212e77718140341513d12673710b825c18218a1b",
+        "byteLength": 139244,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 69600
+            },
+            "frameCount": 69600,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.conclusion",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "34afcd41f04f223b3623b8730a6fb0881181a932a8858ef33555b47ea8e08115",
+        "byteLength": 230444,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 115200
+            },
+            "frameCount": 115200,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.constantine",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "2e69b086c5eda2e47ac40b7ff386f19cac5f3b4b6f549122ec5d589d21edb035",
+        "byteLength": 270044,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 135000
+            },
+            "frameCount": 135000,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.constantinople",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "d973437022ee06136e1578a6d31b3d8ffbe5f259a26cbe741d4fbfe6e6e78013",
+        "byteLength": 253244,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 126600
+            },
+            "frameCount": 126600,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.creed",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "f4e1be9df25f9c3d8af20b68c806fe96cd9f3e01e971ef032470dbc22e17432c",
+        "byteLength": 225644,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 112800
+            },
+            "frameCount": 112800,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.creed-today",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "dfb05aa929da192066f5520e4c4e1c47706f78eb5aa18b1afbc0e69ccf948e08",
+        "byteLength": 190844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 95400
+            },
+            "frameCount": 95400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.dispute",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "23753e8a0d91d0c243701dda70b292bcc5a3a7f735c67315d90319d47c786b74",
+        "byteLength": 272444,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 136200
+            },
+            "frameCount": 136200,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.easter",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "4984d45a18ffb29c476eb6f89f3f6d9e5aa0d3e97d9c71fe4ad5736e756c4e46",
+        "byteLength": 236444,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 118200
+            },
+            "frameCount": 118200,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.exile",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "66b0630f309d57fbc82db64e3ecbee06c0a0fd4148c7ed2df52ea60fa0025383",
+        "byteLength": 217244,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 108600
+            },
+            "frameCount": 108600,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.first-ecumenical",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "83771442b5ded59c4263a679fa094dc667fb00f8af3ff0ebb5c323ad6da8b423",
+        "byteLength": 195644,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 97800
+            },
+            "frameCount": 97800,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.goths",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "5c2a94321ded4b691739b2d2a55a4cd6288f20354ec82807bebdac74c30aa113",
+        "byteLength": 210044,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 105000
+            },
+            "frameCount": 105000,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.homoousios",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "4d1c14b43658ad06469c097fb5296cb0600d882c479026dff6fb838ce035ebc5",
+        "byteLength": 243644,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 121800
+            },
+            "frameCount": 121800,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.legend",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "c7aa67e0a3aaaf13daa8fd03266ab435836d310d1b6a8f80f32d82341d019082",
+        "byteLength": 252044,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 126000
+            },
+            "frameCount": 126000,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.mass",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "306cf680f44a5002e940ceede97701f94f06f0119e407452654a6df49e9e8265",
+        "byteLength": 174044,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 87000
+            },
+            "frameCount": 87000,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.not-the-bible",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "2301f6c2a2ceded11aa1be68b410a0b86ac3268107ae3a031d625ab16fcbae57",
+        "byteLength": 256844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 128400
+            },
+            "frameCount": 128400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.opening",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "390bca97528b67556198fb0400541bd08fa766b7f5c785a60a9d3dc599e2c16b",
+        "byteLength": 202844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 101400
+            },
+            "frameCount": 101400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.orthodox",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "fbe8cf34a00e80d86a5ae8dccc19581d2ca85264ede0f4b76781de37849519e1",
+        "byteLength": 271244,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 135600
+            },
+            "frameCount": 135600,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.perspective",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "13fe8ec0c760ef4a46f46f0fc6f482a78e4700e4615fb53391dbad0f2c9758bb",
+        "byteLength": 166844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 83400
+            },
+            "frameCount": 83400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.pope",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "c644d78fafdeda189eb632733bc5dd010a54d29007ae807bb6124a6702d71bed",
+        "byteLength": 244844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 122400
+            },
+            "frameCount": 122400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.protestants",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "633285a8fc42a3775424044333ea10befcd4ac7c6c405486c6cf5d5e59e4c4d5",
+        "byteLength": 250844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 125400
+            },
+            "frameCount": 125400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.question",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "a3a0d0e31cd18c558a4495c83792e54647c5af18a6632e07f3267987c4d96c9f",
+        "byteLength": 226844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 113400
+            },
+            "frameCount": 113400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.rejected",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "b466033ec09fd44fb9d290b3c9421bf198b04b04870431654ee0603ba8d0a484",
+        "byteLength": 235244,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 117600
+            },
+            "frameCount": 117600,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.summons",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "3ef8d81f18c256355b8931af351da08c57c7e90dcb72a43418ac18e92504eb91",
+        "byteLength": 255644,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 127800
+            },
+            "frameCount": 127800,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "narration.why-the-word",
+      "kind": "audio",
+      "asset": {
+        "schemaVersion": 1,
+        "kind": "audio",
+        "mediaType": "audio/wav",
+        "sha256": "8c54c92bccc89661154a52ad70cb1ba022d72538af1c3ed51ccf237b3f85793d",
+        "byteLength": 256844,
+        "metadata": {
+          "audio": {
+            "channelLayout": "mono",
+            "channels": 1,
+            "codec": "pcm-s16le",
+            "duration": {
+              "denominator": 24000,
+              "numerator": 128400
+            },
+            "frameCount": 128400,
+            "sampleRate": 24000,
+            "schemaVersion": 1
+          },
+          "provenance": {
+            "inputs": [
+              {
+                "port": "model",
+                "sha256": "115b504bedbf242d7794bab72deff3abb1ab069ebf7c5c985f19dcc65f47211d"
+              }
+            ],
+            "operation": {
+              "id": "audio.model.generate",
+              "version": "2"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "kind": "title",
+      "id": "opening",
+      "narration": {
+        "audio": {
+          "asset": "narration.opening",
+          "durationMs": 4225
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 240,
+            "endMs": 3740,
+            "text": "The First Council of Nicaea, in the year 325."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "The Seven Councils, part 1",
+        "heading": "Nicaea, 325"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "perspective",
+      "narration": {
+        "audio": {
+          "asset": "narration.perspective",
+          "durationMs": 3475
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 240,
+            "endMs": 3000,
+            "text": "This episode is told from a Catholic perspective."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "This episode",
+        "text": "Told from a Catholic perspective.",
+        "emphasis": "Catholic perspective"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "arius",
+      "narration": {
+        "audio": {
+          "asset": "narration.arius",
+          "durationMs": 5225
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 3020,
+            "text": "In Alexandria, a priest named Arius taught"
+          },
+          {
+            "startMs": 3160,
+            "endMs": 4740,
+            "text": "that the Son of God was created."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Alexandria, Egypt",
+        "text": "Arius: the Son of God was created.",
+        "emphasis": "created"
+      }
+    },
+    {
+      "kind": "quote",
+      "id": "arius-slogan",
+      "narration": {
+        "audio": {
+          "asset": "narration.arius-slogan",
+          "durationMs": 3800
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 280,
+            "endMs": 1780,
+            "text": "There was a time, he argued,"
+          },
+          {
+            "startMs": 2000,
+            "endMs": 3420,
+            "text": "when the Son did not exist."
+          }
+        ]
+      },
+      "payload": {
+        "text": "There was a time when the Son of God was not.",
+        "attribution": "Condemned by the Creed, 325"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "alexander",
+      "narration": {
+        "audio": {
+          "asset": "narration.alexander",
+          "durationMs": 5475
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2960,
+            "text": "His bishop, Alexander, condemned this teaching,"
+          },
+          {
+            "startMs": 3260,
+            "endMs": 5100,
+            "text": "and the dispute spread through the East."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Bishop Alexander",
+        "text": "Alexander rejects the teaching.",
+        "emphasis": "rejects"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "constantine",
+      "narration": {
+        "audio": {
+          "asset": "narration.constantine",
+          "durationMs": 5625
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 3560,
+            "text": "The emperor Constantine, now sole ruler of the empire,"
+          },
+          {
+            "startMs": 3840,
+            "endMs": 5240,
+            "text": "wanted a united Church."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Emperor Constantine",
+        "text": "One empire, one Church?",
+        "emphasis": "one Church"
+      }
+    },
+    {
+      "kind": "dataPoint",
+      "id": "summons",
+      "narration": {
+        "audio": {
+          "asset": "narration.summons",
+          "durationMs": 5325
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 240,
+            "endMs": 3520,
+            "text": "In 325 he summoned bishops to Nicaea,"
+          },
+          {
+            "startMs": 3780,
+            "endMs": 4840,
+            "text": "in today's Turkey."
+          }
+        ]
+      },
+      "payload": {
+        "value": "325",
+        "label": "Bishops summoned to Nicaea",
+        "context": "Today İznik, in northwestern Turkey"
+      }
+    },
+    {
+      "kind": "dataPoint",
+      "id": "bishops",
+      "narration": {
+        "audio": {
+          "asset": "narration.bishops",
+          "durationMs": 4800
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2100,
+            "text": "More than two hundred and fifty came,"
+          },
+          {
+            "startMs": 2400,
+            "endMs": 4420,
+            "text": "most of them from the Greek-speaking East."
+          }
+        ]
+      },
+      "payload": {
+        "value": "250+",
+        "label": "bishops, most from the East",
+        "context": "Eusebius, Life of Constantine 3.8"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "pope",
+      "narration": {
+        "audio": {
+          "asset": "narration.pope",
+          "durationMs": 5100
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2300,
+            "text": "Pope Sylvester was too old to travel,"
+          },
+          {
+            "startMs": 2580,
+            "endMs": 4720,
+            "text": "so two Roman priests took his place."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Rome",
+        "text": "Pope Sylvester sends two priests.",
+        "emphasis": "two priests"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "rejected",
+      "narration": {
+        "audio": {
+          "asset": "narration.rejected",
+          "durationMs": 4900
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 240,
+            "endMs": 2500,
+            "text": "The bishops rejected the teaching of Arius,"
+          },
+          {
+            "startMs": 2780,
+            "endMs": 4400,
+            "text": "and they set out the faith in a creed."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "The council's answer",
+        "text": "The teaching of Arius is rejected.",
+        "emphasis": "rejected"
+      }
+    },
+    {
+      "kind": "quote",
+      "id": "creed",
+      "narration": {
+        "audio": {
+          "asset": "narration.creed",
+          "durationMs": 4700
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2800,
+            "text": "It confesses the Son as true God from true God,"
+          },
+          {
+            "startMs": 3080,
+            "endMs": 4180,
+            "text": "begotten, not made."
+          }
+        ]
+      },
+      "payload": {
+        "text": "God of God, Light of Light, very God of very God, begotten, not made.",
+        "attribution": "Creed of Nicaea, NPNF tr."
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "homoousios",
+      "narration": {
+        "audio": {
+          "asset": "narration.homoousios",
+          "durationMs": 5075
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2400,
+            "text": "And it calls him homoousios with the Father:"
+          },
+          {
+            "startMs": 2760,
+            "endMs": 4600,
+            "text": "of the same substance, or being."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Homoousios",
+        "text": "Of one substance with the Father.",
+        "emphasis": "one substance"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "why-the-word",
+      "narration": {
+        "audio": {
+          "asset": "narration.why-the-word",
+          "durationMs": 5350
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 1860,
+            "text": "As Athanasius explained,"
+          },
+          {
+            "startMs": 2200,
+            "endMs": 4800,
+            "text": "biblical phrases alone allowed an Arian reading."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Athanasius, De Decretis",
+        "text": "Why a word not found in Scripture?",
+        "emphasis": "not found in Scripture"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "exile",
+      "narration": {
+        "audio": {
+          "asset": "narration.exile",
+          "durationMs": 4525
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2640,
+            "text": "Arius and two bishops who refused to sign"
+          },
+          {
+            "startMs": 2900,
+            "endMs": 4100,
+            "text": "were sent into exile."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Refusal",
+        "text": "Arius and two bishops are exiled.",
+        "emphasis": "exiled"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "easter",
+      "narration": {
+        "audio": {
+          "asset": "narration.easter",
+          "durationMs": 4925
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 240,
+            "endMs": 2160,
+            "text": "The council also settled Easter:"
+          },
+          {
+            "startMs": 2520,
+            "endMs": 4500,
+            "text": "all churches should keep it on the same day."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Easter",
+        "text": "One common day for all churches.",
+        "emphasis": "One common day"
+      }
+    },
+    {
+      "kind": "list",
+      "id": "canons",
+      "narration": {
+        "audio": {
+          "asset": "narration.canons",
+          "durationMs": 4925
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 280,
+            "endMs": 2600,
+            "text": "And it issued twenty canons on church order,"
+          },
+          {
+            "startMs": 2840,
+            "endMs": 4500,
+            "text": "such as how bishops are ordained."
+          }
+        ]
+      },
+      "payload": {
+        "heading": "Twenty canons",
+        "items": [
+          "Ordaining bishops",
+          "Rights of the great sees",
+          "Penance for the lapsed"
+        ],
+        "ordered": false
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "not-the-bible",
+      "narration": {
+        "audio": {
+          "asset": "narration.not-the-bible",
+          "durationMs": 5350
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 220,
+            "endMs": 2360,
+            "text": "Some popular claims are not history."
+          },
+          {
+            "startMs": 2740,
+            "endMs": 4920,
+            "text": "Nicaea did not choose the books of the Bible."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "A popular myth",
+        "text": "Nicaea did not choose the books of the Bible.",
+        "emphasis": "did not"
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "legend",
+      "narration": {
+        "audio": {
+          "asset": "narration.legend",
+          "durationMs": 5250
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2720,
+            "text": "And the story of Saint Nicholas slapping Arius"
+          },
+          {
+            "startMs": 2980,
+            "endMs": 4780,
+            "text": "is a legend from centuries later."
+          }
+        ]
+      },
+      "payload": {
+        "heading": "History or legend?",
+        "items": [
+          {
+            "label": "History",
+            "detail": "The Creed, Easter, the canons"
+          },
+          {
+            "label": "Legend",
+            "detail": "Saint Nicholas slapping Arius"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "dispute",
+      "narration": {
+        "audio": {
+          "asset": "narration.dispute",
+          "durationMs": 5675
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 1860,
+            "text": "Nicaea did not end the dispute."
+          },
+          {
+            "startMs": 2360,
+            "endMs": 5300,
+            "text": "Arian views found powerful backers for decades."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "After 325",
+        "text": "The dispute goes on for decades.",
+        "emphasis": "decades"
+      }
+    },
+    {
+      "kind": "dataPoint",
+      "id": "athanasius",
+      "narration": {
+        "audio": {
+          "asset": "narration.athanasius",
+          "durationMs": 5375
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2900,
+            "text": "Athanasius of Alexandria defended Nicaea,"
+          },
+          {
+            "startMs": 3240,
+            "endMs": 5000,
+            "text": "and was exiled five times."
+          }
+        ]
+      },
+      "payload": {
+        "value": "5",
+        "label": "exiles of Athanasius",
+        "context": "Bishop of Alexandria from 328"
+      }
+    },
+    {
+      "kind": "dataPoint",
+      "id": "constantinople",
+      "narration": {
+        "audio": {
+          "asset": "narration.constantinople",
+          "durationMs": 5275
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 240,
+            "endMs": 3460,
+            "text": "The Council of Constantinople, in 381,"
+          },
+          {
+            "startMs": 3640,
+            "endMs": 4740,
+            "text": "reaffirmed this faith."
+          }
+        ]
+      },
+      "payload": {
+        "value": "381",
+        "label": "Council of Constantinople",
+        "context": "The Nicene faith reaffirmed"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "creed-today",
+      "narration": {
+        "audio": {
+          "asset": "narration.creed-today",
+          "durationMs": 3975
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 3480,
+            "text": "Its expanded creed is still recited in many churches today."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "The Nicene Creed",
+        "text": "Still recited in churches today.",
+        "emphasis": "today"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "goths",
+      "narration": {
+        "audio": {
+          "asset": "narration.goths",
+          "durationMs": 4375
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 3980,
+            "text": "Arian Christianity lived on among the Goths for two centuries."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Arian Christianity",
+        "text": "Lives on among the Goths.",
+        "emphasis": "the Goths"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "first-ecumenical",
+      "narration": {
+        "audio": {
+          "asset": "narration.first-ecumenical",
+          "durationMs": 4075
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 3660,
+            "text": "For Catholics, Nicaea is the first ecumenical council."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "For Catholics",
+        "text": "The first ecumenical council.",
+        "emphasis": "first ecumenical"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "catholic",
+      "narration": {
+        "audio": {
+          "asset": "narration.catholic",
+          "durationMs": 2900
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2460,
+            "text": "Its teaching on the Son is binding dogma."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Our perspective",
+        "text": "In Catholic teaching, the Creed of Nicaea is binding dogma.",
+        "emphasis": "binding dogma"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "mass",
+      "narration": {
+        "audio": {
+          "asset": "narration.mass",
+          "durationMs": 3625
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 240,
+            "endMs": 3260,
+            "text": "Catholics profess this faith in the Creed at Sunday Mass."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "At Sunday Mass",
+        "text": "Catholics profess this faith.",
+        "emphasis": "profess"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "orthodox",
+      "narration": {
+        "audio": {
+          "asset": "narration.orthodox",
+          "durationMs": 5650
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2880,
+            "text": "The Orthodox churches share this Nicene faith,"
+          },
+          {
+            "startMs": 3280,
+            "endMs": 5200,
+            "text": "and honor the council as ecumenical."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Orthodox churches",
+        "text": "The same Nicene faith.",
+        "emphasis": "same"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "protestants",
+      "narration": {
+        "audio": {
+          "asset": "narration.protestants",
+          "durationMs": 5225
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 240,
+            "endMs": 2480,
+            "text": "Most Protestants also confess the Creed,"
+          },
+          {
+            "startMs": 2900,
+            "endMs": 4780,
+            "text": "holding it to be faithful to Scripture."
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "Most Protestants",
+        "text": "Confess the Creed as faithful to Scripture.",
+        "emphasis": "faithful to Scripture"
+      }
+    },
+    {
+      "kind": "statement",
+      "id": "question",
+      "narration": {
+        "audio": {
+          "asset": "narration.question",
+          "durationMs": 4725
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2560,
+            "text": "Nicaea answered one question for the Church."
+          },
+          {
+            "startMs": 2860,
+            "endMs": 4260,
+            "text": "Is the Son truly God?"
+          }
+        ]
+      },
+      "payload": {
+        "eyebrow": "The question",
+        "text": "Is the Son truly God?",
+        "emphasis": "truly God"
+      }
+    },
+    {
+      "kind": "conclusion",
+      "id": "conclusion",
+      "narration": {
+        "audio": {
+          "asset": "narration.conclusion",
+          "durationMs": 4800
+        },
+        "leadInMs": 100,
+        "leadOutMs": 200,
+        "cues": [
+          {
+            "startMs": 260,
+            "endMs": 2260,
+            "text": "Its answer, one in being with the Father,"
+          },
+          {
+            "startMs": 2500,
+            "endMs": 4300,
+            "text": "still shapes Christian worship today."
+          }
+        ]
+      },
+      "payload": {
+        "heading": "One in being with the Father",
+        "takeaway": "Nicaea's answer still shapes Christian worship."
+      }
+    }
+  ]
+}

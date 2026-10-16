@@ -1,0 +1,429 @@
+{
+  "schema": "interactive-videos/council-storyboard",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "note": "The visual plan of the episode: one scene per narration WAV. `say` is the scene's spoken text, already split into subtitle cues; their timing is derived from the generated audio by scripts/narration/regenerate-nicaea-325.ts and lives only in the VideoSpec. The cues of each section, in order, are exactly that section's text in script.json.",
+  "scenes": [
+    {
+      "id": "opening",
+      "section": "context",
+      "kind": "title",
+      "payload": {
+        "eyebrow": "The Seven Councils, part 1",
+        "heading": "Nicaea, 325"
+      },
+      "say": [
+        "The First Council of Nicaea, in the year 325."
+      ]
+    },
+    {
+      "id": "perspective",
+      "section": "context",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "This episode",
+        "text": "Told from a Catholic perspective.",
+        "emphasis": "Catholic perspective"
+      },
+      "say": [
+        "This episode is told from a Catholic perspective."
+      ]
+    },
+    {
+      "id": "arius",
+      "section": "context",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Alexandria, Egypt",
+        "text": "Arius: the Son of God was created.",
+        "emphasis": "created"
+      },
+      "say": [
+        "In Alexandria, a priest named Arius taught",
+        "that the Son of God was created."
+      ]
+    },
+    {
+      "id": "arius-slogan",
+      "section": "context",
+      "kind": "quote",
+      "payload": {
+        "text": "There was a time when the Son of God was not.",
+        "attribution": "Condemned by the Creed, 325"
+      },
+      "say": [
+        "There was a time, he argued,",
+        "when the Son did not exist."
+      ]
+    },
+    {
+      "id": "alexander",
+      "section": "context",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Bishop Alexander",
+        "text": "Alexander rejects the teaching.",
+        "emphasis": "rejects"
+      },
+      "say": [
+        "His bishop, Alexander, condemned this teaching,",
+        "and the dispute spread through the East."
+      ]
+    },
+    {
+      "id": "constantine",
+      "section": "context",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Emperor Constantine",
+        "text": "One empire, one Church?",
+        "emphasis": "one Church"
+      },
+      "say": [
+        "The emperor Constantine, now sole ruler of the empire,",
+        "wanted a united Church."
+      ]
+    },
+    {
+      "id": "summons",
+      "section": "context",
+      "kind": "dataPoint",
+      "payload": {
+        "value": "325",
+        "label": "Bishops summoned to Nicaea",
+        "context": "Today İznik, in northwestern Turkey"
+      },
+      "say": [
+        "In 325 he summoned bishops to Nicaea,",
+        "in today's Turkey."
+      ]
+    },
+    {
+      "id": "bishops",
+      "section": "context",
+      "kind": "dataPoint",
+      "payload": {
+        "value": "250+",
+        "label": "bishops, most from the East",
+        "context": "Eusebius, Life of Constantine 3.8"
+      },
+      "say": [
+        "More than two hundred and fifty came,",
+        "most of them from the Greek-speaking East."
+      ]
+    },
+    {
+      "id": "pope",
+      "section": "context",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Rome",
+        "text": "Pope Sylvester sends two priests.",
+        "emphasis": "two priests"
+      },
+      "say": [
+        "Pope Sylvester was too old to travel,",
+        "so two Roman priests took his place."
+      ]
+    },
+    {
+      "id": "rejected",
+      "section": "creed",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "The council's answer",
+        "text": "The teaching of Arius is rejected.",
+        "emphasis": "rejected"
+      },
+      "say": [
+        "The bishops rejected the teaching of Arius,",
+        "and they set out the faith in a creed."
+      ]
+    },
+    {
+      "id": "creed",
+      "section": "creed",
+      "kind": "quote",
+      "payload": {
+        "text": "God of God, Light of Light, very God of very God, begotten, not made.",
+        "attribution": "Creed of Nicaea, NPNF tr."
+      },
+      "say": [
+        "It confesses the Son as true God from true God,",
+        "begotten, not made."
+      ]
+    },
+    {
+      "id": "homoousios",
+      "section": "creed",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Homoousios",
+        "text": "Of one substance with the Father.",
+        "emphasis": "one substance"
+      },
+      "say": [
+        "And it calls him homoousios with the Father:",
+        "of the same substance, or being."
+      ]
+    },
+    {
+      "id": "why-the-word",
+      "section": "creed",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Athanasius, De Decretis",
+        "text": "Why a word not found in Scripture?",
+        "emphasis": "not found in Scripture"
+      },
+      "say": [
+        "As Athanasius explained,",
+        "biblical phrases alone allowed an Arian reading."
+      ]
+    },
+    {
+      "id": "exile",
+      "section": "creed",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Refusal",
+        "text": "Arius and two bishops are exiled.",
+        "emphasis": "exiled"
+      },
+      "say": [
+        "Arius and two bishops who refused to sign",
+        "were sent into exile."
+      ]
+    },
+    {
+      "id": "easter",
+      "section": "acts",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Easter",
+        "text": "One common day for all churches.",
+        "emphasis": "One common day"
+      },
+      "say": [
+        "The council also settled Easter:",
+        "all churches should keep it on the same day."
+      ]
+    },
+    {
+      "id": "canons",
+      "section": "acts",
+      "kind": "list",
+      "payload": {
+        "heading": "Twenty canons",
+        "items": [
+          "Ordaining bishops",
+          "Rights of the great sees",
+          "Penance for the lapsed"
+        ],
+        "ordered": false
+      },
+      "say": [
+        "And it issued twenty canons on church order,",
+        "such as how bishops are ordained."
+      ]
+    },
+    {
+      "id": "not-the-bible",
+      "section": "myths",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "A popular myth",
+        "text": "Nicaea did not choose the books of the Bible.",
+        "emphasis": "did not"
+      },
+      "say": [
+        "Some popular claims are not history.",
+        "Nicaea did not choose the books of the Bible."
+      ]
+    },
+    {
+      "id": "legend",
+      "section": "myths",
+      "kind": "comparison",
+      "payload": {
+        "heading": "History or legend?",
+        "items": [
+          {
+            "label": "History",
+            "detail": "The Creed, Easter, the canons"
+          },
+          {
+            "label": "Legend",
+            "detail": "Saint Nicholas slapping Arius"
+          }
+        ]
+      },
+      "say": [
+        "And the story of Saint Nicholas slapping Arius",
+        "is a legend from centuries later."
+      ]
+    },
+    {
+      "id": "dispute",
+      "section": "aftermath",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "After 325",
+        "text": "The dispute goes on for decades.",
+        "emphasis": "decades"
+      },
+      "say": [
+        "Nicaea did not end the dispute.",
+        "Arian views found powerful backers for decades."
+      ]
+    },
+    {
+      "id": "athanasius",
+      "section": "aftermath",
+      "kind": "dataPoint",
+      "payload": {
+        "value": "5",
+        "label": "exiles of Athanasius",
+        "context": "Bishop of Alexandria from 328"
+      },
+      "say": [
+        "Athanasius of Alexandria defended Nicaea,",
+        "and was exiled five times."
+      ]
+    },
+    {
+      "id": "constantinople",
+      "section": "aftermath",
+      "kind": "dataPoint",
+      "payload": {
+        "value": "381",
+        "label": "Council of Constantinople",
+        "context": "The Nicene faith reaffirmed"
+      },
+      "say": [
+        "The Council of Constantinople, in 381,",
+        "reaffirmed this faith."
+      ]
+    },
+    {
+      "id": "creed-today",
+      "section": "aftermath",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "The Nicene Creed",
+        "text": "Still recited in churches today.",
+        "emphasis": "today"
+      },
+      "say": [
+        "Its expanded creed is still recited in many churches today."
+      ]
+    },
+    {
+      "id": "goths",
+      "section": "aftermath",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Arian Christianity",
+        "text": "Lives on among the Goths.",
+        "emphasis": "the Goths"
+      },
+      "say": [
+        "Arian Christianity lived on among the Goths for two centuries."
+      ]
+    },
+    {
+      "id": "first-ecumenical",
+      "section": "perspective",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "For Catholics",
+        "text": "The first ecumenical council.",
+        "emphasis": "first ecumenical"
+      },
+      "say": [
+        "For Catholics, Nicaea is the first ecumenical council."
+      ]
+    },
+    {
+      "id": "catholic",
+      "section": "perspective",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Our perspective",
+        "text": "In Catholic teaching, the Creed of Nicaea is binding dogma.",
+        "emphasis": "binding dogma"
+      },
+      "say": [
+        "Its teaching on the Son is binding dogma."
+      ]
+    },
+    {
+      "id": "mass",
+      "section": "perspective",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "At Sunday Mass",
+        "text": "Catholics profess this faith.",
+        "emphasis": "profess"
+      },
+      "say": [
+        "Catholics profess this faith in the Creed at Sunday Mass."
+      ]
+    },
+    {
+      "id": "orthodox",
+      "section": "perspective",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Orthodox churches",
+        "text": "The same Nicene faith.",
+        "emphasis": "same"
+      },
+      "say": [
+        "The Orthodox churches share this Nicene faith,",
+        "and honor the council as ecumenical."
+      ]
+    },
+    {
+      "id": "protestants",
+      "section": "perspective",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "Most Protestants",
+        "text": "Confess the Creed as faithful to Scripture.",
+        "emphasis": "faithful to Scripture"
+      },
+      "say": [
+        "Most Protestants also confess the Creed,",
+        "holding it to be faithful to Scripture."
+      ]
+    },
+    {
+      "id": "question",
+      "section": "conclusion",
+      "kind": "statement",
+      "payload": {
+        "eyebrow": "The question",
+        "text": "Is the Son truly God?",
+        "emphasis": "truly God"
+      },
+      "say": [
+        "Nicaea answered one question for the Church.",
+        "Is the Son truly God?"
+      ]
+    },
+    {
+      "id": "conclusion",
+      "section": "conclusion",
+      "kind": "conclusion",
+      "payload": {
+        "heading": "One in being with the Father",
+        "takeaway": "Nicaea's answer still shapes Christian worship."
+      },
+      "say": [
+        "Its answer, one in being with the Father,",
+        "still shapes Christian worship today."
+      ]
+    }
+  ]
+}

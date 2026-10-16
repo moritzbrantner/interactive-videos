@@ -1,0 +1,74 @@
+{
+  "schema": "interactive-videos/council-script",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "language": "en",
+  "perspective": {
+    "statement": "In Catholic teaching, the Creed of Nicaea is binding dogma.",
+    "scene": "catholic"
+  },
+  "disclosure": {
+    "syntheticNarration": "The narration is a synthetic voice, generated with the open Kokoro-82M text-to-speech model."
+  },
+  "sections": [
+    {
+      "id": "context",
+      "text": "The First Council of Nicaea, in the year 325. This episode is told from a Catholic perspective. In Alexandria, a priest named Arius taught that the Son of God was created. There was a time, he argued, when the Son did not exist. His bishop, Alexander, condemned this teaching, and the dispute spread through the East. The emperor Constantine, now sole ruler of the empire, wanted a united Church. In 325 he summoned bishops to Nicaea, in today's Turkey. More than two hundred and fifty came, most of them from the Greek-speaking East. Pope Sylvester was too old to travel, so two Roman priests took his place.",
+      "sources": [
+        "eusebius-life-of-constantine",
+        "socrates-church-history",
+        "catholic-encyclopedia-nicaea"
+      ]
+    },
+    {
+      "id": "creed",
+      "text": "The bishops rejected the teaching of Arius, and they set out the faith in a creed. It confesses the Son as true God from true God, begotten, not made. And it calls him homoousios with the Father: of the same substance, or being. As Athanasius explained, biblical phrases alone allowed an Arian reading. Arius and two bishops who refused to sign were sent into exile.",
+      "sources": [
+        "nicaea-creed-and-canons",
+        "athanasius-de-decretis",
+        "socrates-church-history"
+      ]
+    },
+    {
+      "id": "acts",
+      "text": "The council also settled Easter: all churches should keep it on the same day. And it issued twenty canons on church order, such as how bishops are ordained.",
+      "sources": [
+        "eusebius-life-of-constantine",
+        "nicaea-creed-and-canons"
+      ]
+    },
+    {
+      "id": "myths",
+      "text": "Some popular claims are not history. Nicaea did not choose the books of the Bible. And the story of Saint Nicholas slapping Arius is a legend from centuries later.",
+      "sources": [
+        "ehrman-nicaea-and-the-bible",
+        "st-nicholas-center-legend",
+        "nicaea-creed-and-canons"
+      ]
+    },
+    {
+      "id": "aftermath",
+      "text": "Nicaea did not end the dispute. Arian views found powerful backers for decades. Athanasius of Alexandria defended Nicaea, and was exiled five times. The Council of Constantinople, in 381, reaffirmed this faith. Its expanded creed is still recited in many churches today. Arian Christianity lived on among the Goths for two centuries.",
+      "sources": [
+        "ayres-nicaea-and-its-legacy",
+        "catholic-encyclopedia-nicaea"
+      ]
+    },
+    {
+      "id": "perspective",
+      "text": "For Catholics, Nicaea is the first ecumenical council. Its teaching on the Son is binding dogma. Catholics profess this faith in the Creed at Sunday Mass. The Orthodox churches share this Nicene faith, and honor the council as ecumenical. Most Protestants also confess the Creed, holding it to be faithful to Scripture.",
+      "sources": [
+        "catechism-of-the-catholic-church",
+        "ayres-nicaea-and-its-legacy"
+      ]
+    },
+    {
+      "id": "conclusion",
+      "text": "Nicaea answered one question for the Church. Is the Son truly God? Its answer, one in being with the Father, still shapes Christian worship today.",
+      "sources": [
+        "nicaea-creed-and-canons",
+        "catechism-of-the-catholic-church"
+      ]
+    }
+  ]
+}
