@@ -18,13 +18,13 @@
   "dependencies": {
     "@moritzbrantner/charts": "github:moritzbrantner/charts#d74fa63fd33e98e201cba5ff4326f204f41939ef",
     "@moritzbrantner/tables": "github:moritzbrantner/tables#1173c132da01bf5cf1e5221a78f40ebe711420b8",
-    "@remotion/bundler": "4.0.534",
-    "@remotion/captions": "4.0.534",
-    "@remotion/player": "4.0.534",
-    "@remotion/renderer": "4.0.534",
+    "@remotion/bundler": "4.0.535",
+    "@remotion/captions": "4.0.535",
+    "@remotion/player": "4.0.535",
+    "@remotion/renderer": "4.0.535",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "remotion": "4.0.534"
+    "remotion": "4.0.535"
   },
   "devDependencies": {
     "@playwright/test": "1.64.0",
