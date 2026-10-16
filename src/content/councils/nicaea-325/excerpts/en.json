@@ -1,0 +1,134 @@
+{
+  "schema": "interactive-videos/council-excerpts",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "language": "en",
+  "excerpts": [
+    {
+      "id": "nicene-creed",
+      "title": "The Creed of Nicaea (325)",
+      "source": "nicaea-creed-and-canons",
+      "standing": "council-act",
+      "locator": {
+        "work": "Council of Nicaea (325): the Creed (Ecthesis)",
+        "section": "Creed, with its anathema"
+      },
+      "url": "https://www.ccel.org/ccel/schaff/npnf214.vii.iii.html",
+      "original": {
+        "status": "included",
+        "language": "grc",
+        "text": "Πιστεύομεν εἰς ἕνα θεόν, πατέρα, παντοκράτορα, πάντων ὁρατῶν τε καὶ ἀοράτων ποιητήν· καὶ εἰς ἕνα κύριον Ἰησοῦν Χριστὸν τὸν υἱὸν τοῦ θεοῦ, γεννηθέντα ἐκ τοῦ πατρὸς μονογενῆ, τουτέστιν ἐκ τῆς οὐσίας τοῦ πατρός, θεὸν ἐκ θεοῦ, φῶς ἐκ φωτός, θεὸν ἀληθινὸν ἐκ θεοῦ ἀληθινοῦ, γεννηθέντα οὐ ποιηθέντα, ὁμοούσιον τῷ πατρί, δι’ οὗ τὰ πάντα ἐγένετο τά τε ἐν οὐρανῷ καὶ τὰ ἐν τῇ γῇ, τὸν δι’ ἡμᾶς τοὺς ἀνθρώπους καὶ διὰ τὴν ἡμετέραν σωτηρίαν κατελθόντα καὶ σαρκωθέντα, ἐνανθρωπήσαντα, παθόντα καὶ ἀναστάντα τῇ τρίτῃ ἡμέρᾳ, ἀνελθόντα εἰς οὐρανούς, ἐρχόμενον κρῖναι ζῶντας καὶ νεκρούς· καὶ εἰς τὸ ἅγιον πνεῦμα. τοὺς δὲ λέγοντας ‘ἦν ποτε ὅτε οὐκ ἦν’ ἢ ‘οὐκ ἦν πρὶν γεννηθῇ’ ἢ ‘ἐξ οὐκ ὄντων ἐγένετο’ ἢ ἐξ ἑτέρας ὑποστάσεως ἢ οὐσίας φάσκοντας εἶναι ἢ κτιστὸν ἢ τρεπτὸν ἢ ἀλλοιωτὸν τὸν υἱὸν τοῦ θεοῦ τοὺς τοιούτους ἀναθεματίζει ἡ καθολικὴ καὶ ἀποστολικὴ ἐκκλησία.",
+        "edition": "Athanasius, De decretis Nicaenae synodi 37.2, ed. H.-G. Opitz, Athanasius Werke II/1 (Berlin: de Gruyter, 1935), pp. 36–37; as transcribed in Fourth Century Christianity, \"Council of Nicaea Documents (Greek and Latin), Part 3\", pp. 5–6 (fourthcentury.com)",
+        "note": "No minutes of the council's sessions survive. The Greek text of the Creed is preserved by witnesses: Eusebius of Caesarea's letter to his church, Athanasius (shown here, from De decretis 37), Socrates' Church History (I.8) and the Acts of the Council of Chalcedon (451), with only small differences between them. Percival translated the form printed in the conciliar collections, so his English differs slightly in places."
+      },
+      "translation": {
+        "status": "included",
+        "text": "We believe in one God, the Father Almighty, maker of all things visible and invisible; and in one Lord Jesus Christ, the Son of God, the only-begotten of his Father, of the substance of the Father, God of God, Light of Light, very God of very God, begotten (γεννηθέντα), not made, being of one substance (ὁμοούσιον, consubstantialem) with the Father. By whom all things were made, both which be in heaven and in earth. Who for us men and for our salvation came down [from heaven] and was incarnate and was made man. He suffered and the third day he rose again, and ascended into heaven. And he shall come again to judge both the quick and the dead. And [we believe] in the Holy Ghost. And whosoever shall say that there was a time when the Son of God was not (ἤν ποτε ὅτε οὐκ ἦν), or that before he was begotten he was not, or that he was made of things that were not, or that he is of a different substance or essence [from the Father] or that he is a creature, or subject to change or conversion—all that so say, the Catholic and Apostolic Church anathematizes them.",
+        "translator": {
+          "kind": "published",
+          "name": "Henry R. Percival"
+        },
+        "edition": "H. R. Percival (ed.), The Seven Ecumenical Councils, Nicene and Post-Nicene Fathers, Second Series, vol. 14 (New York: Charles Scribner's Sons, 1900), p. 3",
+        "translatedFrom": "grc",
+        "url": "https://www.ccel.org/ccel/schaff/npnf214.vii.iii.html"
+      },
+      "explanation": "The bishops at Nicaea adopted this confession of faith in June 325 to exclude the teaching of Arius. It is one of the council's own acts, together with the canons and the synodal letter. In his letter to his church, Eusebius of Caesarea reports that the emperor approved the faith he had presented, asking only that the word homoousios be added, and that the bishops then drew up this fuller text; he explains why he could accept the phrases \"of the substance of the Father\", \"begotten, not made\" and \"of one substance\". These phrases rule out understanding the Son as the first and highest creature, and the closing anathema condemns Arius's own slogans. Arius and two bishops who would not accept it were exiled. This is not word for word the Creed said at Mass today: that longer text is associated with the Council of Constantinople (381), which expanded the article on the Holy Spirit and dropped the anathema. In Catholic teaching the Nicene definition is binding dogma (Catechism §242, §465); the Orthodox churches share it, and most Protestant churches accept it as faithful to Scripture.",
+      "annotations": [
+        {
+          "id": "homoousios",
+          "term": "ὁμοούσιον",
+          "note": "Homoousios, \"of one substance\" (Latin consubstantialis): the Son has the same divine being as the Father. Athanasius explains in De Decretis 19–20 that the bishops chose this non-biblical word because Arius's party could read the biblical phrases as applying to creatures."
+        },
+        {
+          "id": "of-the-substance",
+          "term": "of the substance of the Father",
+          "note": "Greek ἐκ τῆς οὐσίας τοῦ πατρός: the Son is from the Father's own being, not made from nothing by his will like the creatures. The Creed of 381 leaves out this phrase but keeps homoousios."
+        },
+        {
+          "id": "begotten-not-made",
+          "term": "not made",
+          "note": "Greek γεννηθέντα οὐ ποιηθέντα: a father begets a son of his own nature, while a maker produces something of another nature, so the phrase sets the Son apart from every creature."
+        },
+        {
+          "id": "anathema",
+          "term": "anathematizes",
+          "note": "To anathematize is to declare a teaching, and those who hold it, excluded from the Church's communion. The condemned sentences are slogans of Arius and his supporters, such as \"there was a time when the Son of God was not\"."
+        },
+        {
+          "id": "catholic-church",
+          "term": "Catholic and Apostolic Church",
+          "note": "In 325 \"catholic\" means the universal Church as a whole, not a denomination. Catholics and Orthodox both see themselves as the continuation of this Church; Protestants who confess the Creed read \"catholic\" as the universal Church of all believers."
+        }
+      ],
+      "references": [
+        {
+          "scene": "arius-slogan",
+          "anchor": "There was a time when the Son of God was not."
+        },
+        {
+          "scene": "creed",
+          "anchor": "God of God, Light of Light, very God of very God, begotten, not made."
+        },
+        {
+          "scene": "homoousios",
+          "anchor": "Of one substance with the Father."
+        }
+      ]
+    },
+    {
+      "id": "canon-6",
+      "title": "Canon 6: the rights of the great sees",
+      "source": "nicaea-creed-and-canons",
+      "standing": "council-act",
+      "locator": {
+        "work": "Canons of the Council of Nicaea (325)",
+        "section": "Canon 6"
+      },
+      "url": "https://www.ccel.org/ccel/schaff/npnf214.vii.vi.viii.html",
+      "original": {
+        "status": "not-included",
+        "note": "The Greek text of the canons survives through Greek canonical collections and is also known from early Latin, Syriac and Coptic versions. It is not shown here because its Greek could not be checked against a critical edition for this episode; the English below is Percival's translation from the Greek."
+      },
+      "translation": {
+        "status": "included",
+        "text": "Let the ancient customs in Egypt, Libya and Pentapolis prevail, that the Bishop of Alexandria have jurisdiction in all these, since the like is customary for the Bishop of Rome also. Likewise in Antioch and the other provinces, let the Churches retain their privileges. And this is to be universally understood, that if any one be made bishop without the consent of the Metropolitan, the great Synod has declared that such a man ought not to be a bishop. If, however, two or three bishops shall from natural love of contradiction, oppose the common suffrage of the rest, it being reasonable and in accordance with the ecclesiastical law, then let the choice of the majority prevail.",
+        "translator": {
+          "kind": "published",
+          "name": "Henry R. Percival"
+        },
+        "edition": "H. R. Percival (ed.), The Seven Ecumenical Councils, Nicene and Post-Nicene Fathers, Second Series, vol. 14 (New York: Charles Scribner's Sons, 1900), p. 15",
+        "translatedFrom": "grc",
+        "url": "https://www.ccel.org/ccel/schaff/npnf214.vii.vi.viii.html"
+      },
+      "explanation": "Canon 6 does not create new powers; it confirms existing custom. The bishop of Alexandria keeps his authority over the churches of Egypt, Libya and Pentapolis, \"since the like is customary for the Bishop of Rome also\", and Antioch and the other provinces keep their privileges. It was probably prompted by the Meletian schism in Egypt, where Meletius had ordained bishops without Alexandria's consent. The second half applies to every province: no one may become a bishop without the metropolitan's consent, and the majority prevails over two or three objectors. Catholic tradition reads the reference to Rome as acknowledging a long-standing Roman authority; Orthodox and many Protestant readers see in it the regional authority of the great churches rather than a universal jurisdiction. The canon itself does not define the primacy of the pope.",
+      "annotations": [
+        {
+          "id": "ancient-customs",
+          "term": "ancient customs",
+          "note": "The canon presents itself as confirming what was already practised, not as granting new rights (Percival's notes, after Hammond)."
+        },
+        {
+          "id": "pentapolis",
+          "term": "Pentapolis",
+          "note": "The five cities of Cyrenaica, in today's eastern Libya, whose churches belonged to Alexandria's sphere."
+        },
+        {
+          "id": "bishop-of-rome",
+          "term": "Bishop of Rome",
+          "note": "Roman custom is cited as the precedent for Alexandria's authority. Catholic tradition sees here a recognition of Rome's standing; the canon does not define the primacy of the pope."
+        },
+        {
+          "id": "metropolitan",
+          "term": "Metropolitan",
+          "note": "The bishop of the chief city of a province, who presides over its bishops; by canon 4 he confirms their ordination."
+        }
+      ],
+      "references": [
+        {
+          "scene": "canons",
+          "anchor": "Rights of the great sees"
+        }
+      ]
+    }
+  ]
+}

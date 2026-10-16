@@ -563,3 +563,38 @@ h1 {
 .context-image img {
   max-width: 100%;
 }
+
+/* #86 annotated source excerpts: same overlay and panel, with the original and the translation
+   set apart as quotations. */
+.excerpt-reference-kind {
+  font-weight: 700;
+}
+
+.excerpt-inspection section {
+  display: grid;
+  gap: 4px;
+}
+
+.excerpt-original-text,
+.excerpt-translation-text {
+  margin: 0;
+  padding-left: 0.8em;
+  border-left: 2px solid #475569;
+}
+
+.excerpt-original-text {
+  font-family: 'Gentium Plus', 'Noto Serif', Georgia, serif;
+}
+
+.excerpt-standing {
+  font-weight: 700;
+  color: #facc15;
+}
+
+.excerpt-edition,
+.excerpt-provenance,
+.excerpt-absent,
+.excerpt-locator {
+  font-size: 12px;
+  color: #94a3b8;
+}

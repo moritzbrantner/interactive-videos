@@ -15,6 +15,9 @@ import moenarchTypography from '@/spec/fixtures/moenarch-typography.videospec.js
 import nicaeaContextDe from '@/content/councils/nicaea-325/context/de.json';
 import nicaeaContextEn from '@/content/councils/nicaea-325/context/en.json';
 import nicaeaContextEs from '@/content/councils/nicaea-325/context/es.json';
+import nicaeaExcerptsDe from '@/content/councils/nicaea-325/excerpts/de.json';
+import nicaeaExcerptsEn from '@/content/councils/nicaea-325/excerpts/en.json';
+import nicaeaExcerptsEs from '@/content/councils/nicaea-325/excerpts/es.json';
 import nicaeaScript from '@/content/councils/nicaea-325/script.json';
 import nicaeaSources from '@/content/councils/nicaea-325/sources.json';
 import nicaeaSubtitlesDe from '@/content/councils/nicaea-325/subtitles/de.json';
@@ -42,7 +45,8 @@ export const catalog = createCatalog(
     // #82: Seven Councils pilot, Nicaea I. Committed Kokoro narration (sidecar
     // council-nicaea-325.asset-requests.json, ADR 0002), selectable English subtitles, and
     // German and Spanish translations on the English cue timing (#84), and browser-only context
-    // disclosures for people, places and terms in the Subtitles language (#85).
+    // disclosures for people, places and terms in the Subtitles language (#85), and annotated
+    // source excerpts (the Creed, canon 6) in the same overlay and language (#86).
     {
       spec: councilNicaea325,
       format: moenarchShort(),
@@ -53,7 +57,13 @@ export const catalog = createCatalog(
       ],
       notes: [nicaeaScript.disclosure.syntheticNarration],
       overlay: (spec) =>
-        createContextOverlay({ spec, english: nicaeaContextEn, translations: [nicaeaContextDe, nicaeaContextEs], sources: nicaeaSources.sources }),
+        createContextOverlay({
+          spec,
+          english: nicaeaContextEn,
+          translations: [nicaeaContextDe, nicaeaContextEs],
+          sources: nicaeaSources.sources,
+          excerpts: { english: nicaeaExcerptsEn, translations: [nicaeaExcerptsDe, nicaeaExcerptsEs] },
+        }),
     },
   ],
   // `/` without a project keeps opening the latency explainer.
