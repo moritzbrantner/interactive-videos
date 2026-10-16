@@ -6,22 +6,25 @@
   "provenance": {
     "translatedFrom": {
       "language": "en",
-      "excerptsSha256": "fe342453b3495b12b3655c0e2b28ef25257057af8f67f9952d67ae1dd53d3e0f"
+      "excerptsSha256": "f514ccf67b92be3942ec01bed4e169efba344e62d60b16df6c12fa513fb2e575"
     },
     "translator": {
       "kind": "agent",
       "name": "Claude Opus 5.5 (implementation agent, interactive-videos#86)"
     },
     "review": {
-      "status": "pending"
+      "status": "approved",
+      "reviewer": "Claude Opus 5.5 (independent source and translation reviewer, interactive-videos#86)",
+      "date": "2026-10-17",
+      "reference": "https://github.com/moritzbrantner/interactive-videos/pull/91#issuecomment-6225583707"
     }
   },
   "excerpts": [
     {
       "id": "nicene-creed",
       "title": "El Credo de Nicea (325)",
-      "explanation": "Los obispos reunidos en Nicea adoptaron esta confesión de fe en junio de 325 para excluir la enseñanza de Arrio. Es un acto del propio concilio, junto con los cánones y la carta sinodal. En su carta a su Iglesia, Eusebio de Cesarea cuenta que la fe que él había presentado solo fue aceptada con la palabra homoousios añadida, y explica por qué pudo aceptar las expresiones «de la sustancia del Padre», «engendrado, no creado» y «consustancial». Estas expresiones excluyen entender al Hijo como la primera y más alta criatura, y el anatema final condena las propias consignas de Arrio. Arrio y dos obispos que no lo aceptaron fueron desterrados. No es palabra por palabra el Credo que se reza hoy en la misa: ese texto más largo se asocia al Concilio de Constantinopla (381), que amplió el artículo sobre el Espíritu Santo y suprimió el anatema. Según la doctrina católica, la definición de Nicea es dogma vinculante (Catecismo §242, §465); las Iglesias ortodoxas la comparten, y la mayoría de las Iglesias protestantes la aceptan como fiel a la Escritura.",
-      "originalNote": "No se conserva ningún acta de las sesiones del concilio. El texto griego del Credo se ha transmitido por testigos: la carta de Eusebio de Cesarea a su Iglesia, Atanasio (mostrado aquí, de De decretis 37), la Historia eclesiástica de Sócrates (I.8) y las actas del Concilio de Calcedonia (451), con diferencias mínimas entre ellos. Percival tradujo la forma impresa en las colecciones conciliares, por lo que su inglés difiere ligeramente en algunos puntos.",
+      "explanation": "Los obispos reunidos en Nicea adoptaron esta confesión de fe en junio de 325 para excluir la enseñanza de Arrio. Es un acto del propio concilio, junto con los cánones y la carta sinodal. En su carta a su Iglesia, Eusebio de Cesarea cuenta que el emperador aprobó la fe que él había presentado y solo pidió añadir la palabra homoousios, y que los obispos redactaron después este texto más amplio; explica por qué pudo aceptar las expresiones «de la sustancia del Padre», «engendrado, no creado» y «consustancial». Estas expresiones excluyen entender al Hijo como la primera y más alta criatura, y el anatema final condena las propias consignas de Arrio. Arrio y dos obispos que no lo aceptaron fueron desterrados. No es palabra por palabra el Credo que se reza hoy en la misa: ese texto más largo se asocia al Concilio de Constantinopla (381), que amplió el artículo sobre el Espíritu Santo y suprimió el anatema. Según la doctrina católica, la definición de Nicea es dogma vinculante (Catecismo §242, §465); las Iglesias ortodoxas la comparten, y la mayoría de las Iglesias protestantes la aceptan como fiel a la Escritura.",
+      "originalNote": "No se conserva ningún acta de las sesiones del concilio. El texto griego del Credo se ha transmitido por testigos: la carta de Eusebio de Cesarea a su Iglesia, Atanasio (mostrado aquí, de De decretis 37), la Historia eclesiástica de Sócrates (I.8) y las actas del Concilio de Calcedonia (451), con diferencias mínimas entre ellos. La traducción española de abajo se hizo directamente de este texto griego; la traducción inglesa enlazada de Percival sigue la forma de las colecciones conciliares y difiere ligeramente en algunos puntos.",
       "annotations": [
         {
           "id": "homoousios",
@@ -46,7 +49,7 @@
         {
           "id": "catholic-church",
           "term": "Iglesia católica y apostólica",
-          "note": "En 325, «católica» significa la Iglesia universal en su conjunto, todavía no una confesión. Católicos y ortodoxos se consideran ambos continuación de esta Iglesia."
+          "note": "En 325, «católica» significa la Iglesia universal en su conjunto, todavía no una confesión. Católicos y ortodoxos se consideran ambos continuación de esta Iglesia; los protestantes que confiesan el Credo entienden «católica» como la Iglesia universal de todos los creyentes."
         }
       ],
       "translation": {

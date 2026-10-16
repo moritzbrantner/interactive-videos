@@ -6,22 +6,25 @@
   "provenance": {
     "translatedFrom": {
       "language": "en",
-      "excerptsSha256": "fe342453b3495b12b3655c0e2b28ef25257057af8f67f9952d67ae1dd53d3e0f"
+      "excerptsSha256": "f514ccf67b92be3942ec01bed4e169efba344e62d60b16df6c12fa513fb2e575"
     },
     "translator": {
       "kind": "agent",
       "name": "Claude Opus 5.5 (implementation agent, interactive-videos#86)"
     },
     "review": {
-      "status": "pending"
+      "status": "approved",
+      "reviewer": "Claude Opus 5.5 (independent source and translation reviewer, interactive-videos#86)",
+      "date": "2026-10-17",
+      "reference": "https://github.com/moritzbrantner/interactive-videos/pull/91#issuecomment-6225583707"
     }
   },
   "excerpts": [
     {
       "id": "nicene-creed",
       "title": "Das Glaubensbekenntnis von Nizäa (325)",
-      "explanation": "Die Bischöfe in Nizäa nahmen dieses Bekenntnis im Juni 325 an, um die Lehre des Arius auszuschließen. Es ist ein Beschluss des Konzils selbst, neben den Kanones und dem Synodalschreiben. In seinem Brief an seine Gemeinde berichtet Eusebius von Caesarea, dass der von ihm vorgelegte Glaube nur mit dem hinzugefügten Wort homoousios angenommen wurde, und er erklärt, warum er die Wendungen „aus dem Wesen des Vaters“, „gezeugt, nicht geschaffen“ und „wesensgleich“ annehmen konnte. Diese Wendungen schließen aus, den Sohn als erstes und höchstes Geschöpf zu verstehen, und das abschließende Anathema verurteilt die Losungen des Arius selbst. Arius und zwei Bischöfe, die es nicht annahmen, wurden verbannt. Es ist nicht wörtlich das Credo der heutigen Messe: Dieser längere Text wird mit dem Konzil von Konstantinopel (381) verbunden, das den Artikel über den Heiligen Geist erweiterte und das Anathema wegließ. Nach katholischer Lehre ist die Glaubensentscheidung von Nizäa verbindliches Dogma (Katechismus §242, §465); die orthodoxen Kirchen teilen sie, und die meisten protestantischen Kirchen halten sie für schriftgemäß.",
-      "originalNote": "Von den Sitzungen des Konzils ist kein Protokoll erhalten. Der griechische Text des Bekenntnisses ist durch Zeugen überliefert: den Brief des Eusebius von Caesarea an seine Gemeinde, Athanasius (hier gezeigt, aus De decretis 37), die Kirchengeschichte des Sokrates (I.8) und die Akten des Konzils von Chalcedon (451), mit nur geringen Abweichungen. Percival übersetzte die Fassung der Konzilssammlungen, daher weicht sein Englisch stellenweise leicht ab.",
+      "explanation": "Die Bischöfe in Nizäa nahmen dieses Bekenntnis im Juni 325 an, um die Lehre des Arius auszuschließen. Es ist ein Beschluss des Konzils selbst, neben den Kanones und dem Synodalschreiben. In seinem Brief an seine Gemeinde berichtet Eusebius von Caesarea, dass der Kaiser den von ihm vorgelegten Glauben billigte und nur das Wort homoousios hinzufügen wollte, die Bischöfe dann aber diesen ausführlicheren Text verfassten; er erklärt, warum er die Wendungen „aus dem Wesen des Vaters“, „gezeugt, nicht geschaffen“ und „wesensgleich“ annehmen konnte. Diese Wendungen schließen aus, den Sohn als erstes und höchstes Geschöpf zu verstehen, und das abschließende Anathema verurteilt die Losungen des Arius selbst. Arius und zwei Bischöfe, die es nicht annahmen, wurden verbannt. Es ist nicht wörtlich das Credo der heutigen Messe: Dieser längere Text wird mit dem Konzil von Konstantinopel (381) verbunden, das den Artikel über den Heiligen Geist erweiterte und das Anathema wegließ. Nach katholischer Lehre ist die Glaubensentscheidung von Nizäa verbindliches Dogma (Katechismus §242, §465); die orthodoxen Kirchen teilen sie, und die meisten protestantischen Kirchen halten sie für schriftgemäß.",
+      "originalNote": "Von den Sitzungen des Konzils ist kein Protokoll erhalten. Der griechische Text des Bekenntnisses ist durch Zeugen überliefert: den Brief des Eusebius von Caesarea an seine Gemeinde, Athanasius (hier gezeigt, aus De decretis 37), die Kirchengeschichte des Sokrates (I.8) und die Akten des Konzils von Chalcedon (451), mit nur geringen Abweichungen. Die deutsche Übersetzung unten ist direkt aus diesem griechischen Text erstellt; Percivals verlinkte englische Übersetzung folgt der Fassung der Konzilssammlungen und weicht stellenweise leicht ab.",
       "annotations": [
         {
           "id": "homoousios",
@@ -46,12 +49,12 @@
         {
           "id": "catholic-church",
           "term": "katholische und apostolische Kirche",
-          "note": "Im Jahr 325 bedeutet „katholisch“ die allgemeine Kirche als Ganze, noch keine Konfession. Katholiken und Orthodoxe verstehen sich beide als Fortsetzung dieser Kirche."
+          "note": "Im Jahr 325 bedeutet „katholisch“ die allgemeine Kirche als Ganze, noch keine Konfession. Katholiken und Orthodoxe verstehen sich beide als Fortsetzung dieser Kirche; Protestanten, die das Bekenntnis sprechen, verstehen „katholisch“ als die allgemeine Kirche aller Gläubigen."
         }
       ],
       "translation": {
         "status": "included",
-        "text": "Wir glauben an einen Gott, den Vater, den Allherrscher, den Schöpfer aller sichtbaren und unsichtbaren Dinge; und an einen Herrn Jesus Christus, den Sohn Gottes, aus dem Vater gezeugt als der Eingeborene, das heißt aus dem Wesen des Vaters, Gott von Gott, Licht vom Licht, wahrer Gott vom wahren Gott, gezeugt, nicht geschaffen, wesensgleich dem Vater, durch den alles geworden ist, was im Himmel und was auf der Erde ist; der um uns Menschen und um unseres Heiles willen herabgestiegen und Fleisch geworden ist, Mensch geworden ist, gelitten hat und am dritten Tag auferstanden ist, aufgefahren ist in die Himmel und kommen wird, zu richten die Lebenden und die Toten; und an den Heiligen Geist. Die aber sagen: „Es gab eine Zeit, da er nicht war“, oder: „Bevor er gezeugt wurde, war er nicht“, oder: „Er ist aus Nichtseiendem geworden“, oder die behaupten, der Sohn Gottes sei aus einer anderen Hypostase oder Wesenheit, oder er sei geschaffen, wandelbar oder veränderlich, diese belegt die katholische und apostolische Kirche mit dem Anathema.",
+        "text": "Wir glauben an einen Gott, den Vater, den Allherrscher, den Schöpfer aller sichtbaren und unsichtbaren Dinge; und an einen Herrn Jesus Christus, den Sohn Gottes, als der Eingeborene aus dem Vater gezeugt, das heißt aus dem Wesen des Vaters, Gott von Gott, Licht vom Licht, wahrer Gott vom wahren Gott, gezeugt, nicht geschaffen, wesensgleich dem Vater, durch den alles geworden ist, was im Himmel und was auf der Erde ist; der um uns Menschen und um unseres Heiles willen herabgestiegen und Fleisch geworden ist, Mensch geworden ist, gelitten hat und am dritten Tag auferstanden ist, aufgefahren ist in die Himmel und kommen wird, zu richten die Lebenden und die Toten; und an den Heiligen Geist. Die aber sagen: „Es gab eine Zeit, da er nicht war“, oder: „Bevor er gezeugt wurde, war er nicht“, oder: „Er ist aus Nichtseiendem geworden“, oder die behaupten, der Sohn Gottes sei aus einer anderen Hypostase oder Wesenheit, oder er sei geschaffen, wandelbar oder veränderlich, diese belegt die katholische und apostolische Kirche mit dem Anathema.",
         "translator": {
           "kind": "agent",
           "name": "Claude Opus 5.5 (implementation agent, interactive-videos#86)"
