@@ -129,7 +129,8 @@ describe('resolveRenderJob: project selection through the catalog', () => {
     const result = assertRenderResult(createRenderResult(titleCard, FAKE_OUTPUT));
     expect(result).toEqual({
       schema: 'interactive-videos/render-result',
-      schemaVersion: 1,
+      // #17: render result schema v2 (per-slot asset provenance); the title card has no slots.
+      schemaVersion: 2,
       ok: true,
       request: { project: 'catalog-title-card', profile: 'social-portrait', frames: null },
       project: { id: 'catalog-title-card', title: 'Catalog title card', specSha256: sha256(serializeVideoSpec(spec)) },

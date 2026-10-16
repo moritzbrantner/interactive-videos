@@ -6,6 +6,11 @@
 // filled by the network-free source import: a few frames of the scene gallery's media reveal
 // (image) and of the narration project's first audio segment (audio). The result reports each slot
 // as its resolved immutable input { id, kind, src, sha256, byteLength, mediaType }.
+//
+// #17 (independent acceptance): the CLI materializes the selected project through asset-tooling
+// before resolving the job, so its v2 result always carries non-null provenance: `local` for
+// source slots, `hit`/`miss` with operation and cache key for requested ones; a second render of
+// the unchanged project hits every requested slot with the same cache keys.
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -78,5 +83,44 @@ describe('bun run video:render with content-addressed assets (smoke)', () => {
     expectResolvedAssets(id, result.assets);
     expect(result.assets.some((asset: Json) => asset.kind === 'audio')).toBe(true);
     expect(existsSync(out)).toBe(true);
+  });
+});
+
+describe('bun run video:render materializes through asset-tooling (#17 smoke)', () => {
+  const MATERIALIZED = 'moenarch-materialized-audio';
+
+  const provenance = (assets: Json[]) => Object.fromEntries(assets.map((asset) => [asset.id, asset.provenance]));
+
+  it('records local provenance for a project without requests', () => {
+    const id = 'moenarch-narration';
+    const segment = narrationSchedule(catalog.spec(id)!).scenes.flatMap((scene) => scene.audio?.segments ?? [])[0];
+    const run = render(['--project', id, '--frames', `${segment.from}-${segment.from + 2}`, '--out', join(tmp, 'narration-provenance.mp4')]);
+    expect(run.status, run.context).toBe(0);
+    const result = assertRenderResult(run.json);
+    for (const asset of result.assets as Json[]) {
+      expect(asset.provenance, asset.id).toEqual({ status: 'local', operation: null, cacheKey: null });
+    }
+  });
+
+  it('renders the materialized fixture, then reuses every requested slot on an unchanged rebuild', () => {
+    const segment = narrationSchedule(catalog.spec(MATERIALIZED)!).scenes.flatMap((scene) => scene.audio?.segments ?? [])[0];
+    expect(segment, 'the fixture has an audio segment').toBeDefined();
+    const frames = `${segment.from}-${segment.from + 2}`;
+    const first = render(['--project', MATERIALIZED, '--frames', frames, '--out', join(tmp, 'materialized-1.mp4')]);
+    expect(first.status, first.context).toBe(0);
+    const firstResult = assertRenderResult(first.json);
+    expectResolvedAssets(MATERIALIZED, firstResult.assets);
+    const before = provenance(firstResult.assets);
+    expect(before['narration.local']).toEqual({ status: 'local', operation: null, cacheKey: null });
+    expect(before['narration.tone']).toMatchObject({ status: expect.stringMatching(/^(hit|miss)$/), operation: { id: 'audio.oscillator', version: '1' } });
+    expect(before['narration.shaped']).toMatchObject({ status: expect.stringMatching(/^(hit|miss)$/), operation: { id: 'audio.adsr', version: '1' } });
+
+    const second = render(['--project', MATERIALIZED, '--frames', frames, '--out', join(tmp, 'materialized-2.mp4')]);
+    expect(second.status, second.context).toBe(0);
+    const after = provenance(assertRenderResult(second.json).assets);
+    for (const id of ['narration.tone', 'narration.shaped']) {
+      expect(after[id], id).toEqual({ ...before[id], status: 'hit' });
+    }
+    expect(after['narration.local']).toEqual(before['narration.local']);
   });
 });

@@ -1,11 +1,12 @@
-// Acceptance contract for issue #15: the machine-readable render result (schema v1).
+// Acceptance contract for issue #15: the machine-readable render result, bumped to schema v2 by
+// the independent acceptance context of #17 (per-slot asset provenance).
 //
 // Shared by the unit tests and the render smoke. It deliberately imports no production code, so it
 // states the schema independently of the implementation.
 //
 // Success: one JSON object, the only line on stdout of `bun run video:render`.
 //   {
-//     "schema": "interactive-videos/render-result", "schemaVersion": 1, "ok": true,
+//     "schema": "interactive-videos/render-result", "schemaVersion": 2, "ok": true,
 //     "request":     { "project": <selector as given>, "profile": <profile id>, "frames": "<a>-<b>" | null },
 //     "project":     { "id", "title", "specSha256" },      // sha256 of serializeVideoSpec(spec)
 //     "format":      { "id", "version" },                    // the spec's format pack
@@ -13,13 +14,18 @@
 //     "composition": { "id", "width", "height", "fps", "durationInFrames" },
 //     "frames":      { "from", "to", "count" },              // inclusive range actually rendered
 //     "scenes":      [{ "id", "kind", "from", "durationInFrames" }],   // resolveTimeline(spec).scenes
-//     "assets":      [{ "id", "kind", "src", "sha256", "byteLength", "mediaType" }],
+//     "assets":      [{ "id", "kind", "src", "sha256", "byteLength", "mediaType", "provenance" }],
 //                    // #16: spec asset slots in normalized order, resolved before bundling to immutable
 //                    // content-addressed inputs (src contains the sha256; no static: URI anywhere)
+//                    // #17 (schema v2): "provenance" records how the slot was materialized in this run:
+//                    //   { "status": "hit" | "miss", "operation": { "id", "version" }, "cacheKey": <sha256 hex> }
+//                    //   for an asset-tooling operation request, { "status": "local", "operation": null,
+//                    //   "cacheKey": null } for a local/pre-generated slot, or null when the job was resolved
+//                    //   without a materialization record (a pre-filled store; the CLI always records one).
 //     "output":      { "path", "sha256", "bytes" }          // absolute path of the written file
 //   }
 // Failure: exit code != 0, the message on stderr, and one JSON line on stdout:
-//   { "schema": "interactive-videos/render-result", "schemaVersion": 1, "ok": false,
+//   { "schema": "interactive-videos/render-result", "schemaVersion": 2, "ok": false,
 //     "error": { "reason": <RenderErrorReason>, "message": <diagnostic> } }
 // Nothing time-dependent (timestamps, wall-clock durations, hostnames) is part of either object.
 import { expect } from 'vitest';
@@ -46,14 +52,33 @@ const SHA256 = /^[0-9a-f]{64}$/;
 const keys = (value: unknown) => Object.keys(value as object).sort();
 const isInt = (value: unknown) => Number.isSafeInteger(value);
 
-/** Asserts the exact v1 success shape; returns the value typed loosely for further checks. */
+export const RENDER_RESULT_SCHEMA_VERSION = 2;
+
+/** Asserts a v2 asset provenance entry (or null) and its internal consistency. */
+export function assertAssetProvenance(value: unknown, location: string) {
+  if (value === null) return;
+  const provenance = value as Record<string, any>;
+  expect(keys(provenance), location).toEqual(['cacheKey', 'operation', 'status']);
+  expect(['hit', 'miss', 'local'], location).toContain(provenance.status);
+  if (provenance.status === 'local') {
+    expect(provenance.operation, location).toBeNull();
+    expect(provenance.cacheKey, location).toBeNull();
+  } else {
+    expect(keys(provenance.operation), location).toEqual(['id', 'version']);
+    expect(provenance.operation.id, location).toMatch(/^[a-z0-9]+(?:[.-][a-z0-9]+)*$/);
+    expect(provenance.operation.version, location).toBeTypeOf('string');
+    expect(provenance.cacheKey, location).toMatch(SHA256);
+  }
+}
+
+/** Asserts the exact v2 success shape; returns the value typed loosely for further checks. */
 export function assertRenderResult(value: unknown) {
   const result = value as Record<string, any>;
   expect(keys(result)).toEqual(
     ['assets', 'composition', 'format', 'frames', 'ok', 'output', 'profile', 'project', 'request', 'scenes', 'schema', 'schemaVersion'],
   );
   expect(result.schema).toBe(RENDER_RESULT_SCHEMA);
-  expect(result.schemaVersion).toBe(1);
+  expect(result.schemaVersion).toBe(RENDER_RESULT_SCHEMA_VERSION);
   expect(result.ok).toBe(true);
 
   expect(keys(result.request)).toEqual(['frames', 'profile', 'project']);
@@ -97,7 +122,8 @@ export function assertRenderResult(value: unknown) {
 
   expect(Array.isArray(result.assets)).toBe(true);
   for (const asset of result.assets) {
-    expect(keys(asset)).toEqual(['byteLength', 'id', 'kind', 'mediaType', 'sha256', 'src']);
+    expect(keys(asset)).toEqual(['byteLength', 'id', 'kind', 'mediaType', 'provenance', 'sha256', 'src']);
+    assertAssetProvenance(asset.provenance, `assets[${asset.id}].provenance`);
     expect(asset.id).toBeTypeOf('string');
     expect(asset.kind).toBeTypeOf('string');
     expect(asset.sha256).toMatch(SHA256);
@@ -115,12 +141,12 @@ export function assertRenderResult(value: unknown) {
   return result;
 }
 
-/** Asserts the exact v1 failure shape and returns its reason. */
+/** Asserts the exact v2 failure shape and returns its reason. */
 export function assertRenderFailure(value: unknown) {
   const result = value as Record<string, any>;
   expect(keys(result)).toEqual(['error', 'ok', 'schema', 'schemaVersion']);
   expect(result.schema).toBe(RENDER_RESULT_SCHEMA);
-  expect(result.schemaVersion).toBe(1);
+  expect(result.schemaVersion).toBe(RENDER_RESULT_SCHEMA_VERSION);
   expect(result.ok).toBe(false);
   expect(keys(result.error)).toEqual(['message', 'reason']);
   expect(RENDER_ERROR_REASONS).toContain(result.error.reason);

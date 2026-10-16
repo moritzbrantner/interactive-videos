@@ -25,6 +25,8 @@ describe('project catalog', () => {
       { id: 'moenarch-typography', title: 'Moenarch typography specimen' },
       // #60: the interactive disclosure showcase.
       { id: 'interactive-showcase', title: 'Interactive showcase' },
+      // #17: audio materialized through asset-tooling operations, plus one local slot.
+      { id: 'moenarch-materialized-audio', title: 'Moenarch materialized audio' },
     ]);
     expect(catalog.defaultId).toBe('latency-explainer');
   });
