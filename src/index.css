@@ -462,3 +462,104 @@ h1 {
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+
+/* #85 council context: browser-only hotspots, previews and a non-modal disclosure over the Player
+   (never in rendered frames). Reuses the showcase trigger and preview styles. */
+.context-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.context-hotspots {
+  position: absolute;
+  left: 6%;
+  top: 9%;
+  display: grid;
+  gap: 8px;
+  max-width: 88%;
+}
+
+.context-anchor {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+  pointer-events: auto;
+}
+
+.context-hotspot {
+  font-size: 13px;
+}
+
+.context-hotspot:focus-visible,
+.context-disclosure:focus-visible,
+.context-disclosure button:focus-visible,
+.context-disclosure a:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 3px;
+}
+
+.context-preview {
+  max-width: 100%;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.context-disclosure {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 56px;
+  max-height: calc(100% - 170px);
+  overflow: auto;
+  display: grid;
+  gap: 8px;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: rgb(15 23 42 / 96%);
+  color: #f4f4f5;
+  font-size: 13px;
+  line-height: 1.4;
+  pointer-events: auto;
+}
+
+.context-disclosure h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.context-disclosure h3 {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+}
+
+.context-disclosure p,
+.context-disclosure ul {
+  margin: 0;
+}
+
+.context-disclosure ul {
+  padding-left: 1.1em;
+}
+
+.context-disclosure a {
+  color: #93c5fd;
+}
+
+.context-kind,
+.context-untranslated {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.context-close {
+  justify-self: end;
+}
+
+.context-image img {
+  max-width: 100%;
+}

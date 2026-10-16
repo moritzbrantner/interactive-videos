@@ -1,0 +1,61 @@
+{
+  "schema": "interactive-videos/council-context",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "language": "es",
+  "provenance": {
+    "translatedFrom": {
+      "language": "en",
+      "entriesSha256": "f5ab994c77411de4b7928bcdeb75674680c3a456a760d39f431947a610f7aa58"
+    },
+    "translator": {
+      "kind": "agent",
+      "name": "Claude Opus 5.5 (implementation agent, interactive-videos#85)"
+    },
+    "review": {
+      "status": "approved",
+      "reviewer": "Claude Opus 5.5 (independent historical and translation reviewer, interactive-videos#85)",
+      "date": "2026-10-16",
+      "reference": "https://github.com/moritzbrantner/interactive-videos/pull/90#issuecomment-6217402253"
+    },
+    "terminology": "Terminology follows the Spanish subtitle track (#84): Nicea (adjective niceno), Credo, homoousios kept in Greek and glossed as consustancial, Arrio, Alejandro, Atanasio, Constantino, Alejandría."
+  },
+  "entries": [
+    {
+      "id": "arius",
+      "title": "Arrio",
+      "preview": "Sacerdote de Alejandría que enseñó que el Hijo de Dios fue creado y que «hubo un tiempo en que el Hijo no existía». El Concilio de Nicea condenó esta enseñanza en el año 325.",
+      "body": "Arrio era sacerdote en Alejandría, en Egipto. Enseñaba que el Hijo de Dios no era eterno, sino que el Padre lo había sacado de la nada: «hubo un tiempo en que el Hijo no existía». Su obispo, Alejandro, reunió un sínodo que lo excomulgó, pero Arrio encontró apoyo entre otros obispos de Oriente, y la disputa se extendió. En Nicea, en el año 325, los obispos rechazaron su enseñanza: el Credo condena a quienes dicen que el Hijo fue hecho de la nada o que alguna vez no existió, y Arrio fue desterrado junto con dos obispos que se negaron a firmar, Teonas de Marmárica y Segundo de Ptolemaida. Según la doctrina católica, su enseñanza es una herejía; el Catecismo la resume en la afirmación de que «el Hijo de Dios salió de la nada». El propio Arrio presentaba su postura como una defensa del Dios uno, el único que no tiene principio, y las ideas asociadas a él conservaron poderosos apoyos durante décadas después del concilio."
+    },
+    {
+      "id": "alexander-of-alexandria",
+      "title": "Alejandro de Alejandría",
+      "preview": "Obispo de Alejandría que condenó la enseñanza de su sacerdote Arrio y participó en el Concilio de Nicea. Su diácono Atanasio le sucedió en el año 328.",
+      "body": "Alejandro era obispo de Alejandría, una de las grandes sedes cuyos derechos tradicionales confirmó el concilio en su sexto canon. Cuando su sacerdote Arrio enseñó que el Hijo de Dios era una criatura, Alejandro convocó un sínodo de obispos que excomulgó a Arrio y a sus seguidores, y escribió a obispos de otras regiones para advertirles. El emperador Constantino envió primero una carta en la que instaba a Alejandro y a Arrio a resolver su disputa; cuando esto fracasó, convocó el concilio en Nicea. Alejandro asistió acompañado de su diácono Atanasio, y los obispos rechazaron allí la enseñanza de Arrio. Tras la muerte de Alejandro, Atanasio llegó a ser obispo de Alejandría en su lugar."
+    },
+    {
+      "id": "constantine",
+      "title": "Constantino",
+      "preview": "Emperador romano, único gobernante del imperio desde el año 324. Convocó a los obispos a Nicea en 325 para restablecer la unidad, pero no fue bautizado hasta poco antes de su muerte, en 337.",
+      "body": "Constantino llegó a ser único gobernante del Imperio romano tras su victoria sobre su coemperador Licinio en el año 324. Favorecía a la Iglesia y quería verla unida, por lo que primero escribió a Alejandro y a Arrio para pedirles que hicieran las paces. Cuando esto fracasó, convocó a los obispos a Nicea en 325 y les permitió viajar con el correo público. Eusebio de Cesarea describe cómo abrió el concilio con un discurso en favor de la unidad y después siguió los debates. Según la carta de Eusebio que conserva Sócrates, el emperador también apoyó la palabra homoousios, pero el Credo y los cánones fueron decisiones de los obispos; Constantino las hizo cumplir, incluido el destierro de Arrio. Solo fue bautizado al final de su vida, cerca de Nicomedia, en 337, y murió pocos días después."
+    },
+    {
+      "id": "athanasius",
+      "title": "Atanasio de Alejandría",
+      "preview": "Asistió como diácono al Concilio de Nicea en 325 y fue obispo de Alejandría desde 328 hasta su muerte en 373. Defendió la fe del concilio durante décadas y fue desterrado cinco veces.",
+      "body": "Atanasio llegó a Nicea como diácono del obispo Alejandro y le sucedió como obispo de Alejandría en 328. Durante los cuarenta y cinco años siguientes fue uno de los principales defensores del Credo niceno, en una época en que emperadores y muchos obispos preferían fórmulas de compromiso o las ideas asociadas a Arrio, y fue expulsado de su sede cinco veces. En su obra De Decretis explicó por qué el concilio eligió una palabra que no se encuentra en la Escritura: las frases bíblicas por sí solas, como «de Dios», podían ser leídas por los partidarios de Arrio como válidas también para las criaturas; por eso los obispos escribieron que el Hijo es «de la esencia» del Padre y homoousios con él, es decir, consustancial. El Concilio de Constantinopla, en el año 381, ocho años después de su muerte, reafirmó la fe que él había defendido."
+    },
+    {
+      "id": "nicaea",
+      "title": "Nicea",
+      "preview": "Ciudad de Bitinia, en el noroeste de Asia Menor, donde se reunió el primer concilio ecuménico en el año 325. Hoy es la ciudad de İznik, en Turquía.",
+      "body": "Nicea era una ciudad de la provincia romana de Bitinia; Eusebio de Cesarea señala que su nombre griego procede de la palabra que significa victoria. Constantino la eligió para el concilio de 325 y puso a disposición el correo público y caballos para que los obispos pudieran viajar hasta allí. Eusebio cuenta más de doscientos cincuenta obispos, la mayoría del Oriente de habla griega; el papa Silvestre, demasiado anciano para viajar, estuvo representado por dos sacerdotes romanos. El concilio aprobó el Credo, una fecha común para la Pascua y veinte cánones. Los católicos lo consideran el primer concilio ecuménico, igual que las Iglesias ortodoxas. El lugar es la actual ciudad de İznik, en el noroeste de Turquía."
+    },
+    {
+      "id": "homoousios",
+      "title": "Homoousios",
+      "preview": "Término griego que significa «de la misma sustancia»: el Credo de Nicea llama al Hijo homoousios con el Padre, es decir, Dios en el mismo sentido pleno que el Padre, no una criatura.",
+      "body": "Homoousios une las palabras griegas homos, «el mismo», y ousia, «sustancia» o «ser». El Credo de Nicea emplea este término para decir que el Hijo, «engendrado, no creado», comparte el ser mismo del Padre, frente a la enseñanza de que era una criatura. La palabra no aparece en la Escritura; Atanasio explicó más tarde que los obispos la eligieron porque los partidarios de Arrio podían leer las frases bíblicas por sí solas como válidas también para las criaturas. Según la doctrina católica, el Hijo es consustancial al Padre, y el Catecismo cita el homoousios del Credo en este sentido. Algunos obispos objetaron que el término no era bíblico o que podía difuminar la distinción entre el Padre y el Hijo, y durante décadas después de 325 se propusieron fórmulas rivales, hasta que el Concilio de Constantinopla de 381 reafirmó la fe nicena."
+    }
+  ]
+}
