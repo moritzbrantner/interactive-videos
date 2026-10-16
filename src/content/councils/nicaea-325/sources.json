@@ -9,7 +9,7 @@
       "title": "Life of Constantine, Book III",
       "author": "Eusebius of Caesarea",
       "url": "https://www.newadvent.org/fathers/25023.htm",
-      "reference": "Book III, ch. 6–9 (the bishops summoned to Nicaea; more than 250 bishops; the bishop of the imperial city absent through old age, represented by his presbyters) and ch. 18–19 (Easter kept on one and the same day). Tr. E. C. Richardson, NPNF, Second Series, vol. 1."
+      "reference": "Book III, ch. 6–9 (the bishops summoned to Nicaea; more than 250 bishops; the bishop of the imperial city absent through old age, represented by his presbyters), ch. 10–13 (Constantine's opening address and his part in the debates) and ch. 18–19 (Easter kept on one and the same day). Tr. E. C. Richardson, NPNF, Second Series, vol. 1."
     },
     {
       "id": "nicaea-creed-and-canons",
@@ -33,7 +33,7 @@
       "title": "Church History, Book I",
       "author": "Socrates Scholasticus",
       "url": "https://www.newadvent.org/fathers/26011.htm",
-      "reference": "Book I, ch. 5–9: Arius and Alexander, the council, the Creed and its anathema, the exile of Arius, the Easter question. Tr. A. C. Zenos, NPNF, Second Series, vol. 2. Socrates I.8 instead names Eusebius of Nicomedia and Theognis as exiled with Arius (see also I.14); the episode's \"two bishops who refused to sign\" follows the synodal letter, not Socrates."
+      "reference": "Book I, ch. 4–9: Constantine and Licinius, Arius and Alexander, the council, the Creed and its anathema, the exile of Arius, the Easter question; ch. 15: Athanasius succeeds Alexander; ch. 39–40: Constantine baptized in the suburbs of Nicomedia, dies a few days later (22 May 337). Tr. A. C. Zenos, NPNF, Second Series, vol. 2. Socrates I.8 instead names Eusebius of Nicomedia and Theognis as exiled with Arius (see also I.14); the episode's \"two bishops who refused to sign\" follows the synodal letter, not Socrates."
     },
     {
       "id": "ayres-nicaea-and-its-legacy",
@@ -72,6 +72,14 @@
       "author": "St. Nicholas Center",
       "url": "https://www.stnicholascenter.org/who-is-st-nicholas/stories-legends/traditional-stories/life-of-nicholas/bishop-nicholas-loses-his-cool",
       "reference": "Presents the slap at Nicaea as a legend (\"over 500 years old\"); Nicholas appears on the attendance list of Theodore the Lector (c. 515). The fourth- and fifth-century accounts (Eusebius, Socrates) do not tell the story."
+    },
+    {
+      "id": "oca-the-councils",
+      "kind": "reference",
+      "title": "The Councils",
+      "author": "Orthodox Church in America",
+      "url": "https://oca.org/orthodoxy/the-orthodox-faith/doctrine-scripture/sources-of-christian-doctrine/the-councils",
+      "reference": "The Orthodox Faith, vol. I: Doctrine and Scripture, \"Sources of Christian Doctrine\". The Orthodox Church recognizes seven ecumenical councils, the first at Nicaea (325), which addressed the divinity of the Son and formulated the first part of the Creed."
     }
   ]
 }

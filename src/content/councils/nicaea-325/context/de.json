@@ -13,7 +13,10 @@
       "name": "Claude Opus 5.5 (implementation agent, interactive-videos#85)"
     },
     "review": {
-      "status": "pending"
+      "status": "approved",
+      "reviewer": "Claude Opus 5.5 (independent historical and translation reviewer, interactive-videos#85)",
+      "date": "2026-10-16",
+      "reference": "https://github.com/moritzbrantner/interactive-videos/pull/90#issuecomment-6217402253"
     },
     "terminology": "Terminology follows the German subtitle track (#84): Nizäa (adjective nizänisch), (Glaubens)bekenntnis for the Creed, homoousios kept in Greek and glossed as wesensgleich, Konstantin, Alexandria, Konstantinopel."
   },
@@ -21,14 +24,14 @@
     {
       "id": "arius",
       "title": "Arius",
-      "preview": "Ein Priester in Alexandria, der lehrte, der Sohn Gottes sei geschaffen und „es gab eine Zeit, da der Sohn nicht war“. Das Konzil von Nizäa verwarf diese Lehre im Jahr 325.",
-      "body": "Arius war Priester in Alexandria in Ägypten. Er lehrte, der Sohn Gottes sei nicht ewig, sondern vom Vater aus dem Nichts ins Dasein gerufen worden: „Es gab eine Zeit, da der Sohn nicht war.“ Sein Bischof Alexander berief eine Synode, die ihn exkommunizierte, doch Arius fand Unterstützer unter anderen Bischöfen im Osten, und der Streit breitete sich aus. In Nizäa verwarfen die Bischöfe im Jahr 325 seine Lehre: Das Bekenntnis verurteilt alle, die sagen, der Sohn sei aus dem Nichts geworden oder habe einmal nicht existiert, und Arius wurde zusammen mit zwei Bischöfen, die die Unterschrift verweigerten, Theonas von Marmarika und Secundus von Ptolemais, verbannt. Nach katholischer Lehre ist seine Lehre eine Häresie; der Katechismus fasst sie als die Behauptung zusammen, der Sohn sei aus dem Nichtseienden geworden. Arius selbst verstand seine Auffassung als Verteidigung des einen Gottes, der allein ohne Anfang ist, und mit ihm verbundene Ansichten fanden noch Jahrzehnte nach dem Konzil mächtige Förderer."
+      "preview": "Ein Priester in Alexandria, der lehrte, der Sohn Gottes sei geschaffen worden und „es gab eine Zeit, da der Sohn nicht war“. Das Konzil von Nizäa verwarf diese Lehre im Jahr 325.",
+      "body": "Arius war Priester in Alexandria in Ägypten. Er lehrte, der Sohn Gottes sei nicht ewig, sondern vom Vater aus dem Nichts ins Dasein gerufen worden: „Es gab eine Zeit, da der Sohn nicht war.“ Sein Bischof Alexander berief eine Synode, die ihn exkommunizierte, doch Arius fand Unterstützer unter anderen Bischöfen im Osten, und der Streit breitete sich aus. In Nizäa verwarfen die Bischöfe im Jahr 325 seine Lehre: Das Bekenntnis verurteilt alle, die sagen, der Sohn sei aus dem Nichts entstanden oder habe einmal nicht existiert, und Arius wurde zusammen mit zwei Bischöfen, die die Unterschrift verweigerten, Theonas von Marmarika und Secundus von Ptolemais, verbannt. Nach katholischer Lehre ist seine Auffassung eine Häresie; der Katechismus fasst sie in der Behauptung zusammen, der Sohn Gottes sei „aus nichts“. Arius selbst verstand seine Auffassung als Verteidigung des einen Gottes, der allein ohne Anfang ist, und mit ihm verbundene Ansichten fanden noch Jahrzehnte nach dem Konzil mächtige Förderer."
     },
     {
       "id": "alexander-of-alexandria",
       "title": "Alexander von Alexandria",
       "preview": "Bischof von Alexandria, der die Lehre seines Priesters Arius verurteilte und am Konzil von Nizäa teilnahm. Sein Diakon Athanasius wurde 328 sein Nachfolger.",
-      "body": "Alexander war Bischof von Alexandria, einer der großen Bischofssitze, deren überlieferte Rechte das Konzil in seinem sechsten Kanon bestätigte. Als sein Priester Arius lehrte, der Sohn Gottes sei ein Geschöpf, berief Alexander eine Synode von Bischöfen ein, die Arius und seine Anhänger exkommunizierte, und warnte in Briefen Bischöfe in anderen Regionen. Kaiser Konstantin forderte Alexander und Arius zunächst in einem Brief auf, ihren Streit beizulegen; als das scheiterte, berief er das Konzil nach Nizäa. Alexander nahm daran teil, begleitet von seinem Diakon Athanasius, und die Bischöfe verwarfen dort die Lehre des Arius. Nach Alexanders Tod wurde Athanasius an seiner Stelle Bischof von Alexandria."
+      "body": "Alexander war Bischof von Alexandria, einem der großen Bischofssitze, deren überlieferte Rechte das Konzil in seinem sechsten Kanon bestätigte. Als sein Priester Arius lehrte, der Sohn Gottes sei ein Geschöpf, berief Alexander eine Synode von Bischöfen ein, die Arius und seine Anhänger exkommunizierte, und warnte in Briefen Bischöfe in anderen Regionen. Kaiser Konstantin forderte Alexander und Arius zunächst in einem Brief auf, ihren Streit beizulegen; als das scheiterte, berief er das Konzil nach Nizäa. Alexander nahm daran teil, begleitet von seinem Diakon Athanasius, und die Bischöfe verwarfen dort die Lehre des Arius. Nach Alexanders Tod wurde Athanasius an seiner Stelle Bischof von Alexandria."
     },
     {
       "id": "constantine",
@@ -39,14 +42,14 @@
     {
       "id": "athanasius",
       "title": "Athanasius von Alexandria",
-      "preview": "Diakon in Nizäa im Jahr 325, Bischof von Alexandria von 328 bis zu seinem Tod 373. Er verteidigte den Glauben des Konzils jahrzehntelang und wurde fünfmal in die Verbannung getrieben.",
+      "preview": "Nahm 325 als Diakon am Konzil von Nizäa teil und war von 328 bis zu seinem Tod 373 Bischof von Alexandria. Er verteidigte den Glauben des Konzils jahrzehntelang und wurde fünfmal verbannt.",
       "body": "Athanasius kam als Diakon des Bischofs Alexander nach Nizäa und folgte ihm 328 als Bischof von Alexandria nach. In den folgenden fünfundvierzig Jahren war er ein führender Verteidiger des nizänischen Bekenntnisses, zu einer Zeit, als Kaiser und viele Bischöfe Kompromissformeln oder die mit Arius verbundenen Ansichten bevorzugten, und er wurde fünfmal von seinem Bischofssitz vertrieben. In seiner Schrift De Decretis erklärte er, warum das Konzil ein Wort wählte, das nicht in der Schrift steht: Die biblischen Wendungen allein, etwa „aus Gott“, konnten die Anhänger des Arius auch auf Geschöpfe beziehen; deshalb schrieben die Bischöfe, der Sohn sei „aus dem Wesen“ des Vaters und homoousios mit ihm, also wesensgleich. Das Konzil von Konstantinopel bekräftigte im Jahr 381, acht Jahre nach seinem Tod, den Glauben, den er verteidigt hatte."
     },
     {
       "id": "nicaea",
       "title": "Nizäa",
       "preview": "Eine Stadt in Bithynien im Nordwesten Kleinasiens, in der im Jahr 325 das erste ökumenische Konzil tagte. Heute ist sie die Stadt İznik in der Türkei.",
-      "body": "Nizäa war eine Stadt in der römischen Provinz Bithynien; Eusebius von Caesarea vermerkt, dass ihr griechischer Name vom Wort für Sieg kommt. Konstantin wählte sie für das Konzil von 325 und stellte die staatliche Post und Pferde bereit, damit die Bischöfe dorthin reisen konnten. Eusebius zählt mehr als zweihundertfünfzig Bischöfe, die meisten aus dem griechischsprachigen Osten; Papst Silvester war zu alt, um zu reisen, und wurde von zwei römischen Priestern vertreten. Das Konzil verabschiedete das Bekenntnis, einen gemeinsamen Ostertermin und zwanzig Kanones. Katholiken zählen es als erstes ökumenisches Konzil, ebenso die orthodoxen Kirchen. Der Ort ist die heutige Stadt İznik im Nordwesten der Türkei."
+      "body": "Nizäa war eine Stadt in der römischen Provinz Bithynien; Eusebius von Caesarea vermerkt, dass ihr griechischer Name vom Wort für Sieg kommt. Konstantin wählte sie für das Konzil von 325 und stellte die staatliche Post und Pferde bereit, damit die Bischöfe dorthin reisen konnten. Eusebius zählt mehr als zweihundertfünfzig Bischöfe, die meisten aus dem griechischsprachigen Osten; Papst Silvester war zu alt, um zu reisen, und wurde von zwei römischen Priestern vertreten. Das Konzil verabschiedete das Bekenntnis, einen gemeinsamen Ostertermin und zwanzig Kanones. Für Katholiken ist es das erste ökumenische Konzil, ebenso für die orthodoxen Kirchen. Der Ort ist die heutige Stadt İznik im Nordwesten der Türkei."
     },
     {
       "id": "homoousios",

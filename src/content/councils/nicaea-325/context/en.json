@@ -10,7 +10,7 @@
       "title": "Arius",
       "preview": "A priest of Alexandria who taught that the Son of God was created and that “there was a time when the Son was not”. The Council of Nicaea condemned this teaching in 325.",
       "body": "Arius was a priest in Alexandria, Egypt. He taught that the Son of God was not eternal but had been brought into being from nothing by the Father: “there was a time when the Son was not”. His bishop, Alexander, gathered a synod that excommunicated him, but Arius found supporters among other bishops in the East, and the dispute spread. At Nicaea in 325 the bishops rejected his teaching: the Creed condemns those who say the Son was made from nothing or once did not exist, and Arius was exiled together with two bishops who refused to sign, Theonas of Marmarica and Secundus of Ptolemais. In Catholic teaching his doctrine is a heresy, which the Catechism summarizes as the claim that the Son “came to be from things that were not”. Arius himself presented his view as a defence of the one God, who alone is without beginning, and views associated with him kept powerful supporters for decades after the council.",
-      "sources": ["socrates-church-history", "nicaea-creed-and-canons", "catechism-of-the-catholic-church", "ayres-nicaea-and-its-legacy"],
+      "sources": ["socrates-church-history", "nicaea-creed-and-canons", "catholic-encyclopedia-nicaea", "catechism-of-the-catholic-church", "ayres-nicaea-and-its-legacy"],
       "appearances": [
         { "scene": "arius", "anchor": "Arius" },
         { "scene": "rejected", "anchor": "Arius" },
@@ -23,7 +23,7 @@
       "title": "Alexander of Alexandria",
       "preview": "Bishop of Alexandria who condemned the teaching of his priest Arius and took part in the Council of Nicaea. His deacon Athanasius succeeded him in 328.",
       "body": "Alexander was bishop of Alexandria, one of the great sees whose traditional rights the council confirmed in its sixth canon. When his priest Arius taught that the Son of God was a creature, Alexander convened a synod of bishops that excommunicated Arius and his followers, and he wrote to bishops elsewhere to warn them. Emperor Constantine first sent a letter urging Alexander and Arius to settle their quarrel; when that failed, he summoned the council at Nicaea. Alexander attended it, accompanied by his deacon Athanasius, and the bishops there rejected the teaching of Arius. After Alexander’s death Athanasius became bishop of Alexandria in his place.",
-      "sources": ["socrates-church-history", "nicaea-creed-and-canons", "catholic-encyclopedia-nicaea"],
+      "sources": ["socrates-church-history", "nicaea-creed-and-canons", "catholic-encyclopedia-nicaea", "ayres-nicaea-and-its-legacy"],
       "appearances": [{ "scene": "alexander", "anchor": "Bishop Alexander" }]
     },
     {
@@ -53,7 +53,7 @@
       "title": "Nicaea",
       "preview": "A city in Bithynia, in the northwest of Asia Minor, where the first ecumenical council met in 325. Today it is the town of İznik, in Türkiye.",
       "body": "Nicaea was a city in the Roman province of Bithynia; Eusebius of Caesarea notes that its Greek name comes from the word for victory. Constantine chose it for the council of 325 and provided the public post and horses so that bishops could travel there. Eusebius counts more than 250 bishops, most of them from the Greek-speaking East; Pope Sylvester, too old to travel, was represented by two Roman priests. The council produced the Creed, a common date for Easter and twenty canons. Catholics count it as the first ecumenical council, as do the Orthodox churches. The site is the modern town of İznik, in northwestern Türkiye.",
-      "sources": ["eusebius-life-of-constantine", "catholic-encyclopedia-nicaea", "nicaea-creed-and-canons"],
+      "sources": ["eusebius-life-of-constantine", "catholic-encyclopedia-nicaea", "nicaea-creed-and-canons", "catechism-of-the-catholic-church", "oca-the-councils"],
       "appearances": [
         { "scene": "opening", "anchor": "Nicaea" },
         { "scene": "summons", "anchor": "Nicaea" }
