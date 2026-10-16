@@ -1,6 +1,10 @@
-// Shared, git-ignored, content-addressed asset store (VideoSpec v2, ADR 0001). Objects are keyed by
-// their SHA-256 digest only: <store>/sha256/<digest>. Acquisition stays here and in build tooling,
-// never in renderer components. Relative imports only, so the Vite config can use this module.
+// Shared, git-ignored, content-addressed asset store (VideoSpec v2, ADR 0001). Since #17 this is
+// asset-tooling's object store: the `store` argument is an asset-tooling root and objects live at
+// <root>/.asset-tooling/objects/v1/sha256/<first two hex>/<digest> (asset-tooling
+// `assetObjectPortablePath`), keyed by their SHA-256 digest only, so asset-tooling reads what this
+// module writes and the other way round. Acquisition stays here, in src/assets/materialize.ts and in
+// build tooling, never in renderer components. This module itself does not import asset-tooling:
+// the render job resolves through it. Relative imports only, so the Vite config can use it.
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -11,15 +15,18 @@ import { latencyDatasetBytes } from '../video/latency-dataset';
 
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-/** The default store: `.asset-store/` at the repository root (git-ignored). */
-export const DEFAULT_ASSET_STORE = join(REPOSITORY_ROOT, '.asset-store');
+/** The default store: the repository root as asset-tooling root (`.asset-tooling/` is git-ignored). */
+export const DEFAULT_ASSET_STORE = REPOSITORY_ROOT;
+
+/** asset-tooling's object root below an asset-tooling root (asset-tooling 61d71f7). */
+const OBJECT_ROOT = join('.asset-tooling', 'objects', 'v1');
 
 const DIGEST = /^[0-9a-f]{64}$/;
 
 /** Where the object with this digest lives; refuses anything that is not a sha256 digest. */
 export function assetObjectPath(store: string, sha256: string): string {
   if (!DIGEST.test(sha256)) throw new Error(`not a lowercase sha256 digest: ${JSON.stringify(sha256)}`);
-  return join(store, 'sha256', sha256);
+  return join(store, OBJECT_ROOT, 'sha256', sha256.slice(0, 2), sha256);
 }
 
 export const sha256Hex = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');

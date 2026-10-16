@@ -1,0 +1,40 @@
+{
+  "schema": "interactive-videos/asset-requests",
+  "schemaVersion": 1,
+  "project": "moenarch-materialized-audio",
+  "slots": {
+    "narration.local": {
+      "local": "public/fixtures/narration/hook.wav"
+    },
+    "narration.shaped": {
+      "operation": {
+        "id": "audio.adsr",
+        "version": "1"
+      },
+      "parameters": {
+        "attackFrames": 400,
+        "decayFrames": 800,
+        "sustainLevelQ15": 20000,
+        "releaseFrames": 1600
+      },
+      "inputs": {
+        "source": "narration.tone"
+      }
+    },
+    "narration.tone": {
+      "operation": {
+        "id": "audio.oscillator",
+        "version": "1"
+      },
+      "parameters": {
+        "waveform": "sine",
+        "sampleRate": 8000,
+        "channels": 1,
+        "frameCount": 16000,
+        "frequencyHz": 440,
+        "amplitude": 8000
+      },
+      "inputs": {}
+    }
+  }
+}

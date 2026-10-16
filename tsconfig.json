@@ -22,6 +22,15 @@
       "@moritzbrantner/tables/table": [
         "./node_modules/@moritzbrantner/tables/src/table.tsx"
       ],
+      "asset-tooling/operations": [
+        "./node_modules/asset-tooling/src/operations.ts"
+      ],
+      "asset-tooling/operations/store": [
+        "./node_modules/asset-tooling/src/asset-store.ts"
+      ],
+      "asset-tooling/operations/audio/procedural": [
+        "./node_modules/asset-tooling/src/audio-procedural-operations.ts"
+      ],
       "react-render-budget/react": [
         "./node_modules/react-render-budget/src/react.ts"
       ],

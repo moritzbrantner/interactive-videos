@@ -1,5 +1,5 @@
 // The pure front half of `bun run video:render`: argument parsing, job resolution and the
-// machine-readable result (schema v1). Everything a render depends on is resolved here, before
+// machine-readable result (schema v2: per-slot asset provenance since #17). Everything a render depends on is resolved here, before
 // anything is bundled or rendered, and every failure is a typed reason with a diagnostic.
 //
 // Projects come only from the catalog (src/projects.ts), the composition authority the Player
@@ -16,7 +16,7 @@ import type { Catalog } from '@/catalog/catalog';
 import { parseVideoSpecJson, resolveTimeline, serializeVideoSpec, type AssetKind, type ResolvedScene, type VideoSpec } from '@/spec/video-spec';
 
 export const RENDER_RESULT_SCHEMA = 'interactive-videos/render-result';
-export const RENDER_RESULT_SCHEMA_VERSION = 1;
+export const RENDER_RESULT_SCHEMA_VERSION = 2;
 
 export type RenderErrorReason =
   | 'invalid-arguments'
@@ -104,12 +104,32 @@ export function parseRenderArgs(argv: readonly string[]): ParseResult {
   return { ok: true, args };
 }
 
+/**
+ * How one slot was materialized before the job was resolved (#17). Structurally the provenance
+ * part of `MaterializedSlot` in src/assets/materialize.ts; declared here so the render path never
+ * imports the materialize boundary or asset-tooling.
+ */
+export type MaterializedSlotRecord = {
+  id: string;
+  status: 'hit' | 'miss' | 'local';
+  operation: { id: string; version: string } | null;
+  cacheKey: string | null;
+};
+
+/** The v2 result's per-slot provenance; null when the job was resolved without a record. */
+export type AssetProvenance = Pick<MaterializedSlotRecord, 'status' | 'operation' | 'cacheKey'> | null;
+
 export type RenderEnvironment = {
   catalog: Catalog;
   /** Relative spec paths and --out resolve against this directory. */
   cwd: string;
-  /** The content-addressed asset store slots resolve against (`<store>/sha256/<digest>`). */
+  /**
+   * The asset-tooling root slots resolve against
+   * (`<root>/.asset-tooling/objects/v1/sha256/<2>/<digest>`).
+   */
   assetStore: string;
+  /** The materialization record of the selected project, when it was materialized first (#17). */
+  materialized?: readonly MaterializedSlotRecord[];
 };
 
 /** A slot resolved before bundling to an immutable, content-addressed runtime input. */
@@ -124,7 +144,10 @@ export type RenderJob = {
   composition: { id: string; width: number; height: number; fps: number; durationInFrames: number };
   frames: FrameRange;
   scenes: ResolvedScene[];
+  /** Exactly the resolved inputs; this is all a format pack sees. */
   assets: RenderAsset[];
+  /** Per-slot provenance, parallel to `assets`; reported in the result, never given to formats. */
+  provenance: AssetProvenance[];
   /** Absolute path of the file to write. */
   outPath: string;
 };
@@ -168,6 +191,19 @@ function selectProject(selector: string, environment: RenderEnvironment): { ok: 
   return { ok: true, spec: registered };
 }
 
+/**
+ * The catalog project id a request selects, or undefined when it selects none (the job's
+ * resolution then reports why). The CLI materializes this project before resolving the job.
+ */
+export function selectedProjectId(args: RenderArgs, environment: RenderEnvironment): string | undefined {
+  try {
+    const selected = selectProject(args.project, environment);
+    return selected.ok ? selected.spec.project.id : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /** Resolves a parsed request into a render job, or the first reason it cannot render. */
 export function resolveRenderJob(args: RenderArgs, environment: RenderEnvironment): ResolveJobResult {
   const profile = RENDER_PROFILES.find((candidate) => candidate.id === args.profile);
@@ -205,6 +241,8 @@ export function resolveRenderJob(args: RenderArgs, environment: RenderEnvironmen
   }
 
   const assets: RenderAsset[] = [];
+  const provenance: AssetProvenance[] = [];
+  const records = new Map((environment.materialized ?? []).map((record) => [record.id, record]));
   for (const slot of spec.assets) {
     const { sha256: digest, byteLength, mediaType } = slot.asset;
     const file = assetObjectPath(environment.assetStore, digest);
@@ -219,6 +257,12 @@ export function resolveRenderJob(args: RenderArgs, environment: RenderEnvironmen
       );
     }
     assets.push({ id: slot.id, kind: slot.kind, src: assetPath(digest, mediaType), sha256: digest, byteLength, mediaType });
+    const record = records.get(slot.id);
+    provenance.push(
+      record
+        ? { status: record.status, operation: record.operation ? { ...record.operation } : null, cacheKey: record.cacheKey }
+        : null,
+    );
   }
 
   const outPath = args.out === undefined
@@ -236,6 +280,7 @@ export function resolveRenderJob(args: RenderArgs, environment: RenderEnvironmen
       frames,
       scenes: resolveTimeline(spec).scenes,
       assets,
+      provenance,
       outPath,
     },
   };
@@ -243,7 +288,7 @@ export function resolveRenderJob(args: RenderArgs, environment: RenderEnvironmen
 
 export type RenderOutput = { path: string; sha256: string; bytes: number };
 
-/** The v1 success result. Nothing time-dependent is part of it. */
+/** The v2 success result. Nothing time-dependent is part of it. */
 export function createRenderResult(job: RenderJob, output: RenderOutput) {
   const { profile, frames } = job;
   return {
@@ -257,12 +302,18 @@ export function createRenderResult(job: RenderJob, output: RenderOutput) {
     composition: { ...job.composition },
     frames: { from: frames.from, to: frames.to, count: frames.to - frames.from + 1 },
     scenes: job.scenes.map((scene) => ({ id: scene.id, kind: scene.kind, from: scene.from, durationInFrames: scene.durationInFrames })),
-    assets: job.assets.map((asset) => ({ ...asset })),
+    assets: job.assets.map((asset, index) => {
+      const provenance = job.provenance[index] ?? null;
+      return {
+        ...asset,
+        provenance: provenance && { status: provenance.status, operation: provenance.operation && { ...provenance.operation }, cacheKey: provenance.cacheKey },
+      };
+    }),
     output: { path: output.path, sha256: output.sha256, bytes: output.bytes },
   };
 }
 
-/** The v1 failure result. */
+/** The v2 failure result. */
 export function createRenderFailure(error: RenderError) {
   return {
     schema: RENDER_RESULT_SCHEMA,
