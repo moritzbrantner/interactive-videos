@@ -278,7 +278,9 @@ test('English subtitles can be switched off and on without losing the place', as
   const frame = cue.from + Math.floor(cue.durationInFrames / 2);
   await seek(page, frame);
   const select = controls(page).getByRole('combobox', { name: 'Subtitles' });
-  await expect(select.locator('option')).toHaveText(['Off', 'English']);
+  // #84 adds Deutsch and Español after these (e2e/council-nicaea-325-subtitles.spec.ts).
+  await expect(select.locator('option').nth(0)).toHaveText('Off');
+  await expect(select.locator('option').nth(1)).toHaveText('English');
   await expect.poll(async () => (await subtitleState(page)).cues).toEqual([{ text: squash(cue.text), lang: expect.stringMatching(/^en\b/) }]);
   await select.selectOption({ label: 'Off' });
   await expect.poll(async () => (await subtitleState(page)).cues).toEqual([]);
