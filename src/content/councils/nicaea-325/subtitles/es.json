@@ -1,0 +1,288 @@
+{
+  "schema": "interactive-videos/council-subtitles",
+  "schemaVersion": 1,
+  "project": "council-nicaea-325",
+  "language": "es",
+  "label": "Español",
+  "provenance": {
+    "translatedFrom": {
+      "language": "en",
+      "cuesSha256": "64ed7e9dac442a9073c1da052f967b3a751e7a43a517790ecd1a073ddbe6a521"
+    },
+    "translator": {
+      "kind": "agent",
+      "name": "Claude Opus 5.5 (implementation agent, interactive-videos#84)"
+    },
+    "review": {
+      "status": "pending"
+    },
+    "liturgicalText": "Creed phrases quoted in the wording of the Spanish Roman Missal (Misal Romano, Credo niceno-constantinopolitano): \"Dios verdadero de Dios verdadero, engendrado, no creado, de la misma naturaleza del Padre\". homoousios is rendered \"consustancial\" (Catecismo de la Iglesia Católica §242 uses \"consubstancial\"; this track uses one form throughout); the Creed is \"Credo\" throughout."
+  },
+  "cues": [
+    {
+      "scene": "opening",
+      "index": 0,
+      "text": "El Primer Concilio de Nicea, en el año 325."
+    },
+    {
+      "scene": "perspective",
+      "index": 0,
+      "text": "Este episodio se narra desde una perspectiva católica."
+    },
+    {
+      "scene": "arius",
+      "index": 0,
+      "text": "En Alejandría, un sacerdote llamado Arrio enseñaba"
+    },
+    {
+      "scene": "arius",
+      "index": 1,
+      "text": "que el Hijo de Dios había sido creado."
+    },
+    {
+      "scene": "arius-slogan",
+      "index": 0,
+      "text": "Hubo un tiempo, sostenía él,"
+    },
+    {
+      "scene": "arius-slogan",
+      "index": 1,
+      "text": "en que el Hijo no existía."
+    },
+    {
+      "scene": "alexander",
+      "index": 0,
+      "text": "Su obispo, Alejandro, condenó esta enseñanza,"
+    },
+    {
+      "scene": "alexander",
+      "index": 1,
+      "text": "y la disputa se extendió por Oriente."
+    },
+    {
+      "scene": "constantine",
+      "index": 0,
+      "text": "El emperador Constantino, ya único gobernante del imperio,"
+    },
+    {
+      "scene": "constantine",
+      "index": 1,
+      "text": "quería una Iglesia unida."
+    },
+    {
+      "scene": "summons",
+      "index": 0,
+      "text": "En 325 convocó a los obispos a Nicea,"
+    },
+    {
+      "scene": "summons",
+      "index": 1,
+      "text": "en la actual Turquía."
+    },
+    {
+      "scene": "bishops",
+      "index": 0,
+      "text": "Acudieron más de doscientos cincuenta,"
+    },
+    {
+      "scene": "bishops",
+      "index": 1,
+      "text": "la mayoría del Oriente de habla griega."
+    },
+    {
+      "scene": "pope",
+      "index": 0,
+      "text": "El papa Silvestre era demasiado anciano para viajar,"
+    },
+    {
+      "scene": "pope",
+      "index": 1,
+      "text": "así que dos sacerdotes romanos ocuparon su lugar."
+    },
+    {
+      "scene": "rejected",
+      "index": 0,
+      "text": "Los obispos rechazaron la enseñanza de Arrio"
+    },
+    {
+      "scene": "rejected",
+      "index": 1,
+      "text": "y expusieron la fe en un credo."
+    },
+    {
+      "scene": "creed",
+      "index": 0,
+      "text": "Confiesa al Hijo como Dios verdadero de Dios verdadero,"
+    },
+    {
+      "scene": "creed",
+      "index": 1,
+      "text": "engendrado, no creado."
+    },
+    {
+      "scene": "homoousios",
+      "index": 0,
+      "text": "Y lo llama homoousios con el Padre:"
+    },
+    {
+      "scene": "homoousios",
+      "index": 1,
+      "text": "de la misma sustancia o ser, es decir, consustancial."
+    },
+    {
+      "scene": "why-the-word",
+      "index": 0,
+      "text": "Como explicó Atanasio,"
+    },
+    {
+      "scene": "why-the-word",
+      "index": 1,
+      "text": "las frases bíblicas por sí solas permitían una lectura arriana."
+    },
+    {
+      "scene": "exile",
+      "index": 0,
+      "text": "Arrio y dos obispos que se negaron a firmar"
+    },
+    {
+      "scene": "exile",
+      "index": 1,
+      "text": "fueron enviados al exilio."
+    },
+    {
+      "scene": "easter",
+      "index": 0,
+      "text": "El concilio también decidió sobre la Pascua:"
+    },
+    {
+      "scene": "easter",
+      "index": 1,
+      "text": "todas las Iglesias debían celebrarla el mismo día."
+    },
+    {
+      "scene": "canons",
+      "index": 0,
+      "text": "Y promulgó veinte cánones sobre el orden de la Iglesia,"
+    },
+    {
+      "scene": "canons",
+      "index": 1,
+      "text": "por ejemplo, cómo se ordena a los obispos."
+    },
+    {
+      "scene": "not-the-bible",
+      "index": 0,
+      "text": "Algunas afirmaciones populares no son historia."
+    },
+    {
+      "scene": "not-the-bible",
+      "index": 1,
+      "text": "Nicea no eligió los libros de la Biblia."
+    },
+    {
+      "scene": "legend",
+      "index": 0,
+      "text": "Y la historia de san Nicolás abofeteando a Arrio"
+    },
+    {
+      "scene": "legend",
+      "index": 1,
+      "text": "es una leyenda de siglos posteriores."
+    },
+    {
+      "scene": "dispute",
+      "index": 0,
+      "text": "Nicea no puso fin a la disputa."
+    },
+    {
+      "scene": "dispute",
+      "index": 1,
+      "text": "Las ideas arrianas tuvieron poderosos apoyos durante décadas."
+    },
+    {
+      "scene": "athanasius",
+      "index": 0,
+      "text": "Atanasio de Alejandría defendió Nicea"
+    },
+    {
+      "scene": "athanasius",
+      "index": 1,
+      "text": "y fue desterrado cinco veces."
+    },
+    {
+      "scene": "constantinople",
+      "index": 0,
+      "text": "El Concilio de Constantinopla, en el año 381,"
+    },
+    {
+      "scene": "constantinople",
+      "index": 1,
+      "text": "reafirmó esta fe."
+    },
+    {
+      "scene": "creed-today",
+      "index": 0,
+      "text": "Su Credo ampliado aún se recita hoy en muchas Iglesias."
+    },
+    {
+      "scene": "goths",
+      "index": 0,
+      "text": "El cristianismo arriano pervivió dos siglos entre los godos."
+    },
+    {
+      "scene": "first-ecumenical",
+      "index": 0,
+      "text": "Para los católicos, Nicea es el primer concilio ecuménico."
+    },
+    {
+      "scene": "catholic",
+      "index": 0,
+      "text": "Su enseñanza sobre el Hijo es dogma vinculante."
+    },
+    {
+      "scene": "mass",
+      "index": 0,
+      "text": "Los católicos profesan esta fe en el Credo de la misa dominical."
+    },
+    {
+      "scene": "orthodox",
+      "index": 0,
+      "text": "Las Iglesias ortodoxas comparten esta fe nicena"
+    },
+    {
+      "scene": "orthodox",
+      "index": 1,
+      "text": "y honran el concilio como ecuménico."
+    },
+    {
+      "scene": "protestants",
+      "index": 0,
+      "text": "También la mayoría de protestantes acepta la doctrina del Credo,"
+    },
+    {
+      "scene": "protestants",
+      "index": 1,
+      "text": "pues la consideran fiel a la Escritura."
+    },
+    {
+      "scene": "question",
+      "index": 0,
+      "text": "Nicea respondió a una pregunta central para la Iglesia:"
+    },
+    {
+      "scene": "question",
+      "index": 1,
+      "text": "¿Es el Hijo verdaderamente Dios?"
+    },
+    {
+      "scene": "conclusion",
+      "index": 0,
+      "text": "Su respuesta, de la misma naturaleza del Padre,"
+    },
+    {
+      "scene": "conclusion",
+      "index": 1,
+      "text": "sigue marcando hoy el culto cristiano."
+    }
+  ]
+}

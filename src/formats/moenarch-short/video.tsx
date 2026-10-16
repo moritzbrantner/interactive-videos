@@ -2,7 +2,7 @@ import { useMemo, useSyncExternalStore, type CSSProperties } from 'react';
 import { AbsoluteFill, Audio, Easing, interpolate, Sequence, useCurrentFrame } from 'remotion';
 
 import { Subtitles } from '@/components/remotion/subtitles';
-import type { CompositionProps } from '@/catalog/catalog';
+import type { CompositionProps, SubtitleCueText } from '@/catalog/catalog';
 import type { SubtitleTrack } from '@/lib/remotion/subtitle-formats';
 import { useBudgetCounter } from '@/render-budget';
 
@@ -210,7 +210,7 @@ function Subtitle({ tokens, cue, fps, language }: { tokens: MoenarchShortTokens;
         },
       ],
     }),
-    [cue, fps],
+    [cue.from, cue.durationInFrames, cue.text, fps],
   );
   // The primitive positions its cues absolutely over the frame; here the cue sits in the
   // subtitle band's flow, so the band (and its box) is the cue's box.
@@ -284,6 +284,23 @@ export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTok
     ]),
   );
 
+  /**
+   * The cue whose window holds `frame`. With a translation (#84), its text replaces the English
+   * one over the same window; a cue the translation lacks shows nothing rather than English
+   * text under another language's tag.
+   */
+  const cueAt = (frame: number, text: SubtitleCueText | undefined): MoenarchCueWindow | null => {
+    for (const scene of plan.scenes) {
+      const index = scene.cues.findIndex((cue) => frame >= cue.from && frame < cue.from + cue.durationInFrames);
+      if (index < 0) continue;
+      const cue = scene.cues[index];
+      if (!text) return cue;
+      const translated = text[`${scene.id}#${index}`];
+      return translated === undefined ? null : { ...cue, text: translated };
+    }
+    return null;
+  };
+
   function MoenarchShortVideo({ subtitles }: CompositionProps = {}) {
     useBudgetCounter('MoenarchShortVideo');
     const fontsReady = useMoenarchFonts();
@@ -291,10 +308,7 @@ export function createMoenarchVideo(plan: MoenarchPlan, tokens: MoenarchShortTok
     const reducedMotion = usePrefersReducedMotion();
     const state = useMemo(() => moenarchFrameState(plan, frame, { reducedMotion }), [frame, reducedMotion]);
     const { safeArea } = tokens.output;
-    const subtitleCue =
-      state.subtitle === null
-        ? null
-        : (plan.scenes.flatMap((scene) => scene.cues).find((cue) => frame >= cue.from && frame < cue.from + cue.durationInFrames) ?? null);
+    const subtitleCue = state.subtitle === null ? null : cueAt(frame, subtitles?.text);
     if (!fontsReady) {
       return null;
     }
