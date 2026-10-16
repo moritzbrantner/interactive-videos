@@ -16,12 +16,13 @@
 // from the audio itself (cue boundaries on measured pauses) and writes the VideoSpec and its
 // sidecar request manifest with each slot locked to the AssetRef the operation produced.
 // `--retime` skips generation and re-derives timing, spec and sidecar from the committed WAVs.
-import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 import { assertVideoSpec, serializeVideoSpec } from '../../src/spec/video-spec';
+
+import { assertCleanAssetToolingCheckout } from './asset-tooling-checkout';
 
 type Json = Record<string, any>;
 
@@ -105,10 +106,8 @@ async function generate(storyboard: Json, lexicon: Json, only: Set<string> | nul
   if (!checkout || !python || !modelZip) {
     throw new Error('set ASSET_TOOLING_CHECKOUT, ASSET_TOOLING_KOKORO_PYTHON and ASSET_TOOLING_KOKORO_MODEL_ZIP (see the header)');
   }
-  const head = spawnSync('git', ['-C', checkout, 'rev-parse', 'HEAD'], { encoding: 'utf8' });
-  if (head.status !== 0 || !head.stdout.startsWith(ASSET_TOOLING_REVISION)) {
-    throw new Error(`ASSET_TOOLING_CHECKOUT must be at ${ASSET_TOOLING_REVISION}, found ${head.stdout.trim() || head.stderr.trim()}`);
-  }
+  // Pinned revision and a clean tree: the imported working tree must be exactly that commit.
+  const head = assertCleanAssetToolingCheckout(checkout, ASSET_TOOLING_REVISION);
   const store = await import(join(checkout, 'src', 'asset-store.ts'));
   const operations = await import(join(checkout, 'src', 'audio-model-operations.ts'));
   const backends = await import(join(checkout, 'src', 'model-backends.ts'));
@@ -122,7 +121,7 @@ async function generate(storyboard: Json, lexicon: Json, only: Set<string> | nul
 
   const adapter = backends.createKokoroAudioModelAdapter({ python, threads });
   const execute = operations.createAudioModelGenerateV2OperationExecutor(adapter);
-  const receipt: Json = { assetTooling: head.stdout.trim(), threads, scenes: {} };
+  const receipt: Json = { assetTooling: head, threads, scenes: {} };
   const receiptPath = join(NARRATION_DIR, 'regeneration-receipt.json');
   if (existsSync(receiptPath)) Object.assign(receipt.scenes, readJson(receiptPath).scenes);
   for (const scene of storyboard.scenes as Json[]) {

@@ -43,7 +43,7 @@ import {
 } from 'asset-tooling/operations/audio/procedural';
 import { runAssetOperation, storeAssetObject, verifyAssetObject, type AssetOperationImplementationIdentity } from 'asset-tooling/operations/store';
 
-import type { AssetKind, ContentAssetRef, VideoSpec } from '../spec/video-spec';
+import { parseContentAssetRef, type AssetKind, type ContentAssetRef, type VideoSpec } from '../spec/video-spec';
 import { findSourceAsset, loadSourceAsset, sha256Hex } from './asset-store';
 
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -197,7 +197,12 @@ function parseRequests(projectId: string, spec: VideoSpec, manifest: unknown): M
       if (entry.inputs !== undefined) {
         if (!isPlainObject(entry.inputs)) throw invalid(id, `the "inputs" of committed slot "${id}" must be an object of port → AssetRef`);
         for (const [port, ref] of Object.entries(entry.inputs)) {
-          if (!isPlainObject(ref) || typeof ref.sha256 !== 'string') throw invalid(id, `input "${port}" of committed slot "${id}" must be an AssetRef with a sha256`);
+          // The same closed AssetRef v1 contract as a spec slot's lock.
+          const parsed = parseContentAssetRef(ref, `inputs.${port}`);
+          if (!parsed.ok) {
+            const detail = parsed.diagnostics.map((diagnostic) => `${diagnostic.path}: ${diagnostic.message}`).join('; ');
+            throw invalid(id, `input "${port}" of committed slot "${id}" is not an AssetRef v1 (${detail})`);
+          }
         }
       }
       if (entry.evidence !== undefined && !isPlainObject(entry.evidence)) throw invalid(id, `the "evidence" of committed slot "${id}" must be an object`);
