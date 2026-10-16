@@ -9,7 +9,15 @@ import { assertVideoSpec, resolveTimeline, type VideoSpec } from '@/spec/video-s
 export type CompositionProps = {
   onActivate?: (activation: HotspotActivation) => void;
   selectedId?: string;
+  /**
+   * The subtitle track the Player selected (#82): `null` hides subtitles, a language shows the
+   * cues tagged with it. Omitted (headless renders) keeps the format's default, burned-in track.
+   */
+  subtitles?: { language: string } | null;
 };
+
+/** A selectable subtitle track of a project: the narration cues in one language (Atlas 3.10). */
+export type SubtitleTrackOption = { language: string; label: string };
 
 /** What a format pack makes of one spec: the component and optional interaction UI. */
 export type FormatRendering = {
@@ -43,7 +51,18 @@ export type FormatPack = {
  * A catalog entry: project content (an unvalidated spec) and the format pack that renders it.
  * `chapters` opts a multi-scene project into Player chapter navigation (Atlas 1.8).
  */
-export type ProjectSource = { spec: unknown; format: FormatPack; chapters?: boolean };
+export type ProjectSource = {
+  spec: unknown;
+  format: FormatPack;
+  chapters?: boolean;
+  /**
+   * Subtitle tracks the Player offers in its "Subtitles" select, first one selected (#82). The
+   * format must honour `CompositionProps.subtitles`; the spec's narration cues are the track.
+   */
+  subtitles?: readonly SubtitleTrackOption[];
+  /** Short notes shown next to the Player, e.g. the synthetic-narration disclosure (Atlas 3.22). */
+  notes?: readonly string[];
+};
 
 /**
  * One navigable chapter: a scene of the validated timeline. `relatedId` names another chapter
@@ -67,6 +86,9 @@ export type ResolvedComposition = FormatRendering & {
   durationInFrames: number;
   /** Present only for projects with meaningful chapters. */
   chapters?: readonly Chapter[];
+  /** Present only for projects with selectable subtitle tracks. */
+  subtitles?: readonly SubtitleTrackOption[];
+  notes?: readonly string[];
 };
 
 export type ResolveError =
@@ -93,11 +115,18 @@ export type Catalog = {
  * first use and cached, so a project's component identity is stable across renders.
  */
 export function createCatalog(sources: readonly ProjectSource[], defaultId: string): Catalog {
-  const entries = new Map<string, { spec: VideoSpec; format: FormatPack; chapters: boolean }>();
+  type Entry = { spec: VideoSpec; format: FormatPack; chapters: boolean; subtitles?: readonly SubtitleTrackOption[]; notes?: readonly string[] };
+  const entries = new Map<string, Entry>();
   for (const source of sources) {
     const spec = assertVideoSpec(source.spec);
     if (entries.has(spec.project.id)) throw new Error(`duplicate project id "${spec.project.id}"`);
-    entries.set(spec.project.id, { spec, format: source.format, chapters: source.chapters ?? false });
+    entries.set(spec.project.id, {
+      spec,
+      format: source.format,
+      chapters: source.chapters ?? false,
+      ...(source.subtitles?.length ? { subtitles: source.subtitles.map((track) => ({ ...track })) } : {}),
+      ...(source.notes?.length ? { notes: [...source.notes] } : {}),
+    });
   }
   if (!entries.has(defaultId)) throw new Error(`default project "${defaultId}" is not in the catalog`);
 
@@ -108,7 +137,7 @@ export function createCatalog(sources: readonly ProjectSource[], defaultId: stri
     const entry = entries.get(id);
     // Unknown ids are not cached: the URL can hold anything.
     if (!entry) return { ok: false, reason: 'unknown-project', id, message: `No project with id "${id}".` };
-    const result = resolveEntry(id, entry.spec, entry.format, entry.chapters);
+    const result = resolveEntry(id, entry);
     cache.set(id, result);
     return result;
   };
@@ -147,7 +176,10 @@ export function chaptersFor(spec: VideoSpec): Chapter[] | undefined {
   }));
 }
 
-function resolveEntry(id: string, spec: VideoSpec, format: FormatPack, chapters: boolean): ResolveResult {
+function resolveEntry(
+  id: string,
+  { spec, format, chapters, subtitles, notes }: { spec: VideoSpec; format: FormatPack; chapters: boolean; subtitles?: readonly SubtitleTrackOption[]; notes?: readonly string[] },
+): ResolveResult {
   if (spec.format.id !== format.id || spec.format.version !== format.version) {
     return {
       ok: false,
@@ -174,6 +206,8 @@ function resolveEntry(id: string, spec: VideoSpec, format: FormatPack, chapters:
       fps: spec.output.fps,
       durationInFrames: resolveTimeline(spec).durationInFrames,
       ...(chapters ? { chapters: chaptersFor(spec) } : {}),
+      ...(subtitles ? { subtitles } : {}),
+      ...(notes ? { notes } : {}),
     },
   };
 }

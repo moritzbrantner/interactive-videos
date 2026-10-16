@@ -250,6 +250,8 @@ describe('VideoSpec v2: migrated fixtures', () => {
   it('has the seven migrated fixtures plus the #17 materialization fixture', () => {
     expect(FIXTURES).toEqual([
       'catalog-title-card.videospec.json',
+      // #82: the Nicaea I pilot (committed narration, ADR 0002).
+      'council-nicaea-325.videospec.json',
       'interactive-showcase.videospec.json',
       'latency-explainer.videospec.json',
       'moenarch-materialized-audio.videospec.json',

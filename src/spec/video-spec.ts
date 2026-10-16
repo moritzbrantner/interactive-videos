@@ -911,6 +911,27 @@ function readContentAssetRef(r: Reader, value: unknown, path: string): ContentAs
   return { schemaVersion: 1, kind, mediaType, sha256, byteLength, metadata };
 }
 
+export type ContentAssetRefParseResult =
+  | { ok: true; asset: ContentAssetRef }
+  | { ok: false; diagnostics: VideoSpecDiagnostic[] };
+
+/**
+ * Validates one AssetRef v1 on its own (closed fields, digest, media type, kind, byte length,
+ * JSON metadata), exactly as a spec slot's `asset` is validated. Used for AssetRefs outside a
+ * spec, such as the inputs a committed asset request records (#82).
+ */
+export function parseContentAssetRef(input: unknown, path = '$'): ContentAssetRefParseResult {
+  const diagnostics: VideoSpecDiagnostic[] = [];
+  try {
+    const data = snapshot(input, path, diagnostics);
+    if (diagnostics.length) return { ok: false, diagnostics };
+    const asset = readContentAssetRef(new Reader(diagnostics), data, path);
+    return diagnostics.length === 0 ? { ok: true, asset } : { ok: false, diagnostics };
+  } catch (error) {
+    return { ok: false, diagnostics: [...diagnostics, { path, message: `could not read input: ${errorMessage(error)}` }] };
+  }
+}
+
 /** Reports a reference to a missing asset or to an asset of another kind. */
 function checkAssetKind(r: Reader, assets: AssetRef[], id: string, kind: AssetKind, path: string) {
   const asset = assets.find((candidate) => candidate.id === id);

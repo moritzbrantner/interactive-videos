@@ -13,7 +13,8 @@
     "build:budget": "vite build --mode render-budget --outDir .cache/budget-dist",
     "test:budget": "bun run build:pins && playwright test",
     "build:pins": "rm -rf .cache/pins/react-render-budget && mkdir -p .cache/pins/react-render-budget && cp -R node_modules/react-render-budget/src .cache/pins/react-render-budget/src",
-    "video:render": "bun src/render/cli.ts"
+    "video:render": "bun src/render/cli.ts",
+    "narration:regenerate": "bun scripts/narration/regenerate-nicaea-325.ts"
   },
   "dependencies": {
     "@moritzbrantner/charts": "github:moritzbrantner/charts#d74fa63fd33e98e201cba5ff4326f204f41939ef",

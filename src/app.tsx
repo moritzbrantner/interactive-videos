@@ -84,6 +84,8 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
   const [activation, setActivation] = useState<HotspotActivation>();
   const [playing, setPlaying] = useState(false);
   const [focusHint, setFocusHint] = useState<string>();
+  // Atlas 3.10: the first track is on when the project opens; switching never seeks.
+  const [subtitleLanguage, setSubtitleLanguage] = useState<string | null>(() => composition.subtitles?.[0]?.language ?? null);
   const [debugMode, setDebugMode] = useState(
     () => new URLSearchParams(window.location.search).get('debug') === 'hotspots',
   );
@@ -144,9 +146,13 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
     );
   };
 
+  const hasSubtitleTracks = Boolean(composition.subtitles?.length);
   const inputProps = useMemo(
-    () => (renderInsight ? { onActivate, selectedId: activation?.id } : {}),
-    [renderInsight, onActivate, activation?.id],
+    () => ({
+      ...(renderInsight ? { onActivate, selectedId: activation?.id } : {}),
+      ...(hasSubtitleTracks ? { subtitles: subtitleLanguage === null ? null : { language: subtitleLanguage } } : {}),
+    }),
+    [renderInsight, onActivate, activation?.id, hasSubtitleTracks, subtitleLanguage],
   );
 
   const { width, height, fps, durationInFrames } = composition;
@@ -167,6 +173,23 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
             />
             Developer mode
           </label>
+          {composition.subtitles?.length ? (
+            <label className="subtitle-select">
+              Subtitles
+              <select
+                aria-label="Subtitles"
+                value={subtitleLanguage ?? 'off'}
+                onChange={(event) => setSubtitleLanguage(event.target.value === 'off' ? null : event.target.value)}
+              >
+                <option value="off">Off</option>
+                {composition.subtitles.map((track) => (
+                  <option key={track.language} value={track.language}>
+                    {track.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
         </div>
         {focusHint ? <p className="focus-hint" role="status">{focusHint}</p> : null}
         <div
@@ -221,6 +244,8 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
             fps={fps}
             controls
             clickToPlay={false}
+            // A watch-through ends on its last frame (the outro), not back on the first (#82).
+            moveToBeginningWhenEnded={false}
             spaceKeyToPlayOrPause={false}
             style={{ width: '100%', height: '100%' }}
           />
@@ -228,6 +253,11 @@ function ProjectView({ composition }: { composition: ResolvedComposition }) {
         </div>
         {composition.chapters ? <ChapterNav chapters={composition.chapters} player={player} /> : null}
         {debugMode ? <HotspotDebug frame={frame} player={player} /> : null}
+        {composition.notes?.map((note) => (
+          <p key={note} className="project-note">
+            {note}
+          </p>
+        ))}
         <p className="keyboard-help">
           Space in the video: play / pause · Tab / Shift+Tab: navigate clickable elements · Enter / Space on an item: inspect
         </p>

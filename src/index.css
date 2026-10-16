@@ -111,8 +111,29 @@ h1 {
   accent-color: #facc15;
 }
 
+.subtitle-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.subtitle-select select {
+  font: inherit;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.subtitle-select option {
+  color: #111;
+}
+
 .player-toolbar button:focus-visible,
 .developer-toggle input:focus-visible,
+.subtitle-select select:focus-visible,
 .hotspot-debug-panel button:focus-visible,
 .player-frame button[data-hotspot]:focus-visible {
   outline: 3px solid #facc15;
@@ -122,6 +143,14 @@ h1 {
 .player-frame [data-hotspot][role="button"]:focus-visible rect {
   stroke: #facc15;
   stroke-width: 4px;
+}
+
+.project-note {
+  align-self: stretch;
+  margin: 0;
+  color: #d4d4d8;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .keyboard-help,

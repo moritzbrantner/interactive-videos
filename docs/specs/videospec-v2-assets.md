@@ -125,7 +125,7 @@ Each function may be sync or async; tests `await` them.
   corrupt cache entry or a missing or tampered output fails closed. IV keeps no cache or index of
   its own. Only the deterministic in-process operations are registered (`audio.oscillator@1`,
   `audio.adsr@1`); no subprocess, network, model or generation backend is reachable.
-- Each slot reports `{ status: hit | miss | local, operation, cacheKey }`. Failures are results,
+- Each slot reports `{ status: hit | miss | local | committed, operation, cacheKey }`. Failures are results,
   never rejections: `invalid-requests`, `unknown-operation`, `asset-lock-mismatch`,
   `materialize-failed`, each with the slot (or null) and a message.
 - The render CLI materializes the selected project before `resolveRenderJob` and reports the
@@ -138,6 +138,16 @@ Each function may be sync or async; tests `await` them.
 - Fixture: `moenarch-materialized-audio`: `narration.tone` (`audio.oscillator@1`),
   `narration.shaped` (`audio.adsr@1` of the tone) and `narration.local`
   (`public/fixtures/narration/hook.wav`).
+- **#82 committed requests (ADR 0002).** A slot may instead be
+  `{ "committed": "<repository-relative file>", "operation": { "id", "version" }, "adapter": { "id", "version" }, "parameters": { … }, "inputs"?: { "<port>": <AssetRef> }, "evidence"?: { … } }`:
+  bytes an operation produced in an explicit local regeneration step, checked in through Git
+  LFS together with the request that made them. Materialization never looks up or runs the
+  operation (it need not be registered): it reads the file under the `local` path rules,
+  refuses a Git LFS pointer with a diagnostic naming LFS (`materialize-failed`), requires the
+  slot lock's identity (`asset-lock-mismatch`), stores the bytes and reports
+  `{ status: 'committed', operation: <the request's>, cacheKey: null }`. Unknown fields, a
+  missing `operation`, `adapter` or `parameters`, or `committed` together with `local` are
+  `invalid-requests`. Fixture: `council-nicaea-325` (Kokoro narration, `audio.model.generate@2`).
 
 ## 2. Obligation → evidence
 
