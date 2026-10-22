@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@moritzbrantner/charts": "github:moritzbrantner/charts#d45b69c465bc0db70597975b8166433711b7210d",
-    "@moritzbrantner/tables": "github:moritzbrantner/tables#08e15f6e29fa1c32311a515be09ca2b87ab602e2",
-    "asset-tooling": "github:moritzbrantner/asset-tooling#7139ac2cd60b7527e1425076c751e954310295f8",
+    "@moritzbrantner/tables": "github:moritzbrantner/tables#4071f37f41987035af93534210ec2d77bc191212",
+    "asset-tooling": "github:moritzbrantner/asset-tooling#b83f077226eb009b709061e6d2f0ad9d09336cca",
     "@remotion/bundler": "4.0.536",
     "@remotion/captions": "4.0.536",
     "@remotion/player": "4.0.536",
