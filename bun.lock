@@ -11,7 +11,7 @@
         "@remotion/captions": "4.0.538",
         "@remotion/player": "4.0.538",
         "@remotion/renderer": "4.0.538",
-        "asset-tooling": "github:moritzbrantner/asset-tooling#e592d96de15afeb2837bf118e8fdbf80866ff4a5",
+        "asset-tooling": "github:moritzbrantner/asset-tooling#839b565d2727b79c7693df74d88c276ca416a31c",
         "react": "19.3.1",
         "react-dom": "19.3.1",
         "remotion": "4.0.538",
@@ -402,7 +402,7 @@
 
     "assertion-error": ["assertion-error@2.0.1", "", {}, "sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA=="],
 
-    "asset-tooling": ["asset-tooling@github:moritzbrantner/asset-tooling#e592d96", { "dependencies": { "@gltf-transform/core": "4.5.1", "@mapbox/vector-tile": "2.0.5", "gltf-validator": "2.0.0-dev.3.10", "pbf": "4.0.2", "pmtiles": "4.5.0" }, "bin": { "asset-tooling": "./src/entry.ts" } }, "moritzbrantner-asset-tooling-e592d96", "sha512-vBCh06In82oXoFKxSVgfLfyoVDylOLBeg2GDNkmONU9+rVJdGH7+xJWbasD38BVNJCJwdRTWnCvxWhU/cLtvPQ=="],
+    "asset-tooling": ["asset-tooling@github:moritzbrantner/asset-tooling#839b565", { "dependencies": { "@gltf-transform/core": "4.5.1", "@mapbox/vector-tile": "2.0.5", "gltf-validator": "2.0.0-dev.3.10", "pbf": "4.0.2", "pmtiles": "4.5.0" }, "bin": { "asset-tooling": "./src/entry.ts" } }, "moritzbrantner-asset-tooling-839b565", "sha512-JzmlctisJG/38V0WhxQ40/m45EXAjJ2ytj7S9Nr9eDy6uNdTptWmmNzmGcinBDgotJNkJfk2RaheJR75AdP5bA=="],
 
     "ast-types": ["ast-types@0.16.1", "", { "dependencies": { "tslib": "^2.0.1" } }, "sha512-6t10qk83GOG8p0vKmaCr8eiilZwO171AvbROMtvvNiwrTly62t+7XkA8RdIIVbpMhCASAsxgAzdRSwh6nw/5Dg=="],
 
