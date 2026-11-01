@@ -17,9 +17,9 @@
     "narration:regenerate": "bun scripts/narration/regenerate-nicaea-325.ts"
   },
   "dependencies": {
-    "@moritzbrantner/charts": "github:moritzbrantner/charts#78217ce04ea21f0ccb8d41b116d7ea173343ac2e",
-    "@moritzbrantner/tables": "github:moritzbrantner/tables#50c15190886f57ab4dbb1d30fef3097d7bf3dfe8",
-    "asset-tooling": "github:moritzbrantner/asset-tooling#b03c04601ee53373459faf9d919e75013bf99904",
+    "@moritzbrantner/charts": "github:moritzbrantner/charts#6c86d8e86ce9a9f13ebf3558985c38b91a355bf5",
+    "@moritzbrantner/tables": "github:moritzbrantner/tables#d98b5f3cd240fcef5b3f9bd122cd5ade506c7ff2",
+    "asset-tooling": "github:moritzbrantner/asset-tooling#7a069beee9d4860709cc882406472efdb2b37fac",
     "@remotion/bundler": "4.0.539",
     "@remotion/captions": "4.0.539",
     "@remotion/player": "4.0.539",
@@ -34,7 +34,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
-    "react-render-budget": "github:moritzbrantner/react-render-budget#95694af86ea53edb833f710c1a71e91f8acca534",
+    "react-render-budget": "github:moritzbrantner/react-render-budget#b08d9741aeed1e980412cbaecb98fde871b49576",
     "typescript": "7.0.2",
     "vite": "8.3.5",
     "vitest": "5.0.5"
