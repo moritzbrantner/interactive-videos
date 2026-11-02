@@ -17,9 +17,9 @@
     "narration:regenerate": "bun scripts/narration/regenerate-nicaea-325.ts"
   },
   "dependencies": {
-    "@moritzbrantner/charts": "github:moritzbrantner/charts#6c86d8e86ce9a9f13ebf3558985c38b91a355bf5",
-    "@moritzbrantner/tables": "github:moritzbrantner/tables#d98b5f3cd240fcef5b3f9bd122cd5ade506c7ff2",
-    "asset-tooling": "github:moritzbrantner/asset-tooling#e8ce80707538a5bc8257344dd1133cc257959312",
+    "@moritzbrantner/charts": "github:moritzbrantner/charts#18420680c37d50b9cb72b6fb465aeea02b55d00a",
+    "@moritzbrantner/tables": "github:moritzbrantner/tables#6613bcfa078f23aa7edc19a762acc88c23a04a1e",
+    "asset-tooling": "github:moritzbrantner/asset-tooling#bbd8463877c8d5427f92e5809d23ec93c62b936c",
     "@remotion/bundler": "4.0.539",
     "@remotion/captions": "4.0.539",
     "@remotion/player": "4.0.539",
