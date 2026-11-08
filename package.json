@@ -19,7 +19,7 @@
   "dependencies": {
     "@moritzbrantner/charts": "github:moritzbrantner/charts#b4bcc1c9677260d0f69476de62f9c2760c4bf8c7",
     "@moritzbrantner/tables": "github:moritzbrantner/tables#c3d552c644521e7cca4d4257f3bd5362e76efb49",
-    "asset-tooling": "github:moritzbrantner/asset-tooling#528cfa249caad62de4577a5fad825fba8b1f4e2a",
+    "asset-tooling": "github:moritzbrantner/asset-tooling#cda0c1e86f5d1717efd4e069f1d383deb2841240",
     "@remotion/bundler": "4.0.540",
     "@remotion/captions": "4.0.540",
     "@remotion/player": "4.0.540",
