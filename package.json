@@ -20,13 +20,13 @@
     "@moritzbrantner/charts": "github:moritzbrantner/charts#c1d4d29f2240ed0f2af78c4d68285ce692de5d85",
     "@moritzbrantner/tables": "github:moritzbrantner/tables#1459b323ecbc512308f458d7125a238741d6556e",
     "asset-tooling": "github:moritzbrantner/asset-tooling#7b68cd189c455d538182e1785cb95976c1d6b8d1",
-    "@remotion/bundler": "4.0.541",
-    "@remotion/captions": "4.0.541",
-    "@remotion/player": "4.0.541",
-    "@remotion/renderer": "4.0.541",
+    "@remotion/bundler": "4.0.542",
+    "@remotion/captions": "4.0.542",
+    "@remotion/player": "4.0.542",
+    "@remotion/renderer": "4.0.542",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "remotion": "4.0.541"
+    "remotion": "4.0.542"
   },
   "devDependencies": {
     "@playwright/test": "1.65.0",
