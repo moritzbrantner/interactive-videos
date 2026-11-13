@@ -5,13 +5,13 @@
     "": {
       "name": "interactive-videos",
       "dependencies": {
-        "@moritzbrantner/charts": "github:moritzbrantner/charts#8119904cf92501de305a6b0ffa686458326a6e90",
-        "@moritzbrantner/tables": "github:moritzbrantner/tables#a4f4dd26140195456d5a052fbfa9804fcace41e2",
+        "@moritzbrantner/charts": "github:moritzbrantner/charts#c1d4d29f2240ed0f2af78c4d68285ce692de5d85",
+        "@moritzbrantner/tables": "github:moritzbrantner/tables#1459b323ecbc512308f458d7125a238741d6556e",
         "@remotion/bundler": "4.0.541",
         "@remotion/captions": "4.0.541",
         "@remotion/player": "4.0.541",
         "@remotion/renderer": "4.0.541",
-        "asset-tooling": "github:moritzbrantner/asset-tooling#81710d0647e22d619a81efeb6ceea09fb059c200",
+        "asset-tooling": "github:moritzbrantner/asset-tooling#7b68cd189c455d538182e1785cb95976c1d6b8d1",
         "react": "19.3.1",
         "react-dom": "19.3.1",
         "remotion": "4.0.541",
@@ -122,9 +122,9 @@
 
     "@mediabunny/mp3-encoder": ["@mediabunny/mp3-encoder@1.64.0", "", { "peerDependencies": { "mediabunny": "^1.0.0" } }, "sha512-agJx3Vv2NsrJDwMBF4l5a0SEA6cszmFS4LVyLaHCQNAY0BKm55HEo+vbD51CJIxuHSYtvFdaurJqHh/S6kF7XQ=="],
 
-    "@moritzbrantner/charts": ["@moritzbrantner/charts@github:moritzbrantner/charts#8119904", { "dependencies": { "@chenglou/pretext": "0.0.9" }, "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0", "recharts": "^3.0.0" }, "hasInstallScript": true }, "moritzbrantner-charts-8119904", "sha512-GeESJSX3Nc3TxcvkvAkuzRj9cA81hi/H1+yB+zowRngKaaGQBDIs4lfDdTU6C+acirdEysl0PYxIrz+fOlcUTQ=="],
+    "@moritzbrantner/charts": ["@moritzbrantner/charts@github:moritzbrantner/charts#c1d4d29", { "dependencies": { "@chenglou/pretext": "0.0.9" }, "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0", "recharts": "^3.0.0" }, "hasInstallScript": true }, "moritzbrantner-charts-c1d4d29", "sha512-ftAZgmksU3q5/VOiWO59XgaPr0Bi+kmm5rsQYKE+FAgyEOep+iMdDsqrekKoWApe5stql+WsxProNa0qCm2ePQ=="],
 
-    "@moritzbrantner/tables": ["@moritzbrantner/tables@github:moritzbrantner/tables#a4f4dd2", { "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0" } }, "moritzbrantner-tables-a4f4dd2", "sha512-qTd11dIIdpL7uStfXU98QHvOvnvsd2hPLetcnFn1QNsWEilVmIiQOdkPxH740U5Iu30yeZOFGiO3CZaJR4Jcog=="],
+    "@moritzbrantner/tables": ["@moritzbrantner/tables@github:moritzbrantner/tables#1459b32", { "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0" } }, "moritzbrantner-tables-1459b32", "sha512-ylfwYof1mtuzGzoRVhusqTrjzxAecBM5veMoyfOk05OhmEcT79eXf2kWhJfhObIk8FgsORf4DIzf4Tp7eGioNw=="],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.6", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1 || 2.0.0-beta.2", "@emnapi/runtime": "^1.7.1 || 2.0.0-beta.2" } }, "sha512-mRyDmEw9/fCDXCGfL1sbgIw/GUK0PVxRW4YwgPN61F3LQ+fSyoBFarJVzgGyhF6kRzEQZ0FejDqm4WLXSeqQmw=="],
 
@@ -185,6 +185,8 @@
     "@remotion/web-renderer": ["@remotion/web-renderer@4.0.541", "", { "dependencies": { "@mediabunny/aac-encoder": "1.64.0", "@mediabunny/flac-encoder": "1.64.0", "@mediabunny/mp3-encoder": "1.64.0", "@remotion/licensing": "4.0.541", "mediabunny": "1.64.0", "remotion": "4.0.541" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-RNvdKhFMmqyCO19svWHON+6AIXJRbJRVaV3X7n7OFwnmOZDPX9z44TRwQPEGrHBhIOqaVZV0R/U8zhwhiA14dA=="],
 
     "@remotion/zod-types": ["@remotion/zod-types@4.0.541", "", { "dependencies": { "remotion": "4.0.541" } }, "sha512-/9fItkydeJ52gnABuXaO6wU79379nZI6Brol+am/sKgvD4rtp7CevmGAOnSF2d83cYcLSUD0EPHZGEOtNZue0A=="],
+
+    "@resvg/resvg-wasm": ["@resvg/resvg-wasm@2.6.2", "", {}, "sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw=="],
 
     "@rolldown/binding-android-arm-eabi": ["@rolldown/binding-android-arm-eabi@1.2.19", "", { "os": "android", "cpu": "arm" }, "sha512-e+Ebe0WT+9tbXmNKPIiC8YrWAHYwug3m6i4p3rZGGulfZri1jtI4HslT+OZnFf/OIHowWF71DTlHwXBP2SiA7A=="],
 
@@ -400,7 +402,7 @@
 
     "assertion-error": ["assertion-error@2.0.1", "", {}, "sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA=="],
 
-    "asset-tooling": ["asset-tooling@github:moritzbrantner/asset-tooling#81710d0", { "dependencies": { "@gltf-transform/core": "4.5.1", "@gltf-transform/extensions": "4.5.1", "@mapbox/vector-tile": "2.0.5", "gltf-validator": "2.0.0-dev.3.10", "p-limit": "7.3.3", "pbf": "4.0.2", "pmtiles": "4.5.0" }, "bin": { "asset-tooling": "./src/entry.ts" } }, "moritzbrantner-asset-tooling-81710d0", "sha512-a4mq389U6ohh8L2R3KPJRijIgO41swnI2kEYH1Q7beFIn5VlJtASL8vLhZrXIj/30XVmCFsYZV7wKAiVhgjhWg=="],
+    "asset-tooling": ["asset-tooling@github:moritzbrantner/asset-tooling#7b68cd1", { "dependencies": { "@gltf-transform/core": "4.5.1", "@gltf-transform/extensions": "4.5.1", "@mapbox/vector-tile": "2.0.5", "@resvg/resvg-wasm": "2.6.2", "gltf-validator": "2.0.0-dev.3.10", "p-limit": "7.3.3", "pbf": "4.0.2", "pmtiles": "4.5.0" }, "bin": { "asset-tooling": "./src/entry.ts" } }, "moritzbrantner-asset-tooling-7b68cd1", "sha512-BZrdWx4+6KMeIb9oDSNkfb3XRknHMfDP61hdzqzDVgLkXY7WY/omuQ4/AKVSa413/jFGBBSC/UewBqNWRtdKyg=="],
 
     "ast-types": ["ast-types@0.16.1", "", { "dependencies": { "tslib": "^2.0.1" } }, "sha512-6t10qk83GOG8p0vKmaCr8eiilZwO171AvbROMtvvNiwrTly62t+7XkA8RdIIVbpMhCASAsxgAzdRSwh6nw/5Dg=="],
 
