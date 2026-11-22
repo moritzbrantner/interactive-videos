@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@moritzbrantner/charts": "github:moritzbrantner/charts#292ee6975961feebe664a797190d986e86d426b9",
-    "@moritzbrantner/tables": "github:moritzbrantner/tables#3d3dc257ab2ec72f7db34ac48f0e1c40fcd4797d",
+    "@moritzbrantner/tables": "github:moritzbrantner/tables#7963847b80eb2b10860d465b74738c6b10fd6e15",
     "asset-tooling": "github:moritzbrantner/asset-tooling#f07b2a9fee82403d9bc80fc2b04f1938d869200b",
     "@remotion/bundler": "4.0.544",
     "@remotion/captions": "4.0.544",
