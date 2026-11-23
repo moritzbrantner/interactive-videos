@@ -5,13 +5,13 @@
     "": {
       "name": "interactive-videos",
       "dependencies": {
-        "@moritzbrantner/charts": "github:moritzbrantner/charts#15d67cd4d92132c5685705cc052bbced809a5d2b",
-        "@moritzbrantner/tables": "github:moritzbrantner/tables#21802ea31c63334bb92a7e3ae85dc84e10eb22a4",
+        "@moritzbrantner/charts": "github:moritzbrantner/charts#e86fdeb6b0765187ec9a75a2709342f9f5bd9cfc",
+        "@moritzbrantner/tables": "github:moritzbrantner/tables#d629b4a9a3909adf683a72eea4d488bee1483ceb",
         "@remotion/bundler": "4.0.545",
         "@remotion/captions": "4.0.545",
         "@remotion/player": "4.0.545",
         "@remotion/renderer": "4.0.545",
-        "asset-tooling": "github:moritzbrantner/asset-tooling#7e8ac0dbec567708937f92258cf953c06ed3a15f",
+        "asset-tooling": "github:moritzbrantner/asset-tooling#0014482e4cfbc391e62469b48a1332fa686c6244",
         "react": "19.3.1",
         "react-dom": "19.3.1",
         "remotion": "4.0.545",
@@ -122,9 +122,9 @@
 
     "@mediabunny/mp3-encoder": ["@mediabunny/mp3-encoder@1.66.0", "", { "peerDependencies": { "mediabunny": "^1.0.0" } }, "sha512-Co1ChvNYWdjCAVCbbWRVu1PdpY8A7M85wVypc2rpKV3IFWzc/Y2C211BeAgMrk6rTi9DvluI0KuwxIEfAtFSlg=="],
 
-    "@moritzbrantner/charts": ["@moritzbrantner/charts@github:moritzbrantner/charts#15d67cd", { "dependencies": { "@chenglou/pretext": "0.0.9" }, "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0", "recharts": "^3.0.0" }, "hasInstallScript": true }, "moritzbrantner-charts-15d67cd", "sha512-aLnesMBb4RgRtDGgDbHSnDGNXKrRf0bYfovVc2SRUtHcwFk7/rIW2kuU5HrB91T27oMbU9NAejUK0mREsR5XQg=="],
+    "@moritzbrantner/charts": ["@moritzbrantner/charts@github:moritzbrantner/charts#e86fdeb", { "dependencies": { "@chenglou/pretext": "0.0.9" }, "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0", "recharts": "^3.0.0" }, "hasInstallScript": true }, "moritzbrantner-charts-e86fdeb", "sha512-MujIS5Maic6+BsVt6heK8Mss5wNoBUfV+Dozkkt/I/kOnsprhx9ARZ5PYNnG5lrBqv0if4aQgfg2M+abGwxhdA=="],
 
-    "@moritzbrantner/tables": ["@moritzbrantner/tables@github:moritzbrantner/tables#21802ea", { "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0" } }, "moritzbrantner-tables-21802ea", "sha512-51A9wgDctKTA2z8D54/oDb1hbNu1hiI8jl47xe1AoYbCtC3mGKIGxDKQxsZ42CMSNHmYSt94QQVXLdViG8TCDA=="],
+    "@moritzbrantner/tables": ["@moritzbrantner/tables@github:moritzbrantner/tables#d629b4a", { "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0" } }, "moritzbrantner-tables-d629b4a", "sha512-UGq176A+dQWEElf5wVWpiUs5a/BWK2QFpN7DkbaBBwe/j6pxIbGnATktP6Iy0N+f7wT/3aYT13RDpBY4Hfj6gg=="],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.6", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1 || 2.0.0-beta.2", "@emnapi/runtime": "^1.7.1 || 2.0.0-beta.2" } }, "sha512-mRyDmEw9/fCDXCGfL1sbgIw/GUK0PVxRW4YwgPN61F3LQ+fSyoBFarJVzgGyhF6kRzEQZ0FejDqm4WLXSeqQmw=="],
 
@@ -404,7 +404,7 @@
 
     "assertion-error": ["assertion-error@2.0.1", "", {}, "sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA=="],
 
-    "asset-tooling": ["asset-tooling@github:moritzbrantner/asset-tooling#7e8ac0d", { "dependencies": { "@gltf-transform/core": "4.5.1", "@gltf-transform/extensions": "4.5.1", "@mapbox/vector-tile": "2.0.5", "@resvg/resvg-wasm": "2.6.2", "gltf-validator": "2.0.0-dev.3.10", "p-limit": "7.3.3", "pbf": "4.0.2", "pmtiles": "4.5.0" }, "bin": { "asset-tooling": "./src/entry.ts" } }, "moritzbrantner-asset-tooling-7e8ac0d", "sha512-0uJRBa2MJDIYFvCklGnPAt8Jig4iFxrujMblpFU3/eCDVD6DHpOeNX3KZ72Q3eNioFy8r4lj1U6E+AKUhHxA5g=="],
+    "asset-tooling": ["asset-tooling@github:moritzbrantner/asset-tooling#0014482", { "dependencies": { "@gltf-transform/core": "4.5.1", "@gltf-transform/extensions": "4.5.1", "@mapbox/vector-tile": "2.0.5", "@resvg/resvg-wasm": "2.6.2", "gltf-validator": "2.0.0-dev.3.10", "p-limit": "7.3.3", "pbf": "4.0.2", "pmtiles": "4.5.0" }, "bin": { "asset-tooling": "./src/entry.ts" } }, "moritzbrantner-asset-tooling-0014482", "sha512-ZpVR8HTV2d2v2XfFgUDokQIuh62SbwuC07yDi8M5gquA8kSUCUvoe9EjC+6T5AXRzRaSFXLXanMolLGz3ZjW+Q=="],
 
     "ast-types": ["ast-types@0.16.1", "", { "dependencies": { "tslib": "^2.0.1" } }, "sha512-6t10qk83GOG8p0vKmaCr8eiilZwO171AvbROMtvvNiwrTly62t+7XkA8RdIIVbpMhCASAsxgAzdRSwh6nw/5Dg=="],
 
