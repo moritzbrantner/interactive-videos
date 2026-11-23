@@ -2,7 +2,7 @@
   "name": "interactive-videos",
   "private": true,
   "type": "module",
-  "packageManager": "bun@1.4.4",
+  "packageManager": "bun@1.4.5",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -37,6 +37,6 @@
     "react-render-budget": "github:moritzbrantner/react-render-budget#416216865f7dde9383165165ac4e8266f16cf840",
     "typescript": "7.0.2",
     "vite": "8.3.8",
-    "vitest": "5.1.0"
+    "vitest": "5.1.1"
   }
 }
