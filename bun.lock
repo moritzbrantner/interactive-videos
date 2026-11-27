@@ -6,7 +6,7 @@
       "name": "interactive-videos",
       "dependencies": {
         "@moritzbrantner/charts": "github:moritzbrantner/charts#6316f57ae56987df694d256a94858b7ae68401f1",
-        "@moritzbrantner/tables": "github:moritzbrantner/tables#d629b4a9a3909adf683a72eea4d488bee1483ceb",
+        "@moritzbrantner/tables": "github:moritzbrantner/tables#d33af45fc400235f6c7077f3908d92cf3cde371c",
         "@remotion/bundler": "4.0.545",
         "@remotion/captions": "4.0.545",
         "@remotion/player": "4.0.545",
@@ -124,7 +124,7 @@
 
     "@moritzbrantner/charts": ["@moritzbrantner/charts@github:moritzbrantner/charts#6316f57", { "dependencies": { "@chenglou/pretext": "0.0.9" }, "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0", "recharts": "^3.0.0" }, "hasInstallScript": true }, "moritzbrantner-charts-6316f57", "sha512-aW8eEr5OXEiRGt3kTH5fBGQ0WHif+GFa3I7HCDKj+/0xPH4Lq1GkJ8KVMEj5YJ29nOjwx58k21lwH+tlmKqaOQ=="],
 
-    "@moritzbrantner/tables": ["@moritzbrantner/tables@github:moritzbrantner/tables#d629b4a", { "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0" } }, "moritzbrantner-tables-d629b4a", "sha512-UGq176A+dQWEElf5wVWpiUs5a/BWK2QFpN7DkbaBBwe/j6pxIbGnATktP6Iy0N+f7wT/3aYT13RDpBY4Hfj6gg=="],
+    "@moritzbrantner/tables": ["@moritzbrantner/tables@github:moritzbrantner/tables#d33af45", { "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0" } }, "moritzbrantner-tables-d33af45", "sha512-vOjApAPk892HWV0s4//5UJ2FX0tO8VQUQ7nwTekIyEHx4yCpefjwux77Xx7H7ilNdxj+lfQkBYqas0cV4KAy+g=="],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.6", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1 || 2.0.0-beta.2", "@emnapi/runtime": "^1.7.1 || 2.0.0-beta.2" } }, "sha512-mRyDmEw9/fCDXCGfL1sbgIw/GUK0PVxRW4YwgPN61F3LQ+fSyoBFarJVzgGyhF6kRzEQZ0FejDqm4WLXSeqQmw=="],
 
