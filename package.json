@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "@playwright/test": "1.65.1",
-    "@types/node": "26.6.6",
-    "@types/react": "19.3.0",
+    "@types/node": "26.6.7",
+    "@types/react": "19.3.1",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.3.0",
     "react-render-budget": "github:moritzbrantner/react-render-budget#416216865f7dde9383165165ac4e8266f16cf840",
